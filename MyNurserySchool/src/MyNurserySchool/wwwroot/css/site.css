@@ -1,0 +1,35 @@
+﻿body {
+    padding-top: 50px;
+}
+
+li .nav li>a {
+    padding-left: 25px;
+}
+
+ul.nav-vertical {
+    margin-left: 3px;
+}
+
+ul.nav-subnav {
+    margin-top: 3px;
+}
+
+.list-group-item {
+    margin-bottom: 0;
+}
+
+.fa {
+    min-width: 20px;
+}
+
+.col-btn {
+    width: 50px;
+}
+
+h2.modal-header {
+    margin-top: 0;
+}
+
+.view {
+    margin-bottom: 50px;
+}

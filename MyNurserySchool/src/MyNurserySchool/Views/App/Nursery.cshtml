@@ -1,0 +1,42 @@
+﻿@model MyNurserySchool.ViewModels.NurseryViewModel
+@{
+    ViewBag.Title = "Škôlka";
+}
+@section Scripts {
+    <script src="~/lib/angular/angular.min.js"></script>
+    <script src="~/lib/angular-route/angular-route.min.js"></script>
+    <script src="~/js/Nursery/nursery-app.js"></script>
+    <script src="~/js/Nursery/nurseryDetailController.js"></script>
+    <script src="~/js/simpleControls.js"></script>
+}
+<div ng-app="nursery-app">
+    <div ng-init="outerId = @Model.Id">
+        <div><h2 class="modal-header">@Model.Name</h2></div>
+        <div class="col-sm-3 col-lg-2">
+            <ul class="nav nav-pills nav-stacked nav-vertical">
+                <li><a ng-href="" class="list-group-item"><i class="fa fa-home"></i>Prehľad</a>
+                <li><a ng-href="" class="list-group-item"><i class="fa fa-cubes"></i>Triedy</a>
+                    @*<a href="#collapse" class="list-group-item" data-toggle="collapse" data-parent="#MainMenu"><i class="fa fa-cubes"></i>Triedy</a>
+                    <ul class="collapse nav nav-pills nav-stacked nav-subnav" id="collapse">
+                        @foreach (var cla in Model.Classes)
+                        {
+                            <li><a asp-controller="App" asp-action="Class">@cla.Name</a></li>
+                        }
+                        <li><a asp-controller="App" asp-action="NewClass"><i class="fa fa-plus-circle"></i>pridať triedu</a></li>
+                    </ul>*@
+                </li>
+                <li><a class="list-group-item" asp-controller="App" asp-action="Children"><i class="fa fa-child"></i>Všetky deti</a></li>
+                <li><a class="list-group-item" asp-controller="App" asp-action="Employees"><i class="fa fa-users"></i>Zamestnanci</a></li>
+                <li><a ng-href="" class="list-group-item"><i class="fa fa-cogs"></i>Nastavenia</a></li>
+            </ul>
+        </div>
+
+        <div class="col-sm-9 col-lg-10">
+            <div class="container-fluid">
+                
+                <div class="view" ng-view></div>
+
+            </div>
+        </div>
+    </div>
+</div>

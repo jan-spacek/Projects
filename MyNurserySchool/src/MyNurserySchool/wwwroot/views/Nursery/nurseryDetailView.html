@@ -1,0 +1,42 @@
+﻿<div>
+    <div class="row">
+        <div class="col-md-6">
+            <h3><i class="fa fa-cubes"></i> Triedy</h3>
+            <table class="table table-responsive table-striped">
+                <tr>
+                    <th>Názov</th>
+                    <th>Triedna učiteľka</th>
+                    <th>Počet detí</th>
+                    <th colspan="2"></th>
+                </tr>
+                <tr ng-repeat="class in vm.nursery.classes">
+                    <td>{{ class.name }}</td>
+                    <td>{{ class.classTeacher.fullName }}</td>
+                    <td>{{ class.children.length + "/" + class.capacity }}</td>
+                    <td class="col-btn"><a ng-href="" class="btn btn-sm btn-default"><i class="fa fa-folder-open-o"></i></a></td>
+                    <td class="col-btn"><a ng-href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a></td>
+                </tr>
+            </table>
+            <a ng-href="" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Pridať triedu</a>
+        </div>
+        <div class="col-md-6">
+            <h3><i class="fa fa-users"></i> Zamestnanci</h3>
+            <table class="table table-responsive table-striped">
+                <tr>
+                    <th>Meno</th>
+                    <th>E-mail</th>
+                    <th>Telefón</th>
+                    <th colspan="2"></th>
+                </tr>
+                <tr ng-repeat="employee in vm.nursery.employees">
+                    <td>{{ employee.fullName }}</td>
+                    <td>{{ employee.email }}</td>
+                    <td>{{ employee.workPhone }}<br>{{employee.privatePhone }}</td>
+                    <td class="col-btn"><a ng-href="" class="btn btn-sm btn-default"><i class="fa fa-folder-open-o"></i></a></td>
+                    <td class="col-btn"><a ng-href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a></td>
+                </tr>
+            </table>
+            <a ng-href="" class="btn btn-primary btn-block"><i class="fa fa-user-plus"></i> Pridať zamestnanca</a>
+        </div>
+    </div>
+</div>
