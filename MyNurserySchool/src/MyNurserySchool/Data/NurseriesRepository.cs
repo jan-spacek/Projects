@@ -125,12 +125,19 @@ namespace MyNurserySchool.Data
                         .Where(n => n.Id == nurseryId)
                         .FirstOrDefault();
         }
+        
+        public object GetClassById(int classId)
+        {
+            return _context.Classes.Include(n => n.Children)
+                        .Include(n => n.ClassTeacher)
+                        .Where(n => n.Id == classId)
+                        .FirstOrDefault();
+        }
 
         public void AddClass(int nurseryId, Class newClass)
         {
             var nursery = GetNurseryById(nurseryId);
             nursery.Classes.Add(newClass);
-            //_context.Classes.Add(newClass);
         }
 
         public void AddEmployee(Employee newEmployee)
@@ -146,6 +153,12 @@ namespace MyNurserySchool.Data
         public void SaveNursery(Nursery nursery)
         {
             _context.Nurseries.Update(nursery);
+            _context.SaveChanges();
+        }
+
+        public void SaveClass(Class newClass)
+        {
+            _context.Classes.Update(newClass);
         }
 
         public void SaveEmployee(Employee employee)

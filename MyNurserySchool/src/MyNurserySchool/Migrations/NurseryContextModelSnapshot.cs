@@ -190,36 +190,14 @@ namespace MyNurserySchool.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("MyNurserySchool.Models.Contact", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("ChildId");
-
-                    b.Property<DateTime>("Created");
-
-                    b.Property<string>("CreatedBy");
-
-                    b.Property<string>("Email");
-
-                    b.Property<DateTime>("Modified");
-
-                    b.Property<string>("ModifiedBy");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<string>("Title");
-
-                    b.HasKey("Id");
-                });
-
             modelBuilder.Entity("MyNurserySchool.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int?>("AddressId");
+
+                    b.Property<int>("Attendance");
 
                     b.Property<DateTime>("Created");
 
@@ -259,7 +237,11 @@ namespace MyNurserySchool.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("Attendance");
+
                     b.Property<int?>("ClassId");
+
+                    b.Property<string>("Contacts");
 
                     b.Property<DateTime>("Created");
 
@@ -283,8 +265,6 @@ namespace MyNurserySchool.Migrations
 
                     b.Property<DateTime>("StartDate");
 
-                    b.Property<int>("State");
-
                     b.HasKey("Id");
                 });
 
@@ -294,8 +274,6 @@ namespace MyNurserySchool.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int?>("ChildId");
-
-                    b.Property<int?>("ClassId");
 
                     b.Property<DateTime>("Created");
 
@@ -383,13 +361,6 @@ namespace MyNurserySchool.Migrations
                         .HasForeignKey("NurseryId");
                 });
 
-            modelBuilder.Entity("MyNurserySchool.Models.Contact", b =>
-                {
-                    b.HasOne("MyNurserySchool.Models.Child")
-                        .WithMany()
-                        .HasForeignKey("ChildId");
-                });
-
             modelBuilder.Entity("MyNurserySchool.Models.Employee", b =>
                 {
                     b.HasOne("MyNurserySchool.Models.Address")
@@ -413,10 +384,6 @@ namespace MyNurserySchool.Migrations
                     b.HasOne("MyNurserySchool.Models.Child")
                         .WithMany()
                         .HasForeignKey("ChildId");
-
-                    b.HasOne("MyNurserySchool.Models.Class")
-                        .WithMany()
-                        .HasForeignKey("ClassId");
 
                     b.HasOne("MyNurserySchool.Models.Employee")
                         .WithMany()

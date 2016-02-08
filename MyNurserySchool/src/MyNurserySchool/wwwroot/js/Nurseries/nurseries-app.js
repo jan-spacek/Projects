@@ -6,19 +6,19 @@
         .config(function ($routeProvider) {
             $routeProvider.when("/", {
                 controller: "nurseriesController",
-                controllerAs: "scope",
+                controllerAs: "vm",
                 templateUrl: "/views/Nurseries/nurseriesView.html"
             });
 
             $routeProvider.when("/new", {
                 controller: "nurseryNewController",
-                controllerAs: "scope",
+                controllerAs: "vm",
                 templateUrl: "/views/Nurseries/nurseryNewView.html"
             });
 
             $routeProvider.when("/edit/:id", {
                 controller: "nurseryEditController",
-                controllerAs: "scope",
+                controllerAs: "vm",
                 templateUrl: "/views/Nurseries/nurseryEditView.html"
             });
 

@@ -5,44 +5,44 @@
         .controller("nurseryEditController", nurseryEditController);
 
     function nurseryEditController($routeParams, $http, $location) {
-        var scope = this;
-        scope.id = $routeParams.id;
-        scope.isBusy = true;
-        scope.nursery = {};
+        var vm = this;
+        vm.id = $routeParams.id;
+        vm.isBusy = true;
+        vm.nursery = {};
 
-        $http.get("/Api/Nursery/" + scope.id)
+        $http.get("/Api/Nursery/" + vm.id)
             .then(function (response) {
-                angular.copy(response.data, scope.nursery);
+                angular.copy(response.data, vm.nursery);
             }, function () {
                 toastr.error("Nepodarilo sa načítať informácie o škôlke");
             }).finally(function () {
-                scope.isBusy = false;
+                vm.isBusy = false;
             });
 
-        scope.saveNursery = function () {
-            scope.isBusy = true;
-            $http.put("/Api/Nursery/", scope.nursery)
+        vm.saveNursery = function () {
+            vm.isBusy = true;
+            $http.put("/Api/Nursery/", vm.nursery)
                 .then(function (response) {
-                    toastr.success("Zmeny v škôlke " + scope.nursery.name + " boli úspešne uložené");
+                    toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
                     $location.path("#/");
                 }, function () {
                     toastr.error("Škôlku sa nepodarilo uložiť");
                 }).finally(function () {
-                    scope.isBusy = false;
+                    vm.isBusy = false;
                 });
         }
 
-        scope.deleteNursery = function () {
-            scope.isBusy = true;
-            $http.delete("/Api/Nursery/" + scope.nursery.id)
+        vm.deleteNursery = function () {
+            vm.isBusy = true;
+            $http.delete("/Api/Nursery/" + vm.nursery.id)
                 .then(function () {
-                    toastr.success("Škôlka id:" + scope.id + " bola vymazaná");
+                    toastr.success("Škôlka id:" + vm.id + " bola vymazaná");
                     $location.path("#/");
                 }, function (error) {
                     toastr.error("Škôlku sa nepodarilo vymazať");
                 })
                 .finally(function () {
-                    scope.isBusy = false;
+                    vm.isBusy = false;
                 });
         }
     }

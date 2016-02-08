@@ -18,7 +18,6 @@ namespace MyNurserySchool.ViewModels
         public Employee ClassTeacher { get; set; }
         public string Description { get; set; }
 
-
         public DateTime Created { get; set; } = DateTime.Now;
         public string CreatedBy { get; set; } = "admin";
         public DateTime Modified { get; set; } = DateTime.Now;

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNet.Mvc;
 using MyNurserySchool.Models;
 using Microsoft.Extensions.Logging;
@@ -8,11 +7,9 @@ using AutoMapper;
 using MyNurserySchool.ViewModels;
 using MyNurserySchool.Data;
 
-// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace MyNurserySchool.Controllers.Api
 {
-    [Route("api/nursery/{nurseryId}/classes")]
+    [Route("Api/Class/")]
     public class ClassController : Controller
     {
         private INurseriesRepository _repository;
@@ -24,28 +21,29 @@ namespace MyNurserySchool.Controllers.Api
             _logger = logger;
         }
 
-        [HttpGet("")]
-        public JsonResult Get(int nurseryId)
+        [HttpGet("{classId}")]
+        public JsonResult Get(int classId)
         {
             try
             {
-                var results = _repository.GetNurseryById(nurseryId);
+                var result = _repository.GetClassById(classId);
 
-                if (results == null)
+                if (result == null)
                 {
                     return Json(null);
                 }
 
-                return Json(Mapper.Map<IEnumerable<ClassViewModel>>(results.Classes)); // tu mozeme implementovat sortenie
+                return Json(Mapper.Map<ClassViewModel>(result)); // tu mozeme implementovat sortenie
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to get classes for nursery {nurseryId}", ex);
+                _logger.LogError($"Failed to get class {classId}", ex);
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json("Error occurred finding nursery name");
+                return Json("Error occurred finding class id");
             }
         }
 
+        [HttpPost("{nurseryId}")]
         public JsonResult Post(int nurseryId, [FromBody]ClassViewModel vm)
         {
             try
@@ -53,7 +51,13 @@ namespace MyNurserySchool.Controllers.Api
                 if (ModelState.IsValid)
                 {
                     var newClass = Mapper.Map<Class>(vm);
-                    
+                    newClass.Created = DateTime.Now;
+                    newClass.CreatedBy = User.Identity.Name;
+                    newClass.Modified = DateTime.Now;
+                    newClass.ModifiedBy = User.Identity.Name;
+                    newClass.NurseryId = nurseryId;
+
+
                     _repository.AddClass(nurseryId, newClass);
 
                     if(_repository.SaveAll())
@@ -72,6 +76,45 @@ namespace MyNurserySchool.Controllers.Api
 
             Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return Json("Validation failed on new class");
+        }
+
+        [HttpPut("{nurseryId}")]
+        public JsonResult Put(int nurseryId, [FromBody]ClassViewModel vm)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var newClass = Mapper.Map<Class>(vm);
+                    newClass.Modified = DateTime.Now;
+                    newClass.ModifiedBy = User.Identity.Name;
+                    newClass.NurseryId = nurseryId;
+
+                    _repository.SaveClass(newClass);
+
+                    if (_repository.SaveAll())
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.Created;
+                        return Json(Mapper.Map<ClassViewModel>(newClass));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Failed to save new class", ex);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json("Failed to save new class");
+            }
+
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return Json("Validation failed on new class");
+        }
+
+        [HttpDelete("{id}")]
+        public JsonResult Delete(int id)
+        {
+            _repository.DeleteClass(id);
+            return Json(new { Message = "Deleted" });
         }
     }
 }

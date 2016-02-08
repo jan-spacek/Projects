@@ -11,8 +11,8 @@ namespace MyNurserySchool.ViewModels
         public string Name { get; set; }
         public string Description { get; set; }
         public Address Address { get; set; }
-        public IEnumerable<ClassViewModel> Classes { get; set; }
-        public IEnumerable<EmployeeViewModel> Employees { get; set; }
+        public virtual IEnumerable<ClassViewModel> Classes { get; set; }
+        public virtual IEnumerable<EmployeeViewModel> Employees { get; set; }
         public string AllowedUsers { get; set; }
 
         public DateTime Created { get; set; }

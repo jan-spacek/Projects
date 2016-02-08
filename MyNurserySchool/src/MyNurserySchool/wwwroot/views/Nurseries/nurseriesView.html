@@ -1,5 +1,5 @@
 ﻿<div>
-    <wait-cursor ng-show="scope.isBusy"></wait-cursor>
+    <wait-cursor ng-show="vm.isBusy"></wait-cursor>
     <table class="table table-responsive table-striped">
         <tr>
             <th>Názov</th>
@@ -9,7 +9,7 @@
             <th></th>
             <th></th>
         </tr>
-        <tr ng-repeat="nursery in scope.nurseries">
+        <tr ng-repeat="nursery in vm.nurseries">
             <td>{{ nursery.name }}</td>
             <td>{{ nursery.address.city }}</td>
             <td>{{ nursery.address.street + ' ' + nursery.address.number }}</td>

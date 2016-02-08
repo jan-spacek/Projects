@@ -1,13 +1,12 @@
 ﻿(function () {
-
     "use strict";
 
     angular.module("nursery-app")
-        .controller("nurseryEditController", ['$scope', '$http', nurseryEditController]);
+        .controller("nurseryEditController", nurseryEditController);
 
-    function nurseryEditController($scope, $http) {
+    function nurseryEditController($scope, $http, $location) {
         var vm = this;
-        vm.nursery = [];
+        vm.nursery = {};
         vm.isBusy = true;
 
         $http.get("/Api/Nursery/" + $scope.outerId)
@@ -18,5 +17,18 @@
             }).finally(function () {
                 vm.isBusy = false;
             });
+
+        vm.saveNursery = function () {
+            vm.isBusy = true;
+            $http.put("/Api/Nursery/", vm.nursery)
+                .then(function (response) {
+                    toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
+                    //$location.path("#/");
+                }, function () {
+                    toastr.error("Škôlku sa nepodarilo uložiť");
+                }).finally(function () {
+                    vm.isBusy = false;
+                });
+        }
     }
 })();

@@ -1,17 +1,17 @@
 ﻿<div>
-    <h3>{{ scope.nursery.name }}</h3>
-    <wait-cursor ng-if="scope.isBusy"></wait-cursor>
-    <form novalidate name="nurseryEditForm" ng-submit="scope.saveNursery()">
+    <h3>{{ vm.nursery.name }}</h3>
+    <wait-cursor ng-if="vm.isBusy"></wait-cursor>
+    <form novalidate name="nurseryEditForm" ng-submit="vm.saveNursery()">
         <div class="row">
             <div class="col-sm-4">
                 <h4>Škôlka</h4>
                 <div class="form-group">
                     <label for="name">Názov</label>
-                    <input ng-model="scope.nursery.name" type="text" name="name" class="form-control" required />
+                    <input ng-model="vm.nursery.name" type="text" name="name" class="form-control" required />
                 </div>
                 <div class="form-group">
                     <label for="description">Popis</label>
-                    <input ng-model="scope.nursery.description" type="text" name="description" class="form-control" />
+                    <input ng-model="vm.nursery.description" type="text" name="description" class="form-control" />
                 </div>
             </div>
 
@@ -19,19 +19,19 @@
                 <h4 class="col-sm-12">Adresa</h4>
                 <div class="form-group col-sm-8">
                     <label for="street">Ulica</label>
-                    <input ng-model="scope.nursery.address.street" type="text" name="street" class="form-control" />
+                    <input ng-model="vm.nursery.address.street" type="text" name="street" class="form-control" />
                 </div>
                 <div class="form-group col-sm-4">
                     <label for="oNumber">Číslo</label>
-                    <input ng-model="scope.nursery.address.number" type="text" name="oNumber" class="form-control" />
+                    <input ng-model="vm.nursery.address.number" type="text" name="oNumber" class="form-control" />
                 </div>
                 <div class="form-group col-sm-8">
                     <label for="city">Obec</label>
-                    <input ng-model="scope.nursery.address.city" type="text" name="city" class="form-control" />
+                    <input ng-model="vm.nursery.address.city" type="text" name="city" class="form-control" />
                 </div>
                 <div class="form-group col-sm-4">
                     <label for="zip">PSČ</label>
-                    <input ng-model="scope.nursery.address.zip" type="number" name="zip" class="form-control" maxlength="5" />
+                    <input ng-model="vm.nursery.address.zip" type="number" name="zip" class="form-control" maxlength="5" />
                 </div>
             </div>
         </div>
@@ -42,8 +42,15 @@
                 <a href="#/" class="btn btn-warning"><i class="fa fa-reply"></i> Späť</a>
             </div>
             <div class="col-sm-6 text-right">
-                <button type="button" class="btn btn-danger" ng-click="scope.deleteNursery()"><i class="fa fa-trash-o"></i> Vymazať</button>
+                <button type="button" class="btn btn-danger" ng-click="vm.deleteNursery()"><i class="fa fa-trash-o"></i> Vymazať</button>
             </div>
         </div>
     </form>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            Vytvoril {{ vm.nursery.createdBy }} {{ vm.nursery.created | date : 'd.M.yyyy HH:mm' }}<br>
+            <span ng-if="vm.nursery.modifiedBy">Poslednú zmenu vykonal {{ vm.nursery.modifiedBy }} {{ vm.nursery.modified | date : 'd.M.yyyy HH:mm' }}</span>
+        </div>
+    </div>
 </div>

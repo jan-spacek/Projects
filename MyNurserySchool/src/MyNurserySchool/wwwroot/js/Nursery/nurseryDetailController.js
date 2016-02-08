@@ -7,7 +7,7 @@
 
     function nurseryDetailController($scope, $routeParams, $http) {
         var vm = this;
-        vm.nursery = [];
+        vm.nursery = {};
         vm.isBusy = true;
 
         $http.get("/Api/Nursery/" + $scope.outerId)

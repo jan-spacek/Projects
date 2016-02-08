@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MyNurserySchool.Enums;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,6 +23,10 @@ namespace MyNurserySchool.Models
         public string PrivatePhone { get; set; }
         public string WorkPhone { get; set; }
         public ICollection<Note> Notes { get; set; }
+        public AttendanceState Attendance { get; set; }
+
+        [ForeignKey("Nursery")]
+        public int? NurseryId { get; set; }
 
         public DateTime Created { get; set; }
         public string CreatedBy { get; set; }

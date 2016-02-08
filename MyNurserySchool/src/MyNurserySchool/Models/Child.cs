@@ -1,6 +1,7 @@
 ﻿using MyNurserySchool.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,9 +18,13 @@ namespace MyNurserySchool.Models
         public DateTime StartDate { get; set; }
         public DateTime LeaveDate { get; set; }
         public string Description { get; set; }
-        public ICollection<Contact> Contacts { get; set; }
+        public string Contacts { get; set; }
         public ICollection<Note> Notes { get; set; }
-        public ChildState State { get; set; }
+        public AttendanceState Attendance { get; set; }
+
+        [ForeignKey("Class")]
+        public int? ClassId { get; set; }
+
 
         public DateTime Created { get; set; }
         public string CreatedBy { get; set; }

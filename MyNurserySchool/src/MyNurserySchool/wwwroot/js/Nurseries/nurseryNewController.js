@@ -6,21 +6,21 @@
         .controller("nurseryNewController", nurseryNewController);
 
     function nurseryNewController($http, $location) {
-        var scope = this;
-        scope.newNursery = {};
+        var vm = this;
+        vm.newNursery = {};
 
-        scope.addNursery = function () {
-            scope.isBusy = true;
+        vm.addNursery = function () {
+            vm.isBusy = true;
 
-            $http.post("/Api/Nursery", scope.newNursery)
+            $http.post("/Api/Nursery", vm.newNursery)
                 .then(function (response) {
-                    toastr.success("Bola vytvorená nová škôlka " + scope.newNursery.name);
-                    scope.newNursery = {};
+                    toastr.success("Bola vytvorená nová škôlka " + vm.newNursery.name);
+                    vm.newNursery = {};
                     $location.path("#/");
                 }, function () {
                     toastr.error("Škôlku sa nepodarilo uložiť");
                 }).finally(function () {
-                    scope.isBusy = false;
+                    vm.isBusy = false;
                 });
         }
     }

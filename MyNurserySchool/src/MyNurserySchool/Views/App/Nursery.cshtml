@@ -5,16 +5,26 @@
 @section Scripts {
     <script src="~/lib/angular/angular.min.js"></script>
     <script src="~/lib/angular-route/angular-route.min.js"></script>
+    <script src="~/lib/angular-aria/angular-aria.min.js"></script>
+    <script src="~/lib/angular-material/angular-material.min.js"></script>
+    <script src="~/lib/angular-animate/angular-animate.min.js"></script>
+    <script src="~/lib/angular-messages/angular-messages.min.js"></script>
     <script src="~/js/Nursery/nursery-app.js"></script>
     <script src="~/js/Nursery/nurseryDetailController.js"></script>
+    <script src="~/js/Nursery/nurseryEditController.js"></script>
+    <script src="~/js/Nursery/classEditController.js"></script>
+    <script src="~/js/Nursery/employeeEditController.js"></script>
     <script src="~/js/simpleControls.js"></script>
 }
 <div ng-app="nursery-app">
     <div ng-init="outerId = @Model.Id">
-        <div><h2 class="modal-header">@Model.Name</h2></div>
+        <div class="col-xs-12">
+            <h2>@Model.Name</h2>
+            <hr>        
+        </div>
         <div class="col-sm-3 col-lg-2">
             <ul class="nav nav-pills nav-stacked nav-vertical">
-                <li><a ng-href="" class="list-group-item"><i class="fa fa-home"></i>Prehľad</a>
+                <li><a ng-href="#/" class="list-group-item"><i class="fa fa-home"></i>Prehľad</a>
                 <li><a ng-href="" class="list-group-item"><i class="fa fa-cubes"></i>Triedy</a>
                     @*<a href="#collapse" class="list-group-item" data-toggle="collapse" data-parent="#MainMenu"><i class="fa fa-cubes"></i>Triedy</a>
                     <ul class="collapse nav nav-pills nav-stacked nav-subnav" id="collapse">
@@ -25,9 +35,9 @@
                         <li><a asp-controller="App" asp-action="NewClass"><i class="fa fa-plus-circle"></i>pridať triedu</a></li>
                     </ul>*@
                 </li>
-                <li><a class="list-group-item" asp-controller="App" asp-action="Children"><i class="fa fa-child"></i>Všetky deti</a></li>
-                <li><a class="list-group-item" asp-controller="App" asp-action="Employees"><i class="fa fa-users"></i>Zamestnanci</a></li>
-                <li><a ng-href="" class="list-group-item"><i class="fa fa-cogs"></i>Nastavenia</a></li>
+                <li><a ng-href="" class="list-group-item"><i class="fa fa-child"></i>Všetky deti</a></li>
+                <li><a ng-href="" class="list-group-item"><i class="fa fa-users"></i>Zamestnanci</a></li>
+                <li><a ng-href="#/edit" class="list-group-item"><i class="fa fa-cogs"></i>Nastavenia</a></li>
             </ul>
         </div>
 

@@ -1,0 +1,70 @@
+﻿<div>
+    <wait-cursor ng-if="vm.isBusy"></wait-cursor>
+    <form novalidate name="nurseryEditForm" ng-submit="vm.saveEmployee()">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="name">Celé meno</label>
+                    <input ng-model="vm.employee.fullName" type="text" name="name" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="jobTitle">Popis práce</label>
+                    <input ng-model="vm.employee.jobTitle" type="text" name="jobTitle" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="employment">Pracovný úväzok</label>
+                    <input ng-model="vm.employee.employment" type="text" name="employment" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="dateOfBirth">Dátum narodenia</label>
+                    <md-datepicker ng-model="vm.dateOfBirth" md-placeholder="Zadajte dátum" name="dateOfBirth"></md-datepicker>
+                </div>
+                <div class="form-group">
+                    <label for="startDate">Dátum nástupu</label>
+                    <md-datepicker ng-model="vm.startDate" md-placeholder="Zadajte dátum" name="startDate" ></md-datepicker>
+                </div>
+                <div class="form-group">
+                    <label for="leaveDate">Dátum odchodu</label>
+                    <md-datepicker ng-model="vm.leaveDate" md-placeholder="Zadajte dátum" name="leaveDate"></md-datepicker>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input ng-model="vm.employee.email" type="text" name="email" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="privatePhone">Súkromný telefón</label>
+                    <input ng-model="vm.employee.privatePhone" type="text" name="privatePhone" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="workPhone">Služobný telefón</label>
+                    <input ng-model="vm.employee.workPhone" type="text" name="workPhone" class="form-control" />
+                </div>
+                Address
+                Attendance
+                   
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="description">Popis</label>
+                    <textarea ng-model="vm.employee.description" type="text" name="description" class="form-control" rows="5"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-8">
+                <input type="submit" value="Uložiť zmeny" class="btn btn-success" />
+                <a href="#/" class="btn btn-warning"><i class="fa fa-reply"></i> Späť</a>
+            </div>
+            <div class="col-xs-4 text-right">
+                <button type="button" class="btn btn-danger" ng-click="vm.deleteEmployee()"><i class="fa fa-trash-o"></i> Vymazať</button>
+            </div>
+        </div>
+    </form>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            Vytvoril {{ vm.employee.createdBy }} {{ vm.employee.created | date : 'd.M.yyyy HH:mm' }}<br>
+            <span ng-if="vm.employee.modifiedBy">Poslednú zmenu vykonal {{ vm.employee.modifiedBy }} {{ vm.employee.modified | date : 'd.M.yyyy HH:mm' }}</span>
+        </div>
+    </div>
+</div>

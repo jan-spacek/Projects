@@ -7,18 +7,18 @@
         .controller("nurseriesController", nurseriesController);
 
     function nurseriesController($http) {
-        var scope = this;
-        scope.nurseries = [];
-        scope.isBusy = true;
+        var vm = this;
+        vm.nurseries = [];
+        vm.isBusy = true;
 
         $http.get("/Api/Nurseries")
             .then(function (response) {
-                angular.copy(response.data, scope.nurseries);
+                angular.copy(response.data, vm.nurseries);
             }, function (error) {
                 toastr.error("Nepodarilo sa načítať dáta: " + error);
             })
             .finally(function () {
-                scope.isBusy = false;
+                vm.isBusy = false;
             });
     }
 })();

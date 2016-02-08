@@ -16,7 +16,6 @@ namespace MyNurserySchool.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Child> Children { get; set; }
         public DbSet<Address> Addresses { get; set; }
-        public DbSet<Contact> Contacts { get; set; }
         public DbSet<Note> Notes { get; set; }
 
         public NurseryContext()

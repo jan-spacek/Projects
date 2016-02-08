@@ -18,11 +18,13 @@ namespace MyNurserySchool.Data
         void AddAddress(Address address);
         void AddEmployee(Employee employee);
         void SaveNursery(Nursery nursery);
+        void SaveClass(Class newClass);
         void SaveAddress(Address address);
         void SaveEmployee(Employee director);
         void DeleteNursery(int id);
         void DeleteAddress(int id);
         void DeleteEmployee(int id);
+        object GetClassById(int classId);
         void DeleteClass(int id);
         void DeleteChild(int id);
     }

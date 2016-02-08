@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,9 +14,10 @@ namespace MyNurserySchool.Models
         public int Capacity { get; set; }
         public Employee ClassTeacher { get; set; }
         public string Description { get; set; }
-        public ICollection<Child> Children { get; set; }
-        public ICollection<Note> Notes { get; set; }
+        public virtual ICollection<Child> Children { get; set; }
 
+        [ForeignKey("Nursery")]
+        public int? NurseryId { get; set; }
 
         public DateTime Created { get; set; }
         public string CreatedBy { get; set; }
