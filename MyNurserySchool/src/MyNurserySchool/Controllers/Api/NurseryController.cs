@@ -7,11 +7,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNet.Authorization;
 using MyNurserySchool.Data;
 using MyNurserySchool.ViewModels;
+using System.Collections.Generic;
+using MyNurserySchool.Enums;
 
 namespace MyNurserySchool.Controllers.Api
 {
     [Authorize]
-    [Route("api/nursery")]
+    [Route("Api/Nursery/")]
     public class NurseryController : Controller
     {
         private ILogger<NurseryController> _logger;
@@ -94,8 +96,6 @@ namespace MyNurserySchool.Controllers.Api
                         Response.StatusCode = (int)HttpStatusCode.Created;
                         return Json(Mapper.Map<NurseryViewModel>(nursery));
                     }
-
-                    
                 }
             }
             catch (Exception ex)
@@ -114,6 +114,23 @@ namespace MyNurserySchool.Controllers.Api
         {
             _repository.DeleteNursery(id);
             return Json(new { Message = "Deleted" });
+        }
+
+        [HttpGet("AttendanceStates")]
+        public JsonResult GetAttendanceStates()
+        {
+            var enumVals = new List<object>();
+
+            foreach (var item in Enum.GetValues(typeof(AttendanceState)))
+            {
+                enumVals.Add(new
+                {
+                    id = (int)item,
+                    name = item.ToString()
+                });
+            }
+
+            return Json(enumVals);
         }
     }
 }

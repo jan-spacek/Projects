@@ -28,10 +28,10 @@
                 templateUrl: "/views/Nursery/employeeEditView.html"
             });
 
-            $routeProvider.when("/children", {
-                controller: "nurseryDetailController",
+            $routeProvider.when("/class/:id", {
+                controller: "classDetailController",
                 controllerAs: "vm",
-                templateUrl: "/views/Nursery/nurseryDetailView.html"
+                templateUrl: "/views/Nursery/classDetailView.html"
             });
 
             $routeProvider.otherwise({

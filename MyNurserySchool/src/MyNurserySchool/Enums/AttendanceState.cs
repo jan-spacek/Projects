@@ -2,6 +2,6 @@
 {
     public enum AttendanceState
     {
-        Waiting = 0, Attending = 1, Left = 2
+        Waiting = 0, Attendant = 1, Left = 2
     }
 }

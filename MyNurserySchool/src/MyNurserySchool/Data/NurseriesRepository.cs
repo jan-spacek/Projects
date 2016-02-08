@@ -36,6 +36,7 @@ namespace MyNurserySchool.Data
                 return null;
             }
         }
+
         public IEnumerable<Nursery> GetAllNurseries()
         {
             try
@@ -118,19 +119,40 @@ namespace MyNurserySchool.Data
 
         public Nursery GetNurseryById(int nurseryId)
         {
-            return _context.Nurseries.Include(n => n.Classes)
+            //List<Nursery> nurseries = 
+            return _context.Nurseries
+                        .Include(n => n.Classes)
                         .Include(n => n.Director)
                         .Include(n => n.Address)
-                        .Include(n => n.Employees)
+                        .Include(n => n.Employees) //.ToList();
                         .Where(n => n.Id == nurseryId)
                         .FirstOrDefault();
+
+            //return nurseries.Where(n => n.Id == nurseryId).FirstOrDefault;
         }
         
-        public object GetClassById(int classId)
+        public Class GetClassById(int classId)
         {
-            return _context.Classes.Include(n => n.Children)
-                        .Include(n => n.ClassTeacher)
-                        .Where(n => n.Id == classId)
+            return _context.Classes.Include(c => c.ClassTeacher)
+                        .Include(c => c.Children)
+                        .Where(c => c.Id == classId)
+                        .FirstOrDefault();
+        }
+
+        public Employee GetEmployeeById(int employeeId)
+        {
+            return _context.Employees.Include(e => e.Address)
+                        .Include(e => e.Notes)
+                        .Where(e => e.Id == employeeId)
+                        .FirstOrDefault();
+        }
+
+        public Child GetChildById(int childId)
+        {
+            return _context.Children
+                        .Include(c => c.Address)
+                        .Include(c => c.Notes)
+                        .Where(c => c.Id == childId)
                         .FirstOrDefault();
         }
 

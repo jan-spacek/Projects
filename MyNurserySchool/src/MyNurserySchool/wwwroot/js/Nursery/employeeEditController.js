@@ -7,34 +7,38 @@
     function employeeEditController($scope, $http, $location, $routeParams) {
         var vm = this;
         vm.employeeId = $routeParams.id;
-        vm.nursery = {};
         vm.employee = {};
         vm.isBusy = true;
 
-        $http.get("/Api/Nursery/" + $scope.outerId)
+        $http.get("/Api/Employee/" + vm.employeeId)
             .then(function (response) {
-                angular.copy(response.data, vm.nursery);
-                for (var i = 0, l = vm.nursery.employees.length; i < l; i++) {
-                    if (vm.nursery.employees[i].id == vm.employeeId) {
-                        angular.copy(vm.nursery.employees[i], vm.employee);
-                        vm.dateOfBirth = new Date(vm.employee.dateOfBirth);
-                        vm.startDate = new Date(vm.employee.startDate);
-                        vm.leaveDate = new Date(vm.employee.leaveDate);
-                    }
-                }
+                angular.copy(response.data, vm.employee);
+                var dateOfBirth = new Date(vm.employee.dateOfBirth);
+                vm.dateOfBirth = dateOfBirth.getFullYear() < 1901 ? null : dateOfBirth;
+                var startDate = new Date(vm.employee.startDate);
+                vm.startDate = startDate.getFullYear() < 1901 ? null : startDate;
+                var leaveDate = new Date(vm.employee.leaveDate);
+                vm.leaveDate = leaveDate.getFullYear() < 1901 ? null : leaveDate;
             }, function () {
-                toastr.error("Nepodarilo sa načítať informácie o triede");
+                toastr.error("Nepodarilo sa načítať informácie o zamestnancovi");
             }).finally(function () {
                 vm.isBusy = false;
             });
 
+        $http.get("/Api/Nursery/AttendanceStates")
+            .then(function (response) {
+                $scope.data = response.data;
+            }, function () {
+                toastr.error("Nepodarilo sa načítať stránku");
+            });
+
         vm.saveEmployee = function () {
             vm.isBusy = true;
-            vm.employee.dateOfBirth = vm.dateOfBirth;
-            vm.employee.startDate = vm.startDate;
-            vm.employee.leaveDate = vm.leaveDate;
+            vm.employee.dateOfBirth = vm.dateOfBirth === null ? "1900-01-01" : vm.dateOfBirth;
+            vm.employee.startDate = vm.startDate === null ? "1900-01-01" : vm.startDate;
+            vm.employee.leaveDate = vm.leaveDate === null ? "1900-01-01" : vm.leaveDate;
 
-            $http.put("/Api/Employee/" + vm.nursery.id, vm.employee)
+            $http.put("/Api/Employee/" + $scope.outerId, vm.employee)
                 .then(function (response) {
                     toastr.success("Zmeny v zamestnancovi " + vm.employee.fullName + " boli úspešne uložené");
                     $location.path("#/");

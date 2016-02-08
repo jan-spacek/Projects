@@ -12,6 +12,8 @@ namespace MyNurserySchool.Data
         void AddNursery(Nursery newNursery);
         bool SaveAll();
         Nursery GetNurseryById(int nurseryId);
+        Employee GetEmployeeById(int employeeId);
+        Class GetClassById(int classId);
         void AddClass(int nurseryId, Class newClass);
         int GetNurseryIdByUserName(string name);
         bool HasAccess(int id, string name);
@@ -24,7 +26,6 @@ namespace MyNurserySchool.Data
         void DeleteNursery(int id);
         void DeleteAddress(int id);
         void DeleteEmployee(int id);
-        object GetClassById(int classId);
         void DeleteClass(int id);
         void DeleteChild(int id);
     }

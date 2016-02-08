@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Data.Entity.Migrations;
-using MyNurserySchool.Enums;
 
 namespace MyNurserySchool.Migrations
 {
-    public partial class AttendanceAdded : Migration
+    public partial class ChildUpdated : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +13,10 @@ namespace MyNurserySchool.Migrations
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_StandardUser_UserId", table: "AspNetUserLogins");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_StandardUser_UserId", table: "AspNetUserRoles");
-            migrationBuilder.DropColumn(name: "State", table: "Child");
+            migrationBuilder.AddColumn<int>(
+                name: "AddressId",
+                table: "Child",
+                nullable: true);
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",
@@ -50,6 +52,13 @@ namespace MyNurserySchool.Migrations
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Child_Address_AddressId",
+                table: "Child",
+                column: "AddressId",
+                principalTable: "Address",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -59,13 +68,8 @@ namespace MyNurserySchool.Migrations
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_StandardUser_UserId", table: "AspNetUserLogins");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_StandardUser_UserId", table: "AspNetUserRoles");
-            migrationBuilder.DropColumn(name: "Attendance", table: "Child");
-            migrationBuilder.DropColumn(name: "Attendance", table: "Employee");
-            migrationBuilder.AddColumn<int>(
-                name: "State",
-                table: "Child",
-                nullable: false,
-                defaultValue: 0);
+            migrationBuilder.DropForeignKey(name: "FK_Child_Address_AddressId", table: "Child");
+            migrationBuilder.DropColumn(name: "AddressId", table: "Child");
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",

@@ -1,15 +1,12 @@
 ﻿using MyNurserySchool.Enums;
+using MyNurserySchool.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace MyNurserySchool.Models
+namespace MyNurserySchool.ViewModels
 {
-    public class Child
+    public class ChildViewModel
     {
-        #region Parameteres
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -22,14 +19,11 @@ namespace MyNurserySchool.Models
         public Address Address { get; set; }
         public ICollection<Note> Notes { get; set; }
         public AttendanceState Attendance { get; set; }
-
-        [ForeignKey("Class")]
         public int? ClassId { get; set; }
 
         public DateTime Created { get; set; }
         public string CreatedBy { get; set; }
         public DateTime Modified { get; set; }
         public string ModifiedBy { get; set; }
-        #endregion
     }
 }

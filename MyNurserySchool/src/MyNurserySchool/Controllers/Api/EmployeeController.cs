@@ -6,6 +6,8 @@ using MyNurserySchool.Data;
 using Microsoft.AspNet.Mvc;
 using MyNurserySchool.Models;
 using System;
+using System.Collections.Generic;
+using MyNurserySchool.Enums;
 
 namespace MyNurserySchool.Controllers.Api
 {
@@ -26,14 +28,14 @@ namespace MyNurserySchool.Controllers.Api
         {
             try
             {
-                var result = _repository.GetClassById(employeeId);
+                var result = _repository.GetEmployeeById(employeeId);
 
                 if (result == null)
                 {
                     return Json(null);
                 }
 
-                return Json(Mapper.Map<ClassViewModel>(result)); // tu mozeme implementovat sortenie
+                return Json(Mapper.Map<EmployeeViewModel>(result));
             }
             catch (Exception ex)
             {
@@ -88,7 +90,8 @@ namespace MyNurserySchool.Controllers.Api
                     employee.Modified = DateTime.Now;
                     employee.ModifiedBy = User.Identity.Name;
                     employee.NurseryId = nurseryId;
-
+                    
+                    _repository.SaveAddress(employee.Address);
                     _repository.SaveEmployee(employee);
 
                     if (_repository.SaveAll())
@@ -100,13 +103,13 @@ namespace MyNurserySchool.Controllers.Api
             }
             catch (Exception ex)
             {
-                _logger.LogError("Failed to save new class", ex);
+                _logger.LogError("Failed to save employee", ex);
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json("Failed to save new class");
+                return Json("Failed to save employee");
             }
 
             Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return Json("Validation failed on new class");
+            return Json("Validation failed on employee");
         }
 
         [HttpDelete("{id}")]

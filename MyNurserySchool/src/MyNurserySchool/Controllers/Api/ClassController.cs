@@ -33,7 +33,7 @@ namespace MyNurserySchool.Controllers.Api
                     return Json(null);
                 }
 
-                return Json(Mapper.Map<ClassViewModel>(result)); // tu mozeme implementovat sortenie
+                return Json(Mapper.Map<ClassViewModel>(result));
             }
             catch (Exception ex)
             {
@@ -56,8 +56,7 @@ namespace MyNurserySchool.Controllers.Api
                     newClass.Modified = DateTime.Now;
                     newClass.ModifiedBy = User.Identity.Name;
                     newClass.NurseryId = nurseryId;
-
-
+                    
                     _repository.AddClass(nurseryId, newClass);
 
                     if(_repository.SaveAll())
