@@ -7,7 +7,7 @@ using MyNurserySchool.Data;
 
 namespace MyNurserySchool.Migrations
 {
-    [DbContext(typeof(NurseryContext))]
+    [DbContext(typeof(Data.DbContext))]
     [Migration("20160206194736_InitialDatabase")]
     partial class InitialDatabase
     {

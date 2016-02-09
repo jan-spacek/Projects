@@ -15,6 +15,11 @@
     <script src="~/app/Class/classEditController.js"></script>
     <script src="~/app/Class/classDetailController.js"></script>
     <script src="~/app/Employee/employeeEditController.js"></script>
+    <script src="~/app/Employee/employeeDetailController.js"></script>
+    <script src="~/app/Child/childEditController.js"></script>
+    <script src="~/app/Child/childDetailController.js"></script>
+    <script src="~/app/Lists/employeesListController.js"></script>
+    <script src="~/app/Lists/childrenListController.js"></script>
     <script src="~/app/Common/simpleControls.js"></script>
 }
 <div ng-app="nursery-app">
@@ -26,18 +31,18 @@
         <div class="col-sm-3 col-lg-2">
             <ul class="nav nav-pills nav-stacked nav-vertical">
                 <li><a ng-href="#/" class="list-group-item"><i class="fa fa-home"></i>Prehľad</a>
-                <li><a ng-href="" class="list-group-item"><i class="fa fa-cubes"></i>Triedy</a>
-                    @*<a href="#collapse" class="list-group-item" data-toggle="collapse" data-parent="#MainMenu"><i class="fa fa-cubes"></i>Triedy</a>
+                <li><!--<a ng-href="" class="list-group-item"><i class="fa fa-cubes"></i>Triedy</a>-->
+                    <a href="#collapse" class="list-group-item" data-toggle="collapse" data-parent="#MainMenu"><i class="fa fa-cubes"></i>Triedy</a>
                     <ul class="collapse nav nav-pills nav-stacked nav-subnav" id="collapse">
                         @foreach (var cla in Model.Classes)
                         {
-                            <li><a asp-controller="App" asp-action="Class">@cla.Name</a></li>
+                            <li><a ng-href="#/class/@cla.Id">@cla.Name</a></li>
                         }
-                        <li><a asp-controller="App" asp-action="NewClass"><i class="fa fa-plus-circle"></i>pridať triedu</a></li>
-                    </ul>*@
+                        <li><a ng-href="#/class/0/edit"><i class="fa fa-plus-circle"></i>Pridať triedu</a></li>
+                    </ul>
                 </li>
-                <li><a ng-href="" class="list-group-item"><i class="fa fa-child"></i>Všetky deti</a></li>
-                <li><a ng-href="" class="list-group-item"><i class="fa fa-users"></i>Zamestnanci</a></li>
+                <li><a ng-href="#/children" class="list-group-item"><i class="fa fa-child"></i>Všetky deti</a></li>
+                <li><a ng-href="#/employees" class="list-group-item"><i class="fa fa-users"></i>Zamestnanci</a></li>
                 <li><a ng-href="#/edit" class="list-group-item"><i class="fa fa-cogs"></i>Nastavenia</a></li>
             </ul>
         </div>

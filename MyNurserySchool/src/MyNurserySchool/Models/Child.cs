@@ -13,10 +13,10 @@ namespace MyNurserySchool.Models
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public string SocialNumber { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime LeaveDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? LeaveDate { get; set; }
         public string Description { get; set; }
         public string Contacts { get; set; }
         public Address Address { get; set; }

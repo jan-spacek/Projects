@@ -73,15 +73,15 @@ namespace MyNurserySchool
                     }
                 };
             })
-            .AddEntityFrameworkStores<NurseryContext>();
+            .AddEntityFrameworkStores<DbContext>();
 
             services.AddLogging();
 
             services.AddEntityFramework()
                 .AddSqlServer()
-                .AddDbContext<NurseryContext>();
+                .AddDbContext<DbContext>();
 
-            services.AddTransient<NurseryContextSeedData>();
+            services.AddTransient<DbContextSeedData>();
             services.AddScoped<INurseriesRepository, NurseriesRepository>();
 
 #if DEBUG
@@ -92,7 +92,7 @@ namespace MyNurserySchool
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, NurseryContextSeedData seeder, ILoggerFactory loggerFactory)
+        public async void Configure(IApplicationBuilder app, DbContextSeedData seeder, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddDebug(LogLevel.Warning);
 

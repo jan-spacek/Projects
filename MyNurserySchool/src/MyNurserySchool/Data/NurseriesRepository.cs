@@ -9,10 +9,10 @@ namespace MyNurserySchool.Data
 {
     public class NurseriesRepository : INurseriesRepository
     {
-        private NurseryContext _context;
+        private DbContext _context;
         private ILogger<NurseriesRepository> _logger;
 
-        public NurseriesRepository(NurseryContext context, ILogger<NurseriesRepository> logger)
+        public NurseriesRepository(DbContext context, ILogger<NurseriesRepository> logger)
         {
             _context = context;
             _logger = logger;
@@ -56,23 +56,24 @@ namespace MyNurserySchool.Data
             }
         }
 
-        public IEnumerable<Class> GetAllClasses()
+        public IEnumerable<Class> GetAllClasses(int nurseryId)
         {
             try
             {
                 return _context.Classes
-                    .Include(n => n.Children)
-                    .Include(n => n.ClassTeacher)
-                    .OrderBy(n => n.Name)
+                    .Include(c => c.Children)
+                    .Include(c => c.ClassTeacher)
+                    .OrderBy(c => c.Name)
+                    .Where(c => c.NurseryId == nurseryId)
                     .ToList();
             }
             catch (Exception ex)
             {
-                _logger.LogError("Could not get Classes fromdatabase", ex);
+                _logger.LogError("Could not get Classes from database", ex);
                 return null;
             }
         }
-
+        
         public IEnumerable<Employee> GetAllEmployees(int nurseryId)
         {
             try
@@ -80,28 +81,31 @@ namespace MyNurserySchool.Data
                 return _context.Employees
                     .Include(e => e.Notes)
                     .OrderBy(e => e.Id)
+                    .Where(e => e.NurseryId == nurseryId)
                     .ToList();
             }
             catch (Exception ex)
             {
-                _logger.LogError("Could not get Employees fromdatabase", ex);
+                _logger.LogError("Could not get Employees from database", ex);
                 return null;
             }
         }
 
-        public IEnumerable<Child> GetAllChildren()
+        public IEnumerable<Child> GetAllChildren(int nurseryId)
         {
             try
             {
-                return _context.Children
-                    .Include(n => n.Contacts)
-                    .Include(n => n.Notes)
-                    .OrderBy(n => n.LastName)
-                    .ToList();
+                var listOfClasses = _context.Classes.Select(r => r.Id).ToList();
+                var children = _context.Children
+                    .Include(c => c.Notes)
+                    .OrderBy(c => c.DateOfBirth)
+                    .Where(r => listOfClasses.Contains(r.ClassId??0));
+
+                return children;
             }
             catch (Exception ex)
             {
-                _logger.LogError("Could not get Childrens fromdatabase", ex);
+                _logger.LogError("Could not get Children from database", ex);
                 return null;
             }
         }

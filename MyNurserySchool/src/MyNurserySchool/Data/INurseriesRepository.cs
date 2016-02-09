@@ -6,13 +6,14 @@ namespace MyNurserySchool.Data
     public interface INurseriesRepository
     {
         IEnumerable<Nursery> GetAllNurseries(string name);
-        IEnumerable<Class> GetAllClasses();
+        IEnumerable<Class> GetAllClasses(int nurseryId);
         IEnumerable<Employee> GetAllEmployees(int nurseryId);
-        IEnumerable<Child> GetAllChildren();
+        IEnumerable<Child> GetAllChildren(int nurseryId);
         void AddNursery(Nursery newNursery);
         bool SaveAll();
         Nursery GetNurseryById(int nurseryId);
         Employee GetEmployeeById(int employeeId);
+        Child GetChildById(int childId);
         Class GetClassById(int classId);
         void AddClass(int nurseryId, Class newClass);
         int GetNurseryIdByUserName(string name);

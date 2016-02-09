@@ -1,0 +1,64 @@
+﻿<div>
+    <h3>{{ vm.employee.fullName }}</h3>
+    <wait-cursor ng-if="vm.isBusy"></wait-cursor>
+    <div class="row">
+        <div class="col-md-6">
+            {{ vm.employee.dateOfBirth | date : 'd.M.yyyy' }}
+            <hr>
+            <div ng-if="vm.employee.email != null">
+                <label>E-mail: </label>
+                {{ vm.employee.email }}
+            </div>
+            <div ng-if="vm.employee.privatePhone != null">
+                <label>Súkromný telefón: </label>
+                {{ vm.employee.privatePhone | number }}
+            </div>
+            <div ng-if="vm.employee.workPhone != null">
+                <label>Služobný telefón: </label>
+                {{ vm.employee.workPhone | number }}
+            </div>
+            <div ng-if="vm.employee.address != null">
+                <label>Adresa: </label><br>
+                {{ vm.employee.address.street }} {{ vm.employee.address.number | number }}<br>
+                {{ vm.employee.address.city }}<br>
+                {{ vm.employee.address.zip | number }}
+            </div>
+            <hr />
+            <div ng-if="vm.employee.description != null">
+                <label>Popis: </label>
+                {{ vm.employee.description }}
+            </div>
+            <div ng-if="vm.employee.jobTitle != null">
+                <label>Popis práce: </label>
+                {{ vm.employee.jobTitle }}
+            </div>
+            <div ng-if="vm.employee.employment != null">
+                <label>Pracovný úväzok: </label>
+                {{ vm.employee.employment }}
+            </div>
+            <div ng-if="vm.employee.attendance != null">
+                <label>Pracovný stav: </label>
+                {{ vm.attendanceStates[vm.employee.attendance] }}
+            </div>
+            <div ng-if="vm.employee.startDate != null">
+                <label>Dátum nástupu: </label>
+                {{ vm.employee.startDate | date : 'd.M.yyyy' }}
+            </div>
+            <div ng-if="vm.employee.attendance == 2">
+                <label>Dátum odchodu: </label>
+                {{ vm.employee.leaveDate | date : 'd.M.yyyy' }}
+            </div>
+            <br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-8">
+            <a href="#/employee/{{ vm.employee.id }}/edit" class="btn btn-default"><i class="fa fa-edit"></i> Upraviť</a>
+            <a href="#/" class="btn btn-warning"><i class="fa fa-reply"></i> Späť</a>
+        </div>
+        <div class="col-xs-4 text-right">
+            <button type="button" class="btn btn-danger" ng-click="vm.deleteEmployee()"><i class="fa fa-trash-o"></i> Vymazať</button>
+        </div>
+    </div>
+    <created-modified model="vm.employee"></created-modified>
+</div>

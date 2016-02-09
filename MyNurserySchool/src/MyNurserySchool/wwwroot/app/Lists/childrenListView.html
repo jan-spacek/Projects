@@ -1,0 +1,24 @@
+﻿<div>
+    <h3><i class="fa fa-child"></i> Zoznam detí</h3>
+    <wait-cursor ng-show="vm.isBusy"></wait-cursor>
+    <table class="table table-responsive table-striped">
+        <tr>
+            <th>Meno</th>
+            <th>Priezvisko</th>
+            <th>Dátum narodenia</th>
+            <th>Adresa</th>
+            <th>Kontakt</th>
+            <th colspan="2"></th>
+        </tr>
+        <tr ng-repeat="child in vm.children">
+            <td>{{ child.firstName }}</td>
+            <td>{{ child.lastName }}</td>
+            <td>{{ child.dateOfBirth | date : 'd.M.yyyy HH:mm' }}</td>
+            <td>{{ child.address.street + ' ' + child.address.number + ', ' + child.address.city }}</td>
+            <td>{{ child.contacts }}</td>
+            <td class="col-btn"><a ng-href="#/child/{{ child.id }}" class="btn btn-sm btn-default"><i class="fa fa-folder-open-o"></i></a></td>
+            <td class="col-btn"><a ng-href="#/child/{{ child.id }}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a></td>
+        </tr>
+    </table>
+    <a ng-href="#/child/0/edit" class="btn btn-primary btn-block"><i class="fa fa-user-plus"></i> Pridať dieťa</a>
+</div>

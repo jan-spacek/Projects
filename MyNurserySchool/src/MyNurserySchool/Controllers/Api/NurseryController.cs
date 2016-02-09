@@ -132,5 +132,33 @@ namespace MyNurserySchool.Controllers.Api
 
             return Json(enumVals);
         }
+
+        [HttpGet("{nurseryId}/Children")]
+        public JsonResult GetChildren(int nurseryId)
+        {
+            if (_repository.HasAccess(nurseryId, User.Identity.Name))
+            {
+                var results = Mapper.Map<IEnumerable<ChildViewModel>>(_repository.GetAllChildren(nurseryId));
+                return Json(results);
+            }
+
+            _logger.LogInformation("Attempting to get unauthorized nursery");
+            Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            return Json(new { Message = "Do not have permissionts to view this item" });
+        }
+
+        [HttpGet("{nurseryId}/Employees")]
+        public JsonResult GetEmpoyees(int nurseryId)
+        {
+            if (_repository.HasAccess(nurseryId, User.Identity.Name))
+            {
+                var results = Mapper.Map<IEnumerable<EmployeeViewModel>>(_repository.GetAllEmployees(nurseryId));
+                return Json(results);
+            }
+
+            _logger.LogInformation("Attempting to get unauthorized nursery");
+            Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            return Json(new { Message = "Do not have permissionts to view this item" });
+        }
     }
 }

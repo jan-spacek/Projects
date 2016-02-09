@@ -15,9 +15,9 @@ namespace MyNurserySchool.Models
         public string JobTitle { get; set; }
         public string Employment { get; set; }
         public string Description { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime LeaveDate { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? LeaveDate { get; set; }
         public Address Address { get; set; }
         public string Email { get; set; }
         public string PrivatePhone { get; set; }

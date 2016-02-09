@@ -8,8 +8,8 @@ using MyNurserySchool.Data;
 namespace MyNurserySchool.Migrations
 {
     [DbContext(typeof(Data.DbContext))]
-    [Migration("20160207213454_ForeignKeyAdded")]
-    partial class ForeignKeyAdded
+    [Migration("20160209163329_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -198,6 +198,8 @@ namespace MyNurserySchool.Migrations
 
                     b.Property<int?>("AddressId");
 
+                    b.Property<int>("Attendance");
+
                     b.Property<DateTime>("Created");
 
                     b.Property<string>("CreatedBy");
@@ -236,6 +238,10 @@ namespace MyNurserySchool.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("AddressId");
+
+                    b.Property<int>("Attendance");
+
                     b.Property<int?>("ClassId");
 
                     b.Property<string>("Contacts");
@@ -261,8 +267,6 @@ namespace MyNurserySchool.Migrations
                     b.Property<string>("SocialNumber");
 
                     b.Property<DateTime>("StartDate");
-
-                    b.Property<int>("State");
 
                     b.HasKey("Id");
                 });
@@ -373,6 +377,10 @@ namespace MyNurserySchool.Migrations
 
             modelBuilder.Entity("MyNurserySchool.Models.Child", b =>
                 {
+                    b.HasOne("MyNurserySchool.Models.Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
                     b.HasOne("MyNurserySchool.Models.Class")
                         .WithMany()
                         .HasForeignKey("ClassId");

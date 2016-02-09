@@ -34,6 +34,36 @@
                 templateUrl: "/app/Employee/employeeEditView.html"
             });
 
+            $routeProvider.when("/employee/:id", {
+                controller: "employeeDetailController",
+                controllerAs: "vm",
+                templateUrl: "/app/Employee/employeeDetailView.html"
+            });
+
+            $routeProvider.when("/child/:id/edit", {
+                controller: "childEditController",
+                controllerAs: "vm",
+                templateUrl: "/app/Employee/childEditView.html"
+            });
+
+            $routeProvider.when("/child/:id", {
+                controller: "childDetailController",
+                controllerAs: "vm",
+                templateUrl: "/app/Employee/childDetailView.html"
+            });
+
+            $routeProvider.when("/employees", {
+                controller: "employeesListController",
+                controllerAs: "vm",
+                templateUrl: "/app/Lists/employeesListView.html"
+            });
+
+            $routeProvider.when("/children", {
+                controller: "childrenListController",
+                controllerAs: "vm",
+                templateUrl: "/app/Lists/childrenListView.html"
+            });
+
             $routeProvider.otherwise({
                 redirectTo: "/"
             });
