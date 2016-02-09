@@ -33,3 +33,7 @@ h2.modal-header {
 .view {
     margin-bottom: 50px;
 }
+
+h3, h4, h5 {
+    margin-top: 0;
+}

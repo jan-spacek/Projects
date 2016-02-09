@@ -6,6 +6,7 @@
             <th>Obec</th>
             <th>Adresa</th>
             <th>Počet tried</th>
+            <th>Posledná zmena</th>
             <th></th>
             <th></th>
         </tr>
@@ -14,6 +15,7 @@
             <td>{{ nursery.address.city }}</td>
             <td>{{ nursery.address.street + ' ' + nursery.address.number }}</td>
             <td>{{ nursery.classes.length }}</td>
+            <td>{{ nursery.modifiedBy }} {{ nursery.modified | date : 'd.M.yyyy HH:mm' }}</td>
             <td class="col-btn"><a ng-href="/App/Nursery/{{ nursery.id }}" class="btn btn-sm btn-default"><i class="fa fa-folder-open-o"></i></a></td>
             <td class="col-btn"><a ng-href="#/edit/{{ nursery.id }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a></td>
         </tr>

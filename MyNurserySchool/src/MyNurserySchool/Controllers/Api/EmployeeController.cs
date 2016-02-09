@@ -91,7 +91,8 @@ namespace MyNurserySchool.Controllers.Api
                     employee.ModifiedBy = User.Identity.Name;
                     employee.NurseryId = nurseryId;
                     
-                    _repository.SaveAddress(employee.Address);
+                    if (employee.Address != null)
+                        _repository.SaveAddress(employee.Address);
                     _repository.SaveEmployee(employee);
 
                     if (_repository.SaveAll())
@@ -115,8 +116,14 @@ namespace MyNurserySchool.Controllers.Api
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
-            _repository.DeleteEmployee(id);
-            return Json(new { Message = "Deleted" });
+            try {
+                _repository.DeleteEmployee(id);
+                return Json(new { Message = "Deleted" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Message = "Unable to delete: " + ex });
+            }
         }
     }
 }

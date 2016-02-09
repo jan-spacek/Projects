@@ -7,19 +7,19 @@
             $routeProvider.when("/", {
                 controller: "nurseriesController",
                 controllerAs: "vm",
-                templateUrl: "/views/Nurseries/nurseriesView.html"
+                templateUrl: "/app/Nurseries/nurseriesView.html"
             });
 
             $routeProvider.when("/new", {
                 controller: "nurseryNewController",
                 controllerAs: "vm",
-                templateUrl: "/views/Nurseries/nurseryNewView.html"
+                templateUrl: "/app/Nurseries/nurseryNewView.html"
             });
 
             $routeProvider.when("/edit/:id", {
                 controller: "nurseryEditController",
                 controllerAs: "vm",
-                templateUrl: "/views/Nurseries/nurseryEditView.html"
+                templateUrl: "/app/Nurseries/nurseryEditView.html"
             });
 
             $routeProvider.otherwise({

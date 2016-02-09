@@ -1,6 +1,6 @@
 ﻿<div>
     <wait-cursor ng-if="vm.isBusy"></wait-cursor>
-    <form novalidate name="nurseryEditForm" ng-submit="vm.saveEmployee()">
+    <form novalidate name="employeeEditForm" ng-submit="vm.saveEmployee()">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -74,19 +74,14 @@
         </div>
         <div class="row">
             <div class="col-xs-8">
-                <input type="submit" value="Uložiť zmeny" class="btn btn-success" />
+                <input type="submit" value="Uložiť zmeny" class="btn btn-success" ng-if="!vm.isNew"/>
+                <input type="submit" value="Vytvoriť zamestnanca" class="btn btn-success" ng-if="vm.isNew"/>
                 <a href="#/" class="btn btn-warning"><i class="fa fa-reply"></i> Späť</a>
             </div>
             <div class="col-xs-4 text-right">
-                <button type="button" class="btn btn-danger" ng-click="vm.deleteEmployee()"><i class="fa fa-trash-o"></i> Vymazať</button>
+                <button type="button" class="btn btn-danger" ng-click="vm.deleteEmployee()" ng-if="!vm.isNew"><i class="fa fa-trash-o"></i> Vymazať</button>
             </div>
         </div>
     </form>
-    <hr>
-    <div class="row">
-        <div class="col-xs-12">
-            Vytvoril {{ vm.employee.createdBy }} {{ vm.employee.created | date : 'd.M.yyyy HH:mm' }}<br>
-            <span ng-if="vm.employee.modifiedBy">Poslednú zmenu vykonal {{ vm.employee.modifiedBy }} {{ vm.employee.modified | date : 'd.M.yyyy HH:mm' }}</span>
-        </div>
-    </div>
+    <created-modified model="vm.employee" ng-if="!vm.isNew"></created-modified>
 </div>

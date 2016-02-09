@@ -23,7 +23,7 @@
             $http.put("/Api/Nursery/", vm.nursery)
                 .then(function (response) {
                     toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
-                    //$location.path("#/");
+                    $location.path("#/");
                 }, function () {
                     toastr.error("Škôlku sa nepodarilo uložiť");
                 }).finally(function () {

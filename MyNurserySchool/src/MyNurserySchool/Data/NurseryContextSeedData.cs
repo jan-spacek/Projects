@@ -50,8 +50,10 @@ namespace MyNurserySchool.Data
                 var kidsParadiseRuz = new Nursery()
                 {
                     Name = "Kids Paradise - Ružinov",
-                    Created = DateTime.UtcNow,
+                    Created = DateTime.Now,
                     CreatedBy = "admin",
+                    Modified = DateTime.Now,
+                    ModifiedBy = "admin",
                     Address = new Address()
                     {
                         Street = "Martinčekova",
@@ -69,6 +71,8 @@ namespace MyNurserySchool.Data
                             Employment = "plný úväzok",
                             Created = DateTime.Now,
                             CreatedBy = "admin",
+                            Modified = DateTime.Now,
+                            ModifiedBy = "admin",
                             Email = "lucia.spackova@kidsparadise.sk"
                         }
                     },
@@ -79,14 +83,38 @@ namespace MyNurserySchool.Data
                             Name = "Žabky",
                             Created = DateTime.Now,
                             CreatedBy = "admin",
+                            Modified = DateTime.Now,
+                            ModifiedBy = "admin",
                             Capacity = 25,
                             Children = new List<Child>()
+                            {
+                                new Child()
+                                {
+                                    FirstName = "Jožko",
+                                    LastName = "Mrkvička",
+                                    Created = DateTime.Now,
+                                    CreatedBy = "admin",
+                                    Modified = DateTime.Now,
+                                    ModifiedBy = "admin"
+                                },
+                                new Child()
+                                {
+                                    FirstName = "Ferko",
+                                    LastName = "Malý",
+                                    Created = DateTime.Now,
+                                    CreatedBy = "admin",
+                                    Modified = DateTime.Now,
+                                    ModifiedBy = "admin"
+                                }
+                            }
                         },
                         new Class()
                         {
                             Name = "Lienky",
                             Created = DateTime.Now,
                             CreatedBy = "admin",
+                            Modified = DateTime.Now,
+                            ModifiedBy = "admin",
                             Capacity = 25,
                             Children = new List<Child>()
                         }
@@ -104,6 +132,8 @@ namespace MyNurserySchool.Data
                     Name = "Kids Paradise - Petržalka",
                     Created = DateTime.Now,
                     CreatedBy = "admin",
+                    Modified = DateTime.Now,
+                    ModifiedBy = "admin",
                     Address = new Address()
                     {
                         Street = "Vyšehradská",
@@ -120,6 +150,8 @@ namespace MyNurserySchool.Data
                             Employment = "plný úväzok",
                             Created = DateTime.Now,
                             CreatedBy = "admin",
+                            Modified = DateTime.Now,
+                            ModifiedBy = "admin",
                             Email = "vysehradska@kidsparadise.sk"
                         }
                     },

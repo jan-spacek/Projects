@@ -119,16 +119,13 @@ namespace MyNurserySchool.Data
 
         public Nursery GetNurseryById(int nurseryId)
         {
-            //List<Nursery> nurseries = 
             return _context.Nurseries
                         .Include(n => n.Classes)
                         .Include(n => n.Director)
                         .Include(n => n.Address)
-                        .Include(n => n.Employees) //.ToList();
+                        .Include(n => n.Employees)
                         .Where(n => n.Id == nurseryId)
                         .FirstOrDefault();
-
-            //return nurseries.Where(n => n.Id == nurseryId).FirstOrDefault;
         }
         
         public Class GetClassById(int classId)
@@ -174,8 +171,16 @@ namespace MyNurserySchool.Data
         
         public void SaveNursery(Nursery nursery)
         {
+            //using (var newContext = new NurseryContext())
+            //{
+            //    newContext.Nurseries.Attach(nursery);
+            //    newContext.Entry(nursery).Property(n => n.Name).IsModified = true;
+            //    newContext.Entry(nursery).Property(n => n.Description).IsModified = true;
+            //    newContext.Entry(nursery).Property(n => n.Director).IsModified = true;
+            //    newContext.SaveChanges();
+            //}
+
             _context.Nurseries.Update(nursery);
-            _context.SaveChanges();
         }
 
         public void SaveClass(Class newClass)
@@ -242,18 +247,19 @@ namespace MyNurserySchool.Data
                 if (a.Id == id)
                 {
                     _context.Addresses.Remove(a);
-                    return;
                 }
         }
 
         public void DeleteEmployee(int id)
         {
-            foreach (Employee e in _context.Employees)
+            foreach (Employee e in _context.Employees.Include(e => e.Address))
                 if (e.Id == id)
                 {
+                    int addrId = e.Address.Id;
                     _context.Employees.Remove(e);
-                    return;
+                    DeleteAddress(addrId);
                 }
+            _context.SaveChanges();
         }
 
         public void DeleteClass(int id)
@@ -261,11 +267,12 @@ namespace MyNurserySchool.Data
             foreach (Class cls in _context.Classes)
                 if (cls.Id == id)
                 {
-                    foreach (Child child in cls.Children)
-                        DeleteChild(child.Id);
                     _context.Classes.Remove(cls);
-                    return;
+                    if (cls.Children != null)
+                        foreach (Child child in cls.Children)
+                            DeleteChild(child.Id);
                 }
+            _context.SaveChanges();
         }
 
         public void DeleteChild(int id)
@@ -273,9 +280,11 @@ namespace MyNurserySchool.Data
             foreach (Child c in _context.Children)
                 if (c.Id == id)
                 {
+                    int addrId = c.Address.Id;
                     _context.Children.Remove(c);
-                    return;
+                    DeleteAddress(addrId);
                 }
+            _context.SaveChanges();
         }
     }
 }

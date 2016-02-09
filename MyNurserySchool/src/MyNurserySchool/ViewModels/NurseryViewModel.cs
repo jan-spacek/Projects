@@ -10,6 +10,7 @@ namespace MyNurserySchool.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public Employee Director { get; set; }
         public Address Address { get; set; }
         public virtual IEnumerable<ClassViewModel> Classes { get; set; }
         public virtual IEnumerable<EmployeeViewModel> Employees { get; set; }

@@ -46,11 +46,5 @@
             </div>
         </div>
     </form>
-    <hr>
-    <div class="row">
-        <div class="col-xs-12">
-            Vytvoril {{ vm.nursery.createdBy }} {{ vm.nursery.created | date : 'd.M.yyyy HH:mm' }}<br>
-            <span ng-if="vm.nursery.modifiedBy">Poslednú zmenu vykonal {{ vm.nursery.modifiedBy }} {{ vm.nursery.modified | date : 'd.M.yyyy HH:mm' }}</span>
-        </div>
-    </div>
+    <created-modified model="vm.nursery"></created-modified>
 </div>
