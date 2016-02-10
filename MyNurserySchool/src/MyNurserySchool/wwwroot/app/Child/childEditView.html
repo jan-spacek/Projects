@@ -15,7 +15,7 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-6">
-                        <label for="birthDate">Dátum narodenia</label>
+                        <label for="birthDate">Dátum narodenia</label><br />
                         <md-datepicker ng-model="vm.birthDate" md-placeholder="Zadajte dátum" name="birthDate" id="birthDate"></md-datepicker>
                     </div>
                     <div class="form-group col-sm-6">
@@ -52,8 +52,12 @@
                     <textarea ng-model="vm.child.description" type="text" name="description" id="description" class="form-control" rows="5"></textarea>
                 </div>
                 <div class="form-group">
+                    <label for="class">Trieda</label>
+                    <select ng-model="vm.child.classId" ng-options="class.id as class.name for class in vm.classes" class="form-control" name="class" id="class" />
+                </div>
+                <div class="form-group">
                     <label for="state">Stav</label>
-                    <select ng-model="vm.child.attendance" ng-options="o.id as o.name for o in attendance track by o.id" class="form-control" name="state" id="state" />
+                    <select ng-model="vm.child.attendance" ng-options="o.id as o.name for o in attendance" class="form-control" name="state" id="state" />
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="startDate">Dátum nástupu</label><br>

@@ -22,10 +22,6 @@ ul.nav-subnav {
     min-width: 20px;
 }
 
-.col-btn {
-    width: 50px;
-}
-
 h2.modal-header {
     margin-top: 0;
 }
@@ -56,4 +52,26 @@ h2.modal-header {
 .note-form .form-group-sm {
     margin: 5px 0;
 }
+
+/*
+.table-fixed thead {
+  width: 100%;
+}
+.table-fixed tbody {
+  max-height: 550px;
+  overflow-y: auto;
+  width: 100%;
+}
+.table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+  display: block;
+}
+.table-fixed tbody td, .table-fixed thead > tr> th {
+  float: left;
+  border-bottom-width: 0;
+}
+.wrap {
+    white-space: nowrap;
+    overflow:hidden !important;
+    text-overflow: ellipsis;
+}*/
 

@@ -7,8 +7,8 @@ using MyNurserySchool.Data;
 
 namespace MyNurserySchool.Migrations
 {
-    [DbContext(typeof(Data.DbContext))]
-    partial class DbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(NurseryDbContext))]
+    partial class NurseryDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

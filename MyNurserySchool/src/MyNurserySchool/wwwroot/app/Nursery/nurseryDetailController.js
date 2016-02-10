@@ -3,9 +3,9 @@
     "use strict";
 
     angular.module("nursery-app")
-        .controller("nurseryDetailController", ['$scope', '$routeParams', '$http', nurseryDetailController]);
+        .controller("nurseryDetailController", nurseryDetailController);
 
-    function nurseryDetailController($scope, $routeParams, $http) {
+    function nurseryDetailController($scope, $routeParams, $http, $location) {
         var vm = this;
         vm.nursery = {};
         vm.isBusy = true;
@@ -13,7 +13,6 @@
         $http.get("/Api/Nursery/" + $scope.outerId)
             .then(function (response) {
                 angular.copy(response.data, vm.nursery);
-
                 if (vm.nursery.classes.length > 0) {
                     vm.isBusy = true;
                     for (var i = 0; i < vm.nursery.classes.length; i++) {
@@ -33,6 +32,13 @@
                 }, function () {
                     toastr.error("Nepodarilo sa načítať informácie o triede");
                 });
+        }
+
+        vm.dblclick = function (classId) {
+            var path = "#/class/" + classId;
+            $scope.$applyAsync(function () {
+                $location.path(path);
+            });
         }
     }
 })();

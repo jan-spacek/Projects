@@ -1,20 +1,26 @@
 ﻿<div>
     <h3><i class="fa fa-users"></i> Zoznam zamestnancov</h3>
     <wait-cursor ng-if="vm.isBusy"></wait-cursor>
-    <table class="table table-responsive table-striped">
-        <tr>
-            <th>Meno</th>
-            <th>E-mail</th>
-            <th>Telefón</th>
-            <th colspan="2"></th>
-        </tr>
-        <tr ng-repeat="employee in vm.employees">
-            <td>{{ employee.fullName }}</td>
-            <td>{{ employee.email }}</td>
-            <td>{{ employee.workPhone }} {{ employee.privatePhone }}</td>
-            <td class="col-btn"><a ng-href="#/employee/{{ employee.id }}" class="btn btn-sm btn-default"><i class="fa fa-folder-open-o"></i></a></td>
-            <td class="col-btn"><a ng-href="#/employee/{{ employee.id }}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a></td>
-        </tr>
+    <table class="table table-responsive table-striped table-fixed">
+        <thead>
+            <tr>
+                <th>Meno</th>
+                <th>E-mail</th>
+                <th>Telefón</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="employee in vm.employees">
+                <td>{{ employee.fullName }}</td>
+                <td>{{ employee.email }}</td>
+                <td>{{ employee.workPhone }} {{ employee.privatePhone }}</td>
+                <td class="text-right">
+                    <a ng-href="#/employee/{{ employee.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
+                    <a ng-href="#/employee/{{ employee.id }}/edit" class="btn btn-sm btn-primary" title="Editovať"><i class="fa fa-edit"></i></a>
+                </td>
+            </tr>
+        </tbody>
     </table>
     <a ng-href="#/employee/0/edit" class="btn btn-primary btn-block"><i class="fa fa-user-plus"></i> Pridať zamestnanca</a>
 </div>

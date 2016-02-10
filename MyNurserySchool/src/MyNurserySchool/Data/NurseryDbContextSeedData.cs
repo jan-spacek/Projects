@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace MyNurserySchool.Data
 {
-    public class DbContextSeedData
+    public class NurseryDbContextSeedData
     {
-        private DbContext _context;
+        private NurseryDbContext _context;
         private UserManager<StandardUser> _userManager;
 
-        public DbContextSeedData(DbContext context, UserManager<StandardUser> userManager)
+        public NurseryDbContextSeedData(NurseryDbContext context, UserManager<StandardUser> userManager)
         {
             _context = context;
             _userManager = userManager;

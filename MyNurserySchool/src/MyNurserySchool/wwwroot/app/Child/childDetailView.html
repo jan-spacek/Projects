@@ -23,6 +23,10 @@
                 <label>Popis: </label>
                 <p><span ng-bind-html="vm.child.description"></span></p>
             </div>
+            <div ng-if="vm.child.classId != null">
+                <label>Trieda: </label>
+                {{ vm.classTitle }}
+            </div>
             <div ng-if="vm.child.attendance != null">
                 <label>Stav: </label>
                 {{ vm.attendanceStates[vm.child.attendance] }}
@@ -49,7 +53,7 @@
             <br />
         </div>
         <div class="col-md-6">
-            <div>
+            <div class="note-form">
                 <form name="noteForm" ng-submit="vm.saveNote()">
                     <div class="form-group-sm">
                         <input ng-model="vm.newNote.title" type="text" class="form-control" placeholder="Titulok" />
@@ -72,7 +76,7 @@
                 </div>
                 <div class="note-footer text-right">
                     {{ note.createdBy }} {{ note.created | date : 'd.M.yyyy HH:mm' }}
-                    <a class="btn btn-sm" ng-click="vm.deleteNote(note.id)"><i class="fa fa-trash-o"></i></a>
+                    <a class="btn btn-sm" ng-click="vm.deleteNote(note.id)" title="Vymazať"><i class="fa fa-trash-o"></i></a>
                 </div>
             </div>
         </div>

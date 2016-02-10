@@ -15,7 +15,7 @@
         $http.get("/Api/Employee/" + vm.employeeId)
             .then(function (response) {
                 angular.copy(response.data, vm.employee);
-                vm.employee.description = $sce.trustAsHtml(vm.employee.description.replace(/(\r\n|\n|\r)/gm, '<br />'));
+                vm.employee.description = vm.employee.description ? $sce.trustAsHtml(vm.employee.description.replace(/(\r\n|\n|\r)/gm, '<br />')) : null;
                 for (var i = 0; i < vm.employee.notes.length; i++)
                     if (vm.employee.notes[i].text != null)
                         vm.employee.notes[i].text = $sce.trustAsHtml(vm.employee.notes[i].text.replace(/(\r\n|\n|\r)/gm, '<br />'));

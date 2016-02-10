@@ -16,6 +16,24 @@
         vm.startDate = "1900-01-01";
         vm.leaveDate = "1900-01-01";
 
+        vm.classes = [];
+
+        $http.get("/Api/Nursery/" + $scope.outerId)
+            .then(function (response) {
+                for (var i = 0; i < response.data.classes.length; i++) {
+                    vm.classes.push({
+                        id: response.data.classes[i].id,
+                        name: response.data.classes[i].name
+                    });
+                }
+                $scope.classes = vm.classes;
+            }, function () {
+                toastr.error("Nepodarilo sa načítať informácie o škôlke");
+            }).finally(function () {
+                vm.isBusy = false;
+            });
+
+
         if (!vm.isNew) {
             vm.isBusy = true;
             $http.get("/Api/Child/" + vm.childId)
@@ -43,7 +61,7 @@
 
             if (vm.isNew)
             {
-                $http.post("/Api/child/" + $scope.outerId, vm.child)
+                $http.post("/Api/Child/", vm.child)
                     .then(function (response) {
                         toastr.success("Dieťa " + vm.child.firstName + " " + vm.child.lastName + " bolo úspešne vytvorené");
                         $location.path("#/class/" + vm.classId);
@@ -55,7 +73,9 @@
             }
             else
             {
-                $http.put("/Api/Child/" + $scope.outerId, vm.child)
+                if (vm.child.classId == null)
+                    vm.child.classId = vm.classId;
+                $http.put("/Api/Child/", vm.child)
                     .then(function (response) {
                         toastr.success("Zmeny v dieťati " + vm.child.firstName + " " + vm.child.lastName + " boli úspešne uložené");
                         $location.path("#/class/" + vm.classId);

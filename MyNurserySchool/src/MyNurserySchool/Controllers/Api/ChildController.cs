@@ -46,8 +46,8 @@ namespace MyNurserySchool.Controllers.Api
             }
         }
 
-        [HttpPost("{classId}")]
-        public JsonResult Post(int classId, [FromBody]ChildViewModel vm)
+        [HttpPost("")]
+        public JsonResult Post([FromBody]ChildViewModel vm)
         {
             try
             {
@@ -58,7 +58,6 @@ namespace MyNurserySchool.Controllers.Api
                     child.CreatedBy = User.Identity.Name;
                     child.Modified = DateTime.Now;
                     child.ModifiedBy = User.Identity.Name;
-                    child.ClassId = classId;
 
                     _repository.AddChild(child);
 
@@ -80,8 +79,8 @@ namespace MyNurserySchool.Controllers.Api
             return Json("Validation failed on new child");
         }
 
-        [HttpPut("{classId}")]
-        public JsonResult Put(int classId, [FromBody]ChildViewModel vm)
+        [HttpPut("")]
+        public JsonResult Put([FromBody]ChildViewModel vm)
         {
             try
             {
@@ -90,7 +89,6 @@ namespace MyNurserySchool.Controllers.Api
                     var child = Mapper.Map<Child>(vm);
                     child.Modified = DateTime.Now;
                     child.ModifiedBy = User.Identity.Name;
-                    child.ClassId = classId;
 
                     if (child.Address != null)
                         _repository.SaveAddress(child.Address);

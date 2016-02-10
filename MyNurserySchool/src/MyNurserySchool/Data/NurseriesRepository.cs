@@ -10,10 +10,10 @@ namespace MyNurserySchool.Data
 {
     public class NurseriesRepository : INurseriesRepository
     {
-        private DbContext _context;
+        private NurseryDbContext _context;
         private ILogger<NurseriesRepository> _logger;
 
-        public NurseriesRepository(DbContext context, ILogger<NurseriesRepository> logger)
+        public NurseriesRepository(NurseryDbContext context, ILogger<NurseriesRepository> logger)
         {
             _context = context;
             _logger = logger;

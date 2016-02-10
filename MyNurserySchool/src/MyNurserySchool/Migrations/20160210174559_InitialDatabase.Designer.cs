@@ -7,8 +7,8 @@ using MyNurserySchool.Data;
 
 namespace MyNurserySchool.Migrations
 {
-    [DbContext(typeof(Data.DbContext))]
-    [Migration("20160210110429_InitialDatabase")]
+    [DbContext(typeof(NurseryDbContext))]
+    [Migration("20160210174559_InitialDatabase")]
     partial class InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

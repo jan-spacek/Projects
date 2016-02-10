@@ -57,9 +57,10 @@
 
         vm.deleteClass = function () {
             vm.isBusy = true;
+            var className = vm.class.name;
             $http.delete("/Api/Class/" + vm.class.id)
-                .then(function () {
-                    toastr.success("Trieda id:" + vm.classId + " bola vymazaná");
+                .then(function () {                    
+                    toastr.success("Trieda " + className + " bola vymazaná");
                     $location.path("#/");
                 }, function (error) {
                     toastr.error("Triedu sa nepodarilo vymazať");

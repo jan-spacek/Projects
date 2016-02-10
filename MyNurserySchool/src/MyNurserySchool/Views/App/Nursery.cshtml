@@ -23,7 +23,7 @@
     <script src="~/app/Common/simpleControls.js"></script>
 }
 <div ng-app="nursery-app">
-    <div ng-init="outerId = @Model.Id; outerCity = @Model.Address.City">
+    <div ng-init="outerId = @Model.Id">
         <div class="col-xs-12">
             <h2>@Model.Name</h2>
             <hr>        
@@ -32,7 +32,7 @@
             <ul class="nav nav-pills nav-stacked nav-vertical">
                 <li><a ng-href="#/" class="list-group-item"><i class="fa fa-home"></i>Prehľad</a>
                 <li><!--<a ng-href="" class="list-group-item"><i class="fa fa-cubes"></i>Triedy</a>-->
-                    <a href="#collapse" class="list-group-item" data-toggle="collapse" data-parent="#MainMenu"><i class="fa fa-cubes"></i>Triedy</a>
+                    <a href="#collapse" class="list-group-item" data-toggle="collapse"><i class="fa fa-cubes"></i>Triedy</a>
                     <ul class="collapse nav nav-pills nav-stacked nav-subnav" id="collapse">
                         @foreach (var cla in Model.Classes)
                         {
@@ -43,7 +43,7 @@
                 </li>
                 <li><a ng-href="#/children" class="list-group-item"><i class="fa fa-child"></i>Všetky deti</a></li>
                 <li><a ng-href="#/employees" class="list-group-item"><i class="fa fa-users"></i>Zamestnanci</a></li>
-                <li><a ng-href="#/edit" class="list-group-item"><i class="fa fa-cogs"></i>Nastavenia</a></li>
+                <li><a ng-href="#/edit" class="list-group-item"><i class="fa fa-cogs"></i>Nastavenia škôlky</a></li>
             </ul>
         </div>
 

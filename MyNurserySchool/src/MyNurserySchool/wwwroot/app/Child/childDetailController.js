@@ -11,13 +11,16 @@
         vm.newNote = {};
         vm.attendanceStates = ["Žiadateľ", "Docházdajúci", "Odstúpený"];
 
+
         vm.isBusy = true;
         $http.get("/Api/Child/" + vm.childId)
             .then(function (response) {
                 angular.copy(response.data, vm.child);
                 vm.classId = vm.child.classId;
-                vm.child.description = $sce.trustAsHtml(vm.child.description.replace(/(\r\n|\n|\r)/gm, '<br />'));
-                vm.child.contacts = $sce.trustAsHtml(vm.child.contacts.replace(/(\r\n|\n|\r)/gm, '<br />'));
+                vm.child.description = vm.child.description ? $sce.trustAsHtml(vm.child.description.replace(/(\r\n|\n|\r)/gm, '<br />')) : null;
+                vm.child.contacts = vm.child.contacts ? $sce.trustAsHtml(vm.child.contacts.replace(/(\r\n|\n|\r)/gm, '<br />')) : null;
+                getClassName();
+
                 for (var i = 0; i < vm.child.notes.length; i++)
                     if (vm.child.notes[i].text != null)
                         vm.child.notes[i].text = $sce.trustAsHtml(vm.child.notes[i].text.replace(/(\r\n|\n|\r)/gm, '<br />'));
@@ -26,6 +29,17 @@
             }).finally(function () {
                 vm.isBusy = false;
             });
+
+        function getClassName() {
+            $http.get("/Api/Class/" + vm.child.classId)
+                .then(function (response) {
+                    vm.classTitle = response.data.name;
+                }, function () {
+                    toastr.error("Nepodarilo sa načítať informácie o škôlke");
+                }).finally(function () {
+                    vm.isBusy = false;
+                });
+        }
 
         vm.deleteChild = function () {
             vm.isBusy = true;

@@ -11,11 +11,11 @@
             </div>
             <div ng-if="vm.employee.privatePhone != null">
                 <label>Súkromný telefón: </label>
-                {{ vm.employee.privatePhone | number }}
+                {{ vm.employee.privatePhone }}
             </div>
             <div ng-if="vm.employee.workPhone != null">
                 <label>Služobný telefón: </label>
-                {{ vm.employee.workPhone | number }}
+                {{ vm.employee.workPhone }}
             </div>
             <div ng-if="vm.employee.address != null">
                 <label>Adresa: </label>
@@ -87,7 +87,7 @@
                 </div>
                 <div class="note-footer text-right">
                     {{ note.createdBy }} {{ note.created | date : 'd.M.yyyy HH:mm' }}
-                    <a class="btn btn-sm" ng-click="vm.deleteNote(note.id)"><i class="fa fa-trash-o"></i></a>
+                    <a class="btn btn-sm" ng-click="vm.deleteNote(note.id)" title="Vymazať"><i class="fa fa-trash-o"></i></a>
                 </div>
             </div>
         </div>
