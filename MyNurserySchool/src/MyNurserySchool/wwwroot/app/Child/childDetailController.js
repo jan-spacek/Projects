@@ -2,82 +2,75 @@
     "use strict";
 
     angular.module("nursery-app")
-        .controller("employeeEditController", employeeEditController);
+        .controller("childDetailController", childDetailController);
 
-    function employeeEditController($scope, $http, $location, $routeParams) {
+    function childDetailController($scope, $http, $location, $routeParams, $sce) {
         var vm = this;
-        vm.employeeId = $routeParams.id;
-        vm.employee = {};
-        vm.isNew = vm.employeeId == 0;
-        vm.dateOfBirth = "1900-01-01";
-        vm.startDate = "1900-01-01";
-        vm.leaveDate = "1900-01-01";
+        vm.childId = $routeParams.id;
+        vm.child = {};
+        vm.newNote = {};
+        vm.attendanceStates = ["Žiadateľ", "Docházdajúci", "Odstúpený"];
 
-        if (!vm.isNew) {
+        vm.isBusy = true;
+        $http.get("/Api/Child/" + vm.childId)
+            .then(function (response) {
+                angular.copy(response.data, vm.child);
+                vm.classId = vm.child.classId;
+                vm.child.description = $sce.trustAsHtml(vm.child.description.replace(/(\r\n|\n|\r)/gm, '<br />'));
+                vm.child.contacts = $sce.trustAsHtml(vm.child.contacts.replace(/(\r\n|\n|\r)/gm, '<br />'));
+                for (var i = 0; i < vm.child.notes.length; i++)
+                    if (vm.child.notes[i].text != null)
+                        vm.child.notes[i].text = $sce.trustAsHtml(vm.child.notes[i].text.replace(/(\r\n|\n|\r)/gm, '<br />'));
+            }, function () {
+                toastr.error("Nepodarilo sa načítať informácie o dieťati");
+            }).finally(function () {
+                vm.isBusy = false;
+            });
+
+        vm.deleteChild = function () {
             vm.isBusy = true;
-            $http.get("/Api/Employee/" + vm.employeeId)
-                .then(function (response) {
-                    angular.copy(response.data, vm.employee);
-                    var dateOfBirth = new Date(vm.employee.dateOfBirth);
-                    vm.dateOfBirth = dateOfBirth.getFullYear() < 1901 ? "1900-01-01" : dateOfBirth;
-                    var startDate = new Date(vm.employee.startDate);
-                    vm.startDate = startDate.getFullYear() < 1901 ? "1900-01-01" : startDate;
-                    var leaveDate = new Date(vm.employee.leaveDate);
-                    vm.leaveDate = leaveDate.getFullYear() < 1901 ? "1900-01-01" : leaveDate;
-                }, function () {
-                    toastr.error("Nepodarilo sa načítať informácie o zamestnancovi");
-                }).finally(function () {
+            $http.delete("/Api/Child/" + vm.child.id)
+                .then(function () {
+                    toastr.success("Dieťa bolo vymazané");
+                    $location.path("#/class/" + vm.classId);
+                }, function (error) {
+                    toastr.error("Dieťa sa nepodarilo vymazať");
+                })
+                .finally(function () {
                     vm.isBusy = false;
                 });
         }
 
-        $http.get("/Api/Nursery/AttendanceStates")
-            .then(function (response) {
-                $scope.data = response.data;
-            }, function () {
-                toastr.error("Nepodarilo sa načítať číselník");
-            });
-
-        vm.saveEmployee = function () {
+        vm.saveNote = function () {
             vm.isBusy = true;
-            vm.employee.dateOfBirth = vm.dateOfBirth === null ? "1900-01-01" : vm.dateOfBirth;
-            vm.employee.startDate = vm.startDate === null ? "1900-01-01" : vm.startDate;
-            vm.employee.leaveDate = vm.leaveDate === null ? "1900-01-01" : vm.leaveDate;
-
-            if (vm.isNew)
-            {
-                $http.post("/Api/Employee/" + $scope.outerId, vm.employee)
-                    .then(function (response) {
-                        toastr.success("Zamestnanec " + vm.employee.fullName + " bol úspešne vytvorený");
-                        $location.path("#/");
-                    }, function () {
-                        toastr.error("Zamestnanca sa nepodarilo vytvoriť");
-                    }).finally(function () {
-                        vm.isBusy = false;
-                    });
-            }
-            else
-            {
-                $http.put("/Api/Employee/" + $scope.outerId, vm.employee)
-                    .then(function (response) {
-                        toastr.success("Zmeny v zamestnancovi " + vm.employee.fullName + " boli úspešne uložené");
-                        $location.path("#/");
-                    }, function () {
-                        toastr.error("Zamestnanca sa nepodarilo uložiť");
-                    }).finally(function () {
-                        vm.isBusy = false;
-                    });
-            }
+            vm.newNote.childId = vm.childId;
+            $http.post("/Api/Note/", vm.newNote)
+                .then(function (response) {
+                    vm.child.notes.push(response.data);
+                    vm.child.notes[vm.child.notes.length - 1].text = $sce.trustAsHtml(vm.child.notes[vm.child.notes.length - 1].text.replace(/(\r\n|\n|\r)/gm, '<br />'));
+                    toastr.success("Poznámka bola zapísaná");
+                    vm.newNote = {};
+                }, function (error) {
+                    toastr.error("Poznámku sa nepodarilo zapísať");
+                })
+                .finally(function () {
+                    vm.isBusy = false;
+                });
         }
 
-        vm.deleteEmployee = function () {
+        vm.deleteNote = function (id) {
             vm.isBusy = true;
-            $http.delete("/Api/Employee/" + vm.employee.id)
+            $http.delete("/Api/Note/" + id)
                 .then(function () {
-                    toastr.success("Zamestnanec bol vymazaný");
-                    $location.path("#/");
+                    for (var i = 0; i < vm.child.notes.length; i++) {
+                        var note = vm.child.notes[i];
+                        if (note.id == id) {
+                            vm.child.notes.splice(i, 1);
+                        }
+                    }
+                    toastr.success("Poznámka bola vymazaná");
                 }, function (error) {
-                    toastr.error("Zamestnanca sa nepodarilo vymazať");
+                    toastr.error("Poznámku sa nepodarilo vymazať");
                 })
                 .finally(function () {
                     vm.isBusy = false;

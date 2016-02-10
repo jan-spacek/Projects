@@ -33,3 +33,27 @@ h2.modal-header {
 .view {
     margin-bottom: 50px;
 }
+
+.note-header h5 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 105%;
+}
+.note-body p {
+    margin: 0;
+}
+.note-footer a:hover {
+    color: red;
+}
+.note-footer {
+    font-family: "Source Sans Pro",Calibri,Candara,Arial,sans-serif;
+    font-weight: 300;
+    font-size: 90%;
+}
+.note-divider {
+    margin: 10px 0;
+}
+.note-form .form-group-sm {
+    margin: 5px 0;
+}
+

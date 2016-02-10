@@ -4,6 +4,7 @@ using MyNurserySchool.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MyNurserySchool.ViewModels;
 
 namespace MyNurserySchool.Data
 {
@@ -18,6 +19,7 @@ namespace MyNurserySchool.Data
             _logger = logger;
         }
 
+        #region GetAll
         public IEnumerable<Nursery> GetAllNurseries(string name)
         {
             try {
@@ -36,7 +38,6 @@ namespace MyNurserySchool.Data
                 return null;
             }
         }
-
         public IEnumerable<Nursery> GetAllNurseries()
         {
             try
@@ -55,7 +56,6 @@ namespace MyNurserySchool.Data
                 return null;
             }
         }
-
         public IEnumerable<Class> GetAllClasses(int nurseryId)
         {
             try
@@ -73,7 +73,6 @@ namespace MyNurserySchool.Data
                 return null;
             }
         }
-        
         public IEnumerable<Employee> GetAllEmployees(int nurseryId)
         {
             try
@@ -90,7 +89,6 @@ namespace MyNurserySchool.Data
                 return null;
             }
         }
-
         public IEnumerable<Child> GetAllChildren(int nurseryId)
         {
             try
@@ -98,8 +96,8 @@ namespace MyNurserySchool.Data
                 var listOfClasses = _context.Classes.Select(r => r.Id).ToList();
                 var children = _context.Children
                     .Include(c => c.Notes)
-                    .OrderBy(c => c.DateOfBirth)
-                    .Where(r => listOfClasses.Contains(r.ClassId??0));
+                    .OrderBy(c => c.BirthDate)
+                    .Where(r => listOfClasses.Contains(r.ClassId ?? 0));
 
                 return children;
             }
@@ -109,18 +107,19 @@ namespace MyNurserySchool.Data
                 return null;
             }
         }
+        #endregion
 
-        public void AddNursery(Nursery newNursery)
+        #region Get
+        public int GetNurseryIdByUserName(string name)
         {
-            _context.Add(newNursery);
-        }
+            foreach (Nursery n in _context.Nurseries)
+            {
+                if (n.AllowedUsers.Contains(name))
+                    return n.Id;
+            }
 
-        public bool SaveAll()
-        {
-            // ak je zmien viac ako 0, tak sa nieco zmenilo
-            return _context.SaveChanges() > 0;
+            return 0;
         }
-
         public Nursery GetNurseryById(int nurseryId)
         {
             return _context.Nurseries
@@ -131,15 +130,16 @@ namespace MyNurserySchool.Data
                         .Where(n => n.Id == nurseryId)
                         .FirstOrDefault();
         }
-        
         public Class GetClassById(int classId)
         {
-            return _context.Classes.Include(c => c.ClassTeacher)
+            Class result = _context.Classes
+                        .Include(c => c.ClassTeacher)
                         .Include(c => c.Children)
                         .Where(c => c.Id == classId)
                         .FirstOrDefault();
-        }
 
+            return result;
+        }
         public Employee GetEmployeeById(int employeeId)
         {
             return _context.Employees.Include(e => e.Address)
@@ -147,7 +147,6 @@ namespace MyNurserySchool.Data
                         .Where(e => e.Id == employeeId)
                         .FirstOrDefault();
         }
-
         public Child GetChildById(int childId)
         {
             return _context.Children
@@ -156,23 +155,37 @@ namespace MyNurserySchool.Data
                         .Where(c => c.Id == childId)
                         .FirstOrDefault();
         }
+        #endregion
 
+        #region Add
+        public void AddNursery(Nursery nursery)
+        {
+            _context.Add(nursery);
+        }
         public void AddClass(int nurseryId, Class newClass)
         {
             var nursery = GetNurseryById(nurseryId);
             nursery.Classes.Add(newClass);
         }
+        public void AddEmployee(Employee employee)
+        {
+            _context.Employees.Add(employee);
+        }
+        public void AddAddress(Address address)
+        {
+            _context.Addresses.Add(address);
+        }
+        public void AddNote(Note note)
+        {
+            _context.Notes.Add(note);
+        }
+        public void AddChild(Child child)
+        {
+            _context.Children.Add(child);
+        }
+        #endregion
 
-        public void AddEmployee(Employee newEmployee)
-        {
-            _context.Employees.Add(newEmployee);
-        }
-        
-        public void AddAddress(Address newAddress)
-        {
-            _context.Addresses.Add(newAddress);
-        }
-        
+        #region Save
         public void SaveNursery(Nursery nursery)
         {
             //using (var newContext = new NurseryContext())
@@ -186,44 +199,25 @@ namespace MyNurserySchool.Data
 
             _context.Nurseries.Update(nursery);
         }
-
         public void SaveClass(Class newClass)
         {
             _context.Classes.Update(newClass);
         }
-
         public void SaveEmployee(Employee employee)
         {
             _context.Employees.Update(employee);
         }
-
         public void SaveAddress(Address address)
         {
             _context.Addresses.Update(address);
         }
-
-        public int GetNurseryIdByUserName(string name)
+        public void SaveChild(Child child)
         {
-            foreach (Nursery n in _context.Nurseries)
-            {
-                if (n.AllowedUsers.Contains(name))
-                    return n.Id;
-            }
-
-            return 0;
+            _context.Children.Update(child);
         }
+        #endregion
 
-        public bool HasAccess(int id, string name)
-        {
-            foreach (Nursery n in _context.Nurseries)
-            {
-                if (n.Id == id && n.AllowedUsers.Contains(name))
-                    return true;
-            }
-
-            return false;
-        }
-
+        #region Delete
         public void DeleteNursery(int id)
         {
             IEnumerable<Nursery> nurseries = GetAllNurseries();
@@ -244,7 +238,6 @@ namespace MyNurserySchool.Data
                 }
             }
         }
-
         public void DeleteAddress(int id)
         {
             foreach (Address a in _context.Addresses)
@@ -253,7 +246,6 @@ namespace MyNurserySchool.Data
                     _context.Addresses.Remove(a);
                 }
         }
-
         public void DeleteEmployee(int id)
         {
             foreach (Employee e in _context.Employees.Include(e => e.Address))
@@ -265,7 +257,6 @@ namespace MyNurserySchool.Data
                 }
             _context.SaveChanges();
         }
-
         public void DeleteClass(int id)
         {
             foreach (Class cls in _context.Classes)
@@ -278,7 +269,6 @@ namespace MyNurserySchool.Data
                 }
             _context.SaveChanges();
         }
-
         public void DeleteChild(int id)
         {
             foreach (Child c in _context.Children)
@@ -290,5 +280,33 @@ namespace MyNurserySchool.Data
                 }
             _context.SaveChanges();
         }
+        public void DeleteNote(int id)
+        {
+            foreach (Note n in _context.Notes)
+                if (n.Id == id)
+                    _context.Notes.Remove(n);
+
+            _context.SaveChanges();
+        }
+        #endregion
+
+        #region Common
+        public bool HasAccess(int id, string name)
+        {
+            foreach (Nursery n in _context.Nurseries)
+            {
+                if (n.Id == id && n.AllowedUsers.Contains(name))
+                    return true;
+            }
+
+            return false;
+        }
+        public bool SaveAll()
+        {
+            // ak je zmien viac ako 0, tak sa nieco zmenilo
+            return _context.SaveChanges() > 0;
+        }
+        #endregion
+
     }
 }

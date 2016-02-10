@@ -12,7 +12,7 @@ namespace MyNurserySchool.ViewModels
         public string JobTitle { get; set; }
         public string Employment { get; set; }
         public string Description { get; set; }
-        public DateTime? DateOfBirth { get; set; }
+        public DateTime? BirthDate { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? LeaveDate { get; set; }
         public Address Address { get; set; }

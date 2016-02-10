@@ -43,13 +43,13 @@
             $routeProvider.when("/child/:id/edit", {
                 controller: "childEditController",
                 controllerAs: "vm",
-                templateUrl: "/app/Employee/childEditView.html"
+                templateUrl: "/app/Child/childEditView.html"
             });
 
             $routeProvider.when("/child/:id", {
                 controller: "childDetailController",
                 controllerAs: "vm",
-                templateUrl: "/app/Employee/childDetailView.html"
+                templateUrl: "/app/Child/childDetailView.html"
             });
 
             $routeProvider.when("/employees", {

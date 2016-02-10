@@ -8,7 +8,7 @@ using MyNurserySchool.Data;
 namespace MyNurserySchool.Migrations
 {
     [DbContext(typeof(Data.DbContext))]
-    partial class NurseryContextModelSnapshot : ModelSnapshot
+    partial class DbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -199,11 +199,11 @@ namespace MyNurserySchool.Migrations
 
                     b.Property<int>("Attendance");
 
+                    b.Property<DateTime?>("BirthDate");
+
                     b.Property<DateTime>("Created");
 
                     b.Property<string>("CreatedBy");
-
-                    b.Property<DateTime>("DateOfBirth");
 
                     b.Property<string>("Description");
 
@@ -215,7 +215,7 @@ namespace MyNurserySchool.Migrations
 
                     b.Property<string>("JobTitle");
 
-                    b.Property<DateTime>("LeaveDate");
+                    b.Property<DateTime?>("LeaveDate");
 
                     b.Property<DateTime>("Modified");
 
@@ -225,7 +225,7 @@ namespace MyNurserySchool.Migrations
 
                     b.Property<string>("PrivatePhone");
 
-                    b.Property<DateTime>("StartDate");
+                    b.Property<DateTime?>("StartDate");
 
                     b.Property<string>("WorkPhone");
 
@@ -241,6 +241,8 @@ namespace MyNurserySchool.Migrations
 
                     b.Property<int>("Attendance");
 
+                    b.Property<DateTime?>("BirthDate");
+
                     b.Property<int?>("ClassId");
 
                     b.Property<string>("Contacts");
@@ -249,15 +251,13 @@ namespace MyNurserySchool.Migrations
 
                     b.Property<string>("CreatedBy");
 
-                    b.Property<DateTime>("DateOfBirth");
-
                     b.Property<string>("Description");
 
                     b.Property<string>("FirstName");
 
                     b.Property<string>("LastName");
 
-                    b.Property<DateTime>("LeaveDate");
+                    b.Property<DateTime?>("LeaveDate");
 
                     b.Property<DateTime>("Modified");
 
@@ -265,7 +265,7 @@ namespace MyNurserySchool.Migrations
 
                     b.Property<string>("SocialNumber");
 
-                    b.Property<DateTime>("StartDate");
+                    b.Property<DateTime?>("StartDate");
 
                     b.HasKey("Id");
                 });
@@ -282,10 +282,6 @@ namespace MyNurserySchool.Migrations
                     b.Property<string>("CreatedBy");
 
                     b.Property<int?>("EmployeeId");
-
-                    b.Property<DateTime>("Modified");
-
-                    b.Property<string>("ModifiedBy");
 
                     b.Property<string>("Text");
 

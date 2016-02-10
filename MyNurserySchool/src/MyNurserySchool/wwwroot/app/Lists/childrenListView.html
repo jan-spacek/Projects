@@ -7,15 +7,15 @@
             <th>Priezvisko</th>
             <th>Dátum narodenia</th>
             <th>Adresa</th>
-            <th>Kontakt</th>
+            <th>Kontakty</th>
             <th colspan="2"></th>
         </tr>
         <tr ng-repeat="child in vm.children">
             <td>{{ child.firstName }}</td>
             <td>{{ child.lastName }}</td>
-            <td>{{ child.dateOfBirth | date : 'd.M.yyyy HH:mm' }}</td>
+            <td>{{ child.birthDate | date : 'd.M.yyyy' }}</td>
             <td>{{ child.address.street + ' ' + child.address.number + ', ' + child.address.city }}</td>
-            <td>{{ child.contacts }}</td>
+            <td><span ng-bind-html="child.contacts"></span></td>
             <td class="col-btn"><a ng-href="#/child/{{ child.id }}" class="btn btn-sm btn-default"><i class="fa fa-folder-open-o"></i></a></td>
             <td class="col-btn"><a ng-href="#/child/{{ child.id }}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a></td>
         </tr>

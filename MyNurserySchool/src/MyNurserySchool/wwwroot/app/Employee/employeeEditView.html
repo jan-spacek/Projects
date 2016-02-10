@@ -9,7 +9,7 @@
                 </div>
                 <div class="form-group">
                     <label for="email">E-mail</label>
-                    <input ng-model="vm.employee.email" type="text" name="email" id="email" class="form-control" />
+                    <input ng-model="vm.employee.email" type="email" name="email" id="email" class="form-control" />
                 </div>
 
                 <div class="row">
@@ -54,13 +54,13 @@
                 </div>
                 <div class="form-group">
                     <label for="state">Pracovný stav</label>
-                    <select ng-model="vm.employee.attendance" ng-options="o.id as o.name for o in data track by o.id" class="form-control" name="state" id="state" />
+                    <select ng-model="vm.employee.attendance" ng-options="o.id as o.name for o in attendance track by o.id" class="form-control" name="state" id="state" />
                 </div>
             </div>
             <div col-md-9>
                 <div class="form-group col-md-4 col-lg-3">
-                    <label for="dateOfBirth">Dátum narodenia</label><br>
-                    <md-datepicker ng-model="vm.dateOfBirth" md-placeholder="Zadajte dátum" name="dateOfBirth" id="dateOfBirth"></md-datepicker>
+                    <label for="birthDate">Dátum narodenia</label><br>
+                    <md-datepicker ng-model="vm.birthDate" md-placeholder="Zadajte dátum" name="birthDate" id="birthDate"></md-datepicker>
                 </div>
                 <div class="form-group col-md-4 col-lg-3">
                     <label for="startDate">Dátum nástupu</label><br>
@@ -74,12 +74,12 @@
         </div>
         <div class="row">
             <div class="col-xs-8">
-                <input type="submit" value="Uložiť zmeny" class="btn btn-success" ng-if="!vm.isNew"/>
-                <input type="submit" value="Vytvoriť zamestnanca" class="btn btn-success" ng-if="vm.isNew"/>
+                <button type="submit" class="btn btn-success" ng-if="!vm.isNew"><i class="fa fa-save"></i> Uložiť zmeny</button>
+                <button type="submit" class="btn btn-success" ng-if="vm.isNew"><i class="fa fa-user-plus"></i> Vytvoriť zamestnanca</button>
                 <a href="#/" class="btn btn-warning"><i class="fa fa-reply"></i> Späť</a>
             </div>
             <div class="col-xs-4 text-right">
-                <button type="button" class="btn btn-danger" ng-click="vm.deleteEmployee()" ng-if="!vm.isNew"><i class="fa fa-trash-o"></i> Vymazať</button>
+                <button type="button" class="btn btn-danger" ng-click="vm.deleteEmployee()" ng-if="!vm.isNew"><i class="fa fa-user-times"></i> Vymazať</button>
             </div>
         </div>
     </form>

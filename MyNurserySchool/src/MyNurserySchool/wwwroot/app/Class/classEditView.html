@@ -27,8 +27,8 @@
         </div>
         <div class="row">
             <div class="col-xs-8">
-                <input type="submit" value="Uložiť zmeny" class="btn btn-success" ng-if="!vm.isNew"/>
-                <input type="submit" value="Vytvoriť triedu" class="btn btn-success" ng-if="vm.isNew" />
+                <button type="submit" class="btn btn-success" ng-if="!vm.isNew"><i class="fa fa-save"></i> Uložiť zmeny</button>
+                <button type="submit" class="btn btn-success" ng-if="vm.isNew"><i class="fa fa-plus-circle"></i> Vytvoriť triedu</button>
                 <a href="#/" class="btn btn-warning"><i class="fa fa-reply"></i> Späť</a>
             </div>
             <div class="col-xs-4 text-right">

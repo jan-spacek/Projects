@@ -9,7 +9,9 @@
         vm.employeeId = $routeParams.id;
         vm.employee = {};
         vm.isNew = vm.employeeId == 0;
-        vm.dateOfBirth = "1900-01-01";
+        $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
+
+        vm.birthDate = "1900-01-01";
         vm.startDate = "1900-01-01";
         vm.leaveDate = "1900-01-01";
 
@@ -18,8 +20,8 @@
             $http.get("/Api/Employee/" + vm.employeeId)
                 .then(function (response) {
                     angular.copy(response.data, vm.employee);
-                    var dateOfBirth = new Date(vm.employee.dateOfBirth);
-                    vm.dateOfBirth = dateOfBirth.getFullYear() < 1901 ? "1900-01-01" : dateOfBirth;
+                    var birthDate = new Date(vm.employee.birthDate);
+                    vm.birthDate = birthDate.getFullYear() < 1901 ? "1900-01-01" : birthDate;
                     var startDate = new Date(vm.employee.startDate);
                     vm.startDate = startDate.getFullYear() < 1901 ? "1900-01-01" : startDate;
                     var leaveDate = new Date(vm.employee.leaveDate);
@@ -31,16 +33,9 @@
                 });
         }
 
-        $http.get("/Api/Nursery/AttendanceStates")
-            .then(function (response) {
-                $scope.data = response.data;
-            }, function () {
-                toastr.error("Nepodarilo sa načítať číselník");
-            });
-
         vm.saveEmployee = function () {
             vm.isBusy = true;
-            vm.employee.dateOfBirth = vm.dateOfBirth === null ? "1900-01-01" : vm.dateOfBirth;
+            vm.employee.birthDate = vm.birthDate === null ? "1900-01-01" : vm.birthDate;
             vm.employee.startDate = vm.startDate === null ? "1900-01-01" : vm.startDate;
             vm.employee.leaveDate = vm.leaveDate === null ? "1900-01-01" : vm.leaveDate;
 

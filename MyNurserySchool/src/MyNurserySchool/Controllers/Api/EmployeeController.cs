@@ -15,9 +15,9 @@ namespace MyNurserySchool.Controllers.Api
     public class EmployeeController : Controller
     {
         private INurseriesRepository _repository;
-        private ILogger<ClassController> _logger;
+        private ILogger<EmployeeController> _logger;
 
-        public EmployeeController(INurseriesRepository repository, ILogger<ClassController> logger)
+        public EmployeeController(INurseriesRepository repository, ILogger<EmployeeController> logger)
         {
             _repository = repository;
             _logger = logger;

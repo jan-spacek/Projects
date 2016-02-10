@@ -3,44 +3,129 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-
-// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+using MyNurserySchool.Data;
+using Microsoft.Extensions.Logging;
+using AutoMapper;
+using System.Net;
+using MyNurserySchool.ViewModels;
+using MyNurserySchool.Models;
 
 namespace MyNurserySchool.Controllers.Api
 {
-    [Route("api/[controller]")]
+    [Route("Api/Child")]
     public class ChildController : Controller
     {
-        // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private INurseriesRepository _repository;
+        private ILogger<ChildController> _logger;
+
+        public ChildController(INurseriesRepository repository, ILogger<ChildController> logger)
         {
-            return new string[] { "value1", "value2" };
+            _repository = repository;
+            _logger = logger;
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{childId}")]
+        public JsonResult Get(int childId)
         {
-            return "value";
+            try
+            {
+                var result = _repository.GetChildById(childId);
+
+                if (result == null)
+                {
+                    return Json(null);
+                }
+
+                return Json(Mapper.Map<ChildViewModel>(result));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to get class {childId}", ex);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json("Error occurred finding class id");
+            }
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
+        [HttpPost("{classId}")]
+        public JsonResult Post(int classId, [FromBody]ChildViewModel vm)
         {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var child = Mapper.Map<Child>(vm);
+                    child.Created = DateTime.Now;
+                    child.CreatedBy = User.Identity.Name;
+                    child.Modified = DateTime.Now;
+                    child.ModifiedBy = User.Identity.Name;
+                    child.ClassId = classId;
+
+                    _repository.AddChild(child);
+
+                    if (_repository.SaveAll())
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.Created;
+                        return Json(Mapper.Map<ChildViewModel>(child));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Failed to save new child", ex);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json("Failed to save new child");
+            }
+
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return Json("Validation failed on new child");
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPut("{classId}")]
+        public JsonResult Put(int classId, [FromBody]ChildViewModel vm)
         {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var child = Mapper.Map<Child>(vm);
+                    child.Modified = DateTime.Now;
+                    child.ModifiedBy = User.Identity.Name;
+                    child.ClassId = classId;
+
+                    if (child.Address != null)
+                        _repository.SaveAddress(child.Address);
+                    _repository.SaveChild(child);
+
+                    if (_repository.SaveAll())
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.OK;
+                        return Json(Mapper.Map<ChildViewModel>(child));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Failed to save child", ex);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json("Failed to save child");
+            }
+
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return Json("Validation failed on child");
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public JsonResult Delete(int id)
         {
+            try
+            {
+                _repository.DeleteChild(id);
+                return Json(new { Message = "Deleted" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Message = "Unable to delete: " + ex });
+            }
         }
     }
 }

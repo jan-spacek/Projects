@@ -1,10 +1,10 @@
 ﻿<div>
-    <h3>{{ vm.employee.fullName }}</h3>
     <wait-cursor ng-if="vm.isBusy"></wait-cursor>
     <div class="row">
         <div class="col-md-6">
-            {{ vm.employee.dateOfBirth | date : 'd.M.yyyy' }}
-            <hr>
+            <h3>{{ vm.employee.fullName }}</h3>
+            {{ vm.employee.birthDate | date : 'd.M.yyyy' }}
+            <hr />
             <div ng-if="vm.employee.email != null">
                 <label>E-mail: </label>
                 {{ vm.employee.email }}
@@ -18,15 +18,17 @@
                 {{ vm.employee.workPhone | number }}
             </div>
             <div ng-if="vm.employee.address != null">
-                <label>Adresa: </label><br>
-                {{ vm.employee.address.street }} {{ vm.employee.address.number | number }}<br>
-                {{ vm.employee.address.city }}<br>
-                {{ vm.employee.address.zip | number }}
+                <label>Adresa: </label>
+                <p>
+                    {{ vm.employee.address.street }} {{ vm.employee.address.number }}<br>
+                    {{ vm.employee.address.city }}<br>
+                    {{ vm.employee.address.zip }}
+                </p>
             </div>
             <hr />
             <div ng-if="vm.employee.description != null">
                 <label>Popis: </label>
-                {{ vm.employee.description }}
+                <p><span ng-bind-html="vm.employee.description"></span></p>
             </div>
             <div ng-if="vm.employee.jobTitle != null">
                 <label>Popis práce: </label>
@@ -49,16 +51,45 @@
                 {{ vm.employee.leaveDate | date : 'd.M.yyyy' }}
             </div>
             <br />
+            <div class="row">
+                <div class="col-xs-8">
+                    <a href="#/employee/{{ vm.employee.id }}/edit" class="btn btn-default"><i class="fa fa-edit"></i> Upraviť</a>
+                    <a href="#/" class="btn btn-warning"><i class="fa fa-reply"></i> Späť</a>
+                </div>
+                <div class="col-xs-4 text-right">
+                    <!--<button type="button" class="btn btn-danger" ng-click="vm.deleteEmployee()"><i class="fa fa-trash-o"></i> Vymazať</button>-->
+                </div>
+            </div>
+            <created-modified model="vm.employee"></created-modified>
+            <br />
+        </div>
+        <div class="col-md-6">
+            <div class="note-form">
+                <form name="noteForm" ng-submit="vm.saveNote()">
+                    <div class="form-group-sm">
+                        <input ng-model="vm.newNote.title" type="text" class="form-control" placeholder="Titulok" />
+                    </div>
+                    <div class="form-group-sm">
+                        <textarea ng-model="vm.newNote.text" class="form-control form" rows="3" placeholder="Text"></textarea>
+                    </div>
+                    <div class="form-group-sm text-right">
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i> Zapísať</button>
+                    </div>
+                </form>
+            </div>
+            <div ng-repeat="note in vm.employee.notes | orderBy: '-id'">
+                <hr class="note-divider" />
+                <div class="note-header" ng-if="note.title">
+                    <h5>{{ note.title }}</h5>
+                </div>
+                <div class="note-body" ng-if="note.text">
+                    <p><span ng-bind-html="note.text"></span></p>
+                </div>
+                <div class="note-footer text-right">
+                    {{ note.createdBy }} {{ note.created | date : 'd.M.yyyy HH:mm' }}
+                    <a class="btn btn-sm" ng-click="vm.deleteNote(note.id)"><i class="fa fa-trash-o"></i></a>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-xs-8">
-            <a href="#/employee/{{ vm.employee.id }}/edit" class="btn btn-default"><i class="fa fa-edit"></i> Upraviť</a>
-            <a href="#/" class="btn btn-warning"><i class="fa fa-reply"></i> Späť</a>
-        </div>
-        <div class="col-xs-4 text-right">
-            <button type="button" class="btn btn-danger" ng-click="vm.deleteEmployee()"><i class="fa fa-trash-o"></i> Vymazať</button>
-        </div>
-    </div>
-    <created-modified model="vm.employee"></created-modified>
 </div>

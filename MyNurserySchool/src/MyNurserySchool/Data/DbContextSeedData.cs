@@ -65,7 +65,7 @@ namespace MyNurserySchool.Data
                         new Employee()
                         {
                             FullName = "Mgr. Lucia Špačková",
-                            DateOfBirth = new DateTime(1990, 8, 1),
+                            BirthDate = new DateTime(1990, 8, 1),
                             StartDate = new DateTime(2014, 9, 1),
                             JobTitle = "riaditeľka",
                             Employment = "plný úväzok",
