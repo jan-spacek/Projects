@@ -5,7 +5,11 @@
     angular.module("nursery-app")
         .controller("nurseryDetailController", nurseryDetailController);
 
-    function nurseryDetailController($scope, $routeParams, $http, $location) {
+    function nurseryDetailController($scope, $routeParams, $http, $location, $window, $controller) {
+        $controller('baseController', {
+            '$scope': $scope
+        });
+
         var vm = this;
         vm.nursery = {};
         vm.isBusy = true;
@@ -32,13 +36,6 @@
                 }, function () {
                     toastr.error("Nepodarilo sa načítať informácie o triede");
                 });
-        }
-
-        vm.dblclick = function (classId) {
-            var path = "#/class/" + classId;
-            $scope.$applyAsync(function () {
-                $location.path(path);
-            });
         }
     }
 })();

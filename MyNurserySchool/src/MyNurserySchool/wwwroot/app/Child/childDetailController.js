@@ -4,7 +4,11 @@
     angular.module("nursery-app")
         .controller("childDetailController", childDetailController);
 
-    function childDetailController($scope, $http, $location, $routeParams, $sce) {
+    function childDetailController($scope, $http, $location, $routeParams, $sce, $controller) {
+        $controller('baseController', {
+            '$scope': $scope
+        });
+
         var vm = this;
         vm.childId = $routeParams.id;
         vm.child = {};

@@ -4,7 +4,11 @@
     angular.module("nursery-app")
         .controller("childrenListController", childrenListController);
 
-    function childrenListController($scope, $http, $sce) {
+    function childrenListController($scope, $http, $sce, $window, $controller) {
+        $controller('baseController', {
+            '$scope': $scope
+        });
+
         var vm = this;
         vm.children = [];
         vm.isBusy = true;

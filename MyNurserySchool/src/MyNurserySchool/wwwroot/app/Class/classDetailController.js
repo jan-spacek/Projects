@@ -5,7 +5,11 @@
     angular.module("nursery-app")
         .controller("classDetailController", classDetailController);
 
-    function classDetailController($scope, $http, $location, $routeParams, $sce) {
+    function classDetailController($scope, $http, $routeParams, $sce, $window, $controller) {
+        $controller('baseController', {
+            '$scope': $scope
+        });
+
         var vm = this;
         vm.classId = $routeParams.id;
         vm.class = {};

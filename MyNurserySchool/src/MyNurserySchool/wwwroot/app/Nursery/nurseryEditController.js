@@ -4,7 +4,11 @@
     angular.module("nursery-app")
         .controller("nurseryEditController", nurseryEditController);
 
-    function nurseryEditController($scope, $http, $location) {
+    function nurseryEditController($scope, $http, $location, $controller) {
+        $controller('baseController', {
+            '$scope': $scope
+        });
+
         var vm = this;
         vm.nursery = {};
         vm.isBusy = true;

@@ -13,7 +13,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="class in vm.nursery.classes">                <!-- TODO: dorobit double click-->
+                    <tr ng-repeat="class in vm.nursery.classes" ng-dblclick="redirect('#/class/' + class.id)">                <!-- TODO: dorobit double click-->
                         <td>{{ class.name }}</td>
                         <td>{{ class.classTeacher.fullName }}</td>
                         <td>{{ class.children.length + "/" + class.capacity }}</td>
@@ -38,7 +38,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="employee in vm.nursery.employees">
+                    <tr ng-repeat="employee in vm.nursery.employees" ng-dblclick="redirect('#/employee/' + employee.id)">
                         <td>{{ employee.fullName }}</td>
                         <td>{{ employee.email }}</td>
                         <td>{{ employee.workPhone }} {{ employee.privatePhone }}</td>

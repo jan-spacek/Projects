@@ -64,6 +64,18 @@
                 templateUrl: "/app/Lists/childrenListView.html"
             });
 
+            $routeProvider.when("/children/waiting", {
+                controller: "childrenListController",
+                controllerAs: "vm",
+                templateUrl: "/app/Lists/childrenWaitingListView.html"
+            });
+
+            $routeProvider.when("/children/archive", {
+                controller: "childrenListController",
+                controllerAs: "vm",
+                templateUrl: "/app/Lists/childrenArchiveView.html"
+            });
+
             $routeProvider.otherwise({
                 redirectTo: "/"
             });
@@ -76,7 +88,7 @@
             $mdDateLocaleProvider.firstDayOfWeek = 1;
             // In addition to date display, date components also need localized messages
             // for aria-labels for screen-reader users.
-            $mdDateLocaleProvider.weekNumberFormatter = function(weekNumber) {
+            $mdDateLocaleProvider.weekNumberFormatter = function (weekNumber) {
                 return weekNumber + 'týždeň';
             };
             $mdDateLocaleProvider.msgCalendar = 'Kalendár';
@@ -94,5 +106,5 @@
                 var year = dateString.substring(dateString.lastIndexOf(".") + 1);
                 return new Date(year + "-" + month + "-" + day);
             };
-        })
+        });
 })();

@@ -4,7 +4,11 @@
     angular.module("nursery-app")
         .controller("classEditController", classEditController);
 
-    function classEditController($scope, $http, $location, $routeParams) {
+    function classEditController($scope, $http, $location, $routeParams, $controller) {
+        $controller('baseController', {
+            '$scope': $scope
+        });
+
         var vm = this;
         vm.classId = $routeParams.id;
         vm.nursery = {};

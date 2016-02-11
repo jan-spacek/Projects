@@ -6,7 +6,7 @@
     angular.module("nurseries-app")
         .controller("nurseriesController", nurseriesController);
 
-    function nurseriesController($http) {
+    function nurseriesController($http, $scope, $window) {
         var vm = this;
         vm.nurseries = [];
         vm.isBusy = true;
@@ -20,5 +20,9 @@
             .finally(function () {
                 vm.isBusy = false;
             });
+
+        $scope.redirect = function (path) {
+            $window.location.href = path;
+        }
     }
 })();

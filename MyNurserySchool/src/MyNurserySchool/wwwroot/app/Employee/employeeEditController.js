@@ -4,7 +4,11 @@
     angular.module("nursery-app")
         .controller("employeeEditController", employeeEditController);
 
-    function employeeEditController($scope, $http, $location, $routeParams) {
+    function employeeEditController($scope, $http, $location, $routeParams, $controller) {
+        $controller('baseController', {
+            '$scope': $scope
+        });
+
         var vm = this;
         vm.employeeId = $routeParams.id;
         vm.employee = {};

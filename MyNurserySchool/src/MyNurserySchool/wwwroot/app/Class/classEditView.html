@@ -29,7 +29,7 @@
             <div class="col-xs-8">
                 <button type="submit" class="btn btn-success" ng-if="!vm.isNew"><i class="fa fa-save"></i> Uložiť zmeny</button>
                 <button type="submit" class="btn btn-success" ng-if="vm.isNew"><i class="fa fa-plus-circle"></i> Vytvoriť triedu</button>
-                <a href="#/" class="btn btn-warning"><i class="fa fa-reply"></i> Späť</a>
+                <back-button></back-button>
             </div>
             <div class="col-xs-4 text-right">
                 <button type="button" class="btn btn-danger" ng-click="vm.deleteClass()" ng-if="!vm.isNew"><i class="fa fa-trash-o"></i> Vymazať</button>

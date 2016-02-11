@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="nursery in vm.nurseries">
+            <tr ng-repeat="nursery in vm.nurseries" ng-dblclick="redirect('/App/Nursery/' + nursery.id)">
                 <td>{{ nursery.name }}</td>
                 <td>{{ nursery.address.city }}</td>
                 <td>{{ nursery.address.street + ' ' + nursery.address.number }}</td>

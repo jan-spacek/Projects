@@ -1,11 +1,10 @@
 ﻿<div>
     <div>
         <back-button></back-button>
-        <a ng-href="#/child/0/edit" class="btn btn-primary"><i class="fa fa-user-plus"></i> Pridať dieťa</a>
     </div>
-    <h3>{{ vm.class.name }}</h3>
+    <h3><i class="fa fa-archive"></i> Archív detí</h3>
     <wait-cursor ng-show="vm.isBusy"></wait-cursor>
-    <table class="table table-striped table-responsive table-fixed">
+    <table class="table table-responsive table-striped table-fixed">
         <thead>
             <tr>
                 <th>Meno</th>
@@ -16,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="child in vm.class.children" ng-dblclick="redirect('#/child/' + child.id)">
+            <tr ng-repeat="child in vm.children" ng-dblclick="redirect('#/child/' + child.id)">
                 <td>{{ child.firstName }}</td>
                 <td>{{ child.lastName }}</td>
                 <td>{{ child.birthDate | date : 'd.M.yyyy' }}</td>

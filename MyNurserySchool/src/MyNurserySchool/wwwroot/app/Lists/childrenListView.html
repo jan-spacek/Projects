@@ -1,4 +1,8 @@
 ﻿<div>
+    <div>
+        <back-button></back-button>
+        <a ng-href="#/child/0/edit" class="btn btn-primary"><i class="fa fa-user-plus"></i> Pridať dieťa</a>
+    </div>
     <h3><i class="fa fa-child"></i> Zoznam detí</h3>
     <wait-cursor ng-show="vm.isBusy"></wait-cursor>
     <table class="table table-responsive table-striped table-fixed">
@@ -12,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="child in vm.children">
+            <tr ng-repeat="child in vm.children" ng-dblclick="redirect('#/child/' + child.id)">
                 <td>{{ child.firstName }}</td>
                 <td>{{ child.lastName }}</td>
                 <td>{{ child.birthDate | date : 'd.M.yyyy' }}</td>
@@ -24,5 +28,4 @@
             </tr>
         </tbody>
     </table>
-    <a ng-href="#/child/0/edit" class="btn btn-primary btn-block"><i class="fa fa-user-plus"></i> Pridať dieťa</a>
 </div>
