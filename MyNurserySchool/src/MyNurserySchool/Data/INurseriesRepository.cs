@@ -18,7 +18,6 @@ namespace MyNurserySchool.Data
         Employee GetEmployeeById(int employeeId);
         Child GetChildById(int childId);
         Class GetClassById(int classId);
-        int GetNurseryIdByUserName(string name);
         #endregion
 
         #region Add

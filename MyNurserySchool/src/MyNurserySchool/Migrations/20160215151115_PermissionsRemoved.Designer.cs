@@ -8,9 +8,10 @@ using MyNurserySchool.Data;
 namespace MyNurserySchool.Migrations
 {
     [DbContext(typeof(NurseryDbContext))]
-    partial class NurseryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160215151115_PermissionsRemoved")]
+    partial class PermissionsRemoved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -311,6 +312,8 @@ namespace MyNurserySchool.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<string>("StandardUserId");
+
                     b.HasKey("Id");
                 });
 
@@ -399,6 +402,10 @@ namespace MyNurserySchool.Migrations
                     b.HasOne("MyNurserySchool.Models.Employee")
                         .WithMany()
                         .HasForeignKey("DirectorId");
+
+                    b.HasOne("MyNurserySchool.Authentication.StandardUser")
+                        .WithMany()
+                        .HasForeignKey("StandardUserId");
                 });
         }
     }

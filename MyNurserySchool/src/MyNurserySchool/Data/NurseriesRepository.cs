@@ -110,16 +110,6 @@ namespace MyNurserySchool.Data
         #endregion
 
         #region Get
-        public int GetNurseryIdByUserName(string name)
-        {
-            foreach (Nursery n in _context.Nurseries)
-            {
-                if (n.AllowedUsers.Contains(name))
-                    return n.Id;
-            }
-
-            return 0;
-        }
         public Nursery GetNurseryById(int nurseryId)
         {
             return _context.Nurseries
@@ -292,7 +282,7 @@ namespace MyNurserySchool.Data
 
         #region Common
         public bool HasAccess(int id, string name)
-        {
+        {            
             foreach (Nursery n in _context.Nurseries)
             {
                 if (n.Id == id && n.AllowedUsers.Contains(name))

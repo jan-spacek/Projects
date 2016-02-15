@@ -29,11 +29,37 @@ namespace MyNurserySchool.Controllers.Web
             return View();
         }
         
+        [HttpGet("App/Nursery")]
+        public IActionResult Nursery()
+        {
+            if (User.FindFirst("Nursery") != null)
+            {
+                int id = int.Parse(User.FindFirst("Nursery").Value);
+                var nursery = Mapper.Map<NurseryViewModel>(_repository.GetNurseryById(id));
+                return View(nursery);
+            }
+            else if (User.FindFirst("Full") != null)
+            {
+                return RedirectToAction("Nurseries", "App");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Public");
+            }
+        }
+
         [HttpGet("App/Nursery/{id}")]
         public IActionResult Nursery(int id)
         {
-            var nursery = Mapper.Map<NurseryViewModel>(_repository.GetNurseryById(id));            
-            return View(nursery);
+            if (User.FindFirst("Full") != null || ( User.FindFirst("Nursery") != null && User.FindFirst("Nursery").Value == id.ToString()))
+            {
+                var nursery = Mapper.Map<NurseryViewModel>(_repository.GetNurseryById(id));
+                return View(nursery);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Public");
+            }
         }
     }
 }

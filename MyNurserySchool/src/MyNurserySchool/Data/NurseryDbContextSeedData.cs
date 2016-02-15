@@ -4,6 +4,7 @@ using MyNurserySchool.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MyNurserySchool.Data
@@ -23,27 +24,41 @@ namespace MyNurserySchool.Data
         {
             if (await _userManager.FindByEmailAsync("jan.spacek@gmail.com") == null)
             {
-                var newUser = new StandardUser()
+                var newUser = new StandardUser
                 {
                     UserName = "admin",
-                    Email = "jan.spacek@gmail.com",
-                    Permission = Permission.Full
+                    Email = "jan.spacek@gmail.com"
                 };
 
                 await _userManager.CreateAsync(newUser, "P@ssw0rd");
+                await _userManager.AddClaimAsync(newUser, new Claim("Full", "true"));
             }
 
             if (await _userManager.FindByEmailAsync("lucia.spackova@gmail.com") == null)
             {
-                var newUser = new StandardUser()
+                var newUser = new StandardUser
                 {
                     UserName = "lucia.spackova",
-                    Email = "lucia.spackova@gmail.com",
-                    Permission = Permission.Edit
+                    Email = "lucia.spackova@gmail.com"
                 };
 
                 await _userManager.CreateAsync(newUser, "P@ssw0rd");
+                await _userManager.AddClaimAsync(newUser, new Claim("Edit", "true"));
+                await _userManager.AddClaimAsync(newUser, new Claim("Nursery", "1"));
             }
+
+            if (await _userManager.FindByEmailAsync("viewer@viewer.com") == null)
+            {
+                var newUser = new StandardUser
+                {
+                    UserName = "viewer",
+                    Email = "viewer@viewer.com"
+                };
+
+                await _userManager.CreateAsync(newUser, "P@ssw0rd");
+                await _userManager.AddClaimAsync(newUser, new Claim("Nursery", "1"));
+            }
+
 
             if (!_context.Nurseries.Any())
             {

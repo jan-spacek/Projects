@@ -19,7 +19,10 @@ namespace MyNurserySchool.Controllers.Web
         
         public IActionResult Index()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Nursery", "App");
+            else
+                return View();
         }
 
         public IActionResult About()
