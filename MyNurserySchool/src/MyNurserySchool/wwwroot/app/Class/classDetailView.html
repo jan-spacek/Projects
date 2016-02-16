@@ -5,21 +5,23 @@
     </div>
     <h3>{{ vm.class.name }}</h3>
     <wait-cursor ng-show="vm.isBusy"></wait-cursor>
-    <div ng-if="vm.class.children.length < 1">
+    <div ng-if="vm.children.length < 1">
         Zoznam je prázdny
     </div>
-    <table class="table table-striped table-responsive table-fixed" ng-if="vm.class.children.length > 0">
+    <table class="table table-striped table-condensed" ng-if="vm.children.length > 0">
         <thead>
             <tr>
-                <th>Meno</th>
-                <th>Priezvisko</th>
-                <th>Dátum narodenia</th>
+                <th width="50">Por.č.</th>
+                <th width="120">Meno</th>
+                <th width="120">Priezvisko</th>
+                <th width="150">Dátum narodenia</th>
                 <th>Kontakty</th>
-                <th></th>
+                <th width="105"></th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="child in vm.class.children" ng-dblclick="redirect('#/child/' + child.id)" ng-if="child.attendance == 1">
+            <tr ng-repeat="child in vm.children" ng-dblclick="redirect('#/child/' + child.id)" ng-if="child.attendance == 1">
+                <td class="text-right">{{ child.number }}</td>
                 <td>{{ child.firstName }}</td>
                 <td>{{ child.lastName }}</td>
                 <td>{{ child.birthDate | date : 'd.M.yyyy' }}</td>

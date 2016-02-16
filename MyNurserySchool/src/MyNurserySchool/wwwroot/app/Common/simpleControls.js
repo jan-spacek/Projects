@@ -5,7 +5,12 @@
         .directive("waitCursor", waitCursor)
         .directive("createdModified", createdModified)
         .directive("backButton", backButton)
-        .controller("baseController", ['$scope', '$window', baseController]);
+        .controller("baseController", ['$scope', '$window', baseController])
+        .filter('numberFixedLen', function () {
+            return function (a, b) {
+                return (1e4 + a + "").slice(-b)
+            }
+        });
 
     function backButton($window) {
         return {

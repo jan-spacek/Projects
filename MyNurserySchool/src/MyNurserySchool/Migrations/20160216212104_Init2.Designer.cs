@@ -8,9 +8,10 @@ using MyNurserySchool.Data;
 namespace MyNurserySchool.Migrations
 {
     [DbContext(typeof(NurseryDbContext))]
-    partial class NurseryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160216212104_Init2")]
+    partial class Init2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")

@@ -112,21 +112,7 @@ namespace MyNurserySchool.Data
                         City = "Bratislava",
                         Zip = 82101
                     },
-                    Employees = new List<Employee>() {
-                        new Employee()
-                        {
-                            FullName = "Mgr. Lucia Špačková",
-                            BirthDate = new DateTime(1990, 8, 1),
-                            StartDate = new DateTime(2014, 9, 1),
-                            JobTitle = "riaditeľka",
-                            Employment = "plný úväzok",
-                            Created = DateTime.Now,
-                            CreatedBy = "admin",
-                            Modified = DateTime.Now,
-                            ModifiedBy = "admin",
-                            Email = "lucia.spackova@kidsparadise.sk"
-                        }
-                    },
+                    Employees = new List<Employee>(),
                     Classes = new List<Class>()
                     {
                         new Class()
@@ -138,26 +124,6 @@ namespace MyNurserySchool.Data
                             ModifiedBy = "admin",
                             Capacity = 25,
                             Children = new List<Child>()
-                            {
-                                new Child()
-                                {
-                                    FirstName = "Jožko",
-                                    LastName = "Mrkvička",
-                                    Created = DateTime.Now,
-                                    CreatedBy = "admin",
-                                    Modified = DateTime.Now,
-                                    ModifiedBy = "admin"
-                                },
-                                new Child()
-                                {
-                                    FirstName = "Ferko",
-                                    LastName = "Malý",
-                                    Created = DateTime.Now,
-                                    CreatedBy = "admin",
-                                    Modified = DateTime.Now,
-                                    ModifiedBy = "admin"
-                                }
-                            }
                         },
                         new Class()
                         {

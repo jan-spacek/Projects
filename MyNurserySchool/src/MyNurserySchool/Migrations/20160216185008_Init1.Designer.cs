@@ -8,9 +8,10 @@ using MyNurserySchool.Data;
 namespace MyNurserySchool.Migrations
 {
     [DbContext(typeof(NurseryDbContext))]
-    partial class NurseryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160216185008_Init1")]
+    partial class Init1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -260,8 +261,6 @@ namespace MyNurserySchool.Migrations
                     b.Property<DateTime>("Modified");
 
                     b.Property<string>("ModifiedBy");
-
-                    b.Property<int>("Number");
 
                     b.Property<string>("SocialNumber");
 

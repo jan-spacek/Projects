@@ -32,7 +32,9 @@
         function getClass(i) {
             $http.get("/Api/Class/" + vm.nursery.classes[i].id)
                 .then(function (response) {
-                    angular.copy(response.data.children, vm.nursery.classes[i].children);
+                    for (var j = 0; j < response.data.children.length; j++)
+                        if (response.data.children[j].attendance == 1)
+                            vm.nursery.classes[i].children.push(response.data.children[j]);
                 }, function () {
                     toastr.error("Nepodarilo sa načítať informácie o triede");
                 });
