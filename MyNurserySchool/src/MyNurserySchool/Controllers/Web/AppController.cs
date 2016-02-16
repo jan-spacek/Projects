@@ -9,6 +9,9 @@ using MyNurserySchool.Models;
 using Microsoft.AspNet.Authorization;
 using MyNurserySchool.Data;
 using AutoMapper;
+using Microsoft.AspNet.Identity;
+using MyNurserySchool.Authentication;
+using System.Security.Claims;
 
 namespace MyNurserySchool.Controllers.Web
 {
@@ -32,15 +35,15 @@ namespace MyNurserySchool.Controllers.Web
         [HttpGet("App/Nursery")]
         public IActionResult Nursery()
         {
-            if (User.FindFirst("Nursery") != null)
+            if (User.IsInRole("Admin") || User.FindAll("Nursery").ToList().Count > 1)
+            {
+                return RedirectToAction("Nurseries", "App");
+            }
+            else if (User.IsInRole("Viewer") || User.IsInRole("Editor") && User.FindFirst("Nursery") != null)
             {
                 int id = int.Parse(User.FindFirst("Nursery").Value);
                 var nursery = Mapper.Map<NurseryViewModel>(_repository.GetNurseryById(id));
                 return View(nursery);
-            }
-            else if (User.FindFirst("Full") != null)
-            {
-                return RedirectToAction("Nurseries", "App");
             }
             else
             {
@@ -51,7 +54,9 @@ namespace MyNurserySchool.Controllers.Web
         [HttpGet("App/Nursery/{id}")]
         public IActionResult Nursery(int id)
         {
-            if (User.FindFirst("Full") != null || ( User.FindFirst("Nursery") != null && User.FindFirst("Nursery").Value == id.ToString()))
+            var nurs = User.FindAll("Nursery").ToList();
+            if (nurs.Find(new Claim("Nursery", id.ToString()))) { }
+            if (.Contains(new Claim("Nursery", id.ToString())) || User.IsInRole("Admin"))
             {
                 var nursery = Mapper.Map<NurseryViewModel>(_repository.GetNurseryById(id));
                 return View(nursery);

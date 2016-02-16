@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using MyNurserySchool.Authentication;
 using MyNurserySchool.Models;
 using System;
@@ -13,52 +14,88 @@ namespace MyNurserySchool.Data
     {
         private NurseryDbContext _context;
         private UserManager<StandardUser> _userManager;
+        private RoleManager<IdentityRole> _roleManager;
 
-        public NurseryDbContextSeedData(NurseryDbContext context, UserManager<StandardUser> userManager)
+        public NurseryDbContextSeedData(NurseryDbContext context, UserManager<StandardUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task EnsureSeedDataAsync()
         {
-            if (await _userManager.FindByEmailAsync("jan.spacek@gmail.com") == null)
+            string roleName = "Admin";
+            if (await _roleManager.FindByNameAsync("Admin") == null)
+            {
+                var str = _roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+
+            roleName = "Editor";
+            if (await _roleManager.FindByNameAsync("Editor") == null)
+            {
+                var str = _roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+
+            roleName = "Viewer";
+            if (await _roleManager.FindByNameAsync("Viewer") == null)
+            {
+                var str = _roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+
+            if (await _userManager.FindByNameAsync("admin") == null)
             {
                 var newUser = new StandardUser
                 {
                     UserName = "admin",
-                    Email = "jan.spacek@gmail.com"
+                    Email = "admin@example.com"
                 };
 
                 await _userManager.CreateAsync(newUser, "P@ssw0rd");
-                await _userManager.AddClaimAsync(newUser, new Claim("Full", "true"));
+                var roleresult = await _userManager.AddToRoleAsync(newUser, "Admin");
+                await _userManager.AddClaimAsync(newUser, new Claim("Nursery", "1"));
+                await _userManager.AddClaimAsync(newUser, new Claim("Nursery", "2"));
             }
 
-            if (await _userManager.FindByEmailAsync("lucia.spackova@gmail.com") == null)
+            if (await _userManager.FindByNameAsync("editor") == null)
             {
                 var newUser = new StandardUser
                 {
-                    UserName = "lucia.spackova",
-                    Email = "lucia.spackova@gmail.com"
+                    UserName = "editor",
+                    Email = "editor@example.com"
                 };
 
                 await _userManager.CreateAsync(newUser, "P@ssw0rd");
-                await _userManager.AddClaimAsync(newUser, new Claim("Edit", "true"));
+                var roleresult = await _userManager.AddToRoleAsync(newUser, "Editor");
                 await _userManager.AddClaimAsync(newUser, new Claim("Nursery", "1"));
             }
 
-            if (await _userManager.FindByEmailAsync("viewer@viewer.com") == null)
+            if (await _userManager.FindByNameAsync("editor2") == null)
+            {
+                var newUser = new StandardUser
+                {
+                    UserName = "editor2",
+                    Email = "editor2@example.com"
+                };
+
+                await _userManager.CreateAsync(newUser, "P@ssw0rd");
+                var roleresult = await _userManager.AddToRoleAsync(newUser, "Editor");
+                await _userManager.AddClaimAsync(newUser, new Claim("Nursery", "1"));
+                await _userManager.AddClaimAsync(newUser, new Claim("Nursery", "2"));
+            }
+
+            if (await _userManager.FindByNameAsync("viewer") == null)
             {
                 var newUser = new StandardUser
                 {
                     UserName = "viewer",
-                    Email = "viewer@viewer.com"
+                    Email = "viewer@example.com"
                 };
 
                 await _userManager.CreateAsync(newUser, "P@ssw0rd");
+                var roleresult = await _userManager.AddToRoleAsync(newUser, "Viewer");
                 await _userManager.AddClaimAsync(newUser, new Claim("Nursery", "1"));
             }
-
 
             if (!_context.Nurseries.Any())
             {
@@ -133,8 +170,7 @@ namespace MyNurserySchool.Data
                             Capacity = 25,
                             Children = new List<Child>()
                         }
-                    },
-                    AllowedUsers = "admin;lucia.spackova"
+                    }
                 };
 
                 _context.Nurseries.Add(kidsParadiseRuz);
@@ -170,8 +206,7 @@ namespace MyNurserySchool.Data
                             Email = "vysehradska@kidsparadise.sk"
                         }
                     },
-                    Classes = new List<Class>(),
-                    AllowedUsers = "admin"
+                    Classes = new List<Class>()
                 };
 
                 _context.Nurseries.Add(kidsParadisePet);

@@ -14,7 +14,6 @@ namespace MyNurserySchool.ViewModels
         public Address Address { get; set; }
         public virtual IEnumerable<ClassViewModel> Classes { get; set; }
         public virtual IEnumerable<EmployeeViewModel> Employees { get; set; }
-        public string AllowedUsers { get; set; }
 
         public DateTime Created { get; set; }
         public string CreatedBy { get; set; }

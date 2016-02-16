@@ -48,7 +48,6 @@ namespace MyNurserySchool.Data
 
         #region Common
         bool SaveAll();
-        bool HasAccess(int id, string name);
         #endregion
     }
 }

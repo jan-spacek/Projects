@@ -16,7 +16,6 @@ namespace MyNurserySchool.Models
         public Employee Director { get; set; }
         public virtual ICollection<Class> Classes { get; set; }
         public virtual ICollection<Employee> Employees { get; set; }
-        public string AllowedUsers { get; set; }
 
         public DateTime Created { get; set; }
         public string CreatedBy { get; set; }

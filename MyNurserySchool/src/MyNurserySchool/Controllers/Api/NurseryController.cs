@@ -28,10 +28,7 @@ namespace MyNurserySchool.Controllers.Api
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
-            if (_repository.HasAccess(id, User.Identity.Name))
-            {
-                return Json(Mapper.Map<NurseryViewModel>(_repository.GetNurseryById(id)));
-            }
+            return Json(Mapper.Map<NurseryViewModel>(_repository.GetNurseryById(id)));
 
             _logger.LogInformation("Attempting to get unauthorized nursery");
             Response.StatusCode = (int)HttpStatusCode.Unauthorized;
@@ -82,10 +79,6 @@ namespace MyNurserySchool.Controllers.Api
                     nursery.ModifiedBy = User.Identity.Name;
                     nursery.CreatedBy = User.Identity.Name;
                     nursery.Created = DateTime.Now;
-                    if (User.Identity.Name != "admin")
-                        nursery.AllowedUsers = "admin;" + User.Identity.Name;
-                    else
-                        nursery.AllowedUsers = "admin";
 
                     _logger.LogInformation("Attempting to save nursery");
                     _repository.AddAddress(nursery.Address);
@@ -136,11 +129,9 @@ namespace MyNurserySchool.Controllers.Api
         [HttpGet("{nurseryId}/Children")]
         public JsonResult GetChildren(int nurseryId)
         {
-            if (_repository.HasAccess(nurseryId, User.Identity.Name))
-            {
+            
                 var results = Mapper.Map<IEnumerable<ChildViewModel>>(_repository.GetAllChildren(nurseryId));
                 return Json(results);
-            }
 
             _logger.LogInformation("Attempting to get unauthorized nursery");
             Response.StatusCode = (int)HttpStatusCode.Unauthorized;
@@ -150,11 +141,8 @@ namespace MyNurserySchool.Controllers.Api
         [HttpGet("{nurseryId}/Employees")]
         public JsonResult GetEmpoyees(int nurseryId)
         {
-            if (_repository.HasAccess(nurseryId, User.Identity.Name))
-            {
                 var results = Mapper.Map<IEnumerable<EmployeeViewModel>>(_repository.GetAllEmployees(nurseryId));
                 return Json(results);
-            }
 
             _logger.LogInformation("Attempting to get unauthorized nursery");
             Response.StatusCode = (int)HttpStatusCode.Unauthorized;

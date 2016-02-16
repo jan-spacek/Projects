@@ -29,7 +29,6 @@ namespace MyNurserySchool.Data
                     .Include(n => n.Address)
                     .Include(n => n.Director)
                     .OrderBy(n => n.Name)
-                    .Where(n => n.AllowedUsers.Contains(name))
                     .ToList();
             }
             catch (Exception ex)
@@ -281,16 +280,6 @@ namespace MyNurserySchool.Data
         #endregion
 
         #region Common
-        public bool HasAccess(int id, string name)
-        {            
-            foreach (Nursery n in _context.Nurseries)
-            {
-                if (n.Id == id && n.AllowedUsers.Contains(name))
-                    return true;
-            }
-
-            return false;
-        }
         public bool SaveAll()
         {
             // ak je zmien viac ako 0, tak sa nieco zmenilo
