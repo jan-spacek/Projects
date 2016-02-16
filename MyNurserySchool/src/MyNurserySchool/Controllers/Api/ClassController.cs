@@ -6,9 +6,12 @@ using System.Net;
 using AutoMapper;
 using MyNurserySchool.ViewModels;
 using MyNurserySchool.Data;
+using Microsoft.AspNet.Authorization;
+using System.Linq;
 
 namespace MyNurserySchool.Controllers.Api
 {
+    [Authorize]
     [Route("Api/Class/")]
     public class ClassController : Controller
     {
@@ -28,12 +31,14 @@ namespace MyNurserySchool.Controllers.Api
             {
                 var result = _repository.GetClassById(classId);
 
-                if (result == null)
+                var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == result.NurseryId.ToString());
+                if (User.IsInRole("Admin") || matchingNurs != null)
                 {
-                    return Json(null);
-                }
+                    if (result == null)
+                        return Json(null);
 
-                return Json(Mapper.Map<ClassViewModel>(result));
+                    return Json(Mapper.Map<ClassViewModel>(result));
+                }
             }
             catch (Exception ex)
             {
@@ -41,9 +46,13 @@ namespace MyNurserySchool.Controllers.Api
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json("Error occurred finding class id");
             }
+
+            Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            return Json("Unauthorized to get this class");
         }
 
         [HttpPost("{nurseryId}")]
+        [Authorize(Roles = "Editor")]
         public JsonResult Post(int nurseryId, [FromBody]ClassViewModel vm)
         {
             try
@@ -51,18 +60,28 @@ namespace MyNurserySchool.Controllers.Api
                 if (ModelState.IsValid)
                 {
                     var newClass = Mapper.Map<Class>(vm);
-                    newClass.Created = DateTime.Now;
-                    newClass.CreatedBy = User.Identity.Name;
-                    newClass.Modified = DateTime.Now;
-                    newClass.ModifiedBy = User.Identity.Name;
-                    newClass.NurseryId = nurseryId;
-                    
-                    _repository.AddClass(nurseryId, newClass);
 
-                    if(_repository.SaveAll())
+                    var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == nurseryId.ToString());
+                    if (User.IsInRole("Admin") || matchingNurs != null)
                     {
-                        Response.StatusCode = (int)HttpStatusCode.Created;
-                        return Json(Mapper.Map<ClassViewModel>(newClass));
+                        newClass.Created = DateTime.Now;
+                        newClass.CreatedBy = User.Identity.Name;
+                        newClass.Modified = DateTime.Now;
+                        newClass.ModifiedBy = User.Identity.Name;
+                        newClass.NurseryId = nurseryId;
+
+                        _repository.AddClass(nurseryId, newClass);
+
+                        if (_repository.SaveAll())
+                        {
+                            Response.StatusCode = (int)HttpStatusCode.Created;
+                            return Json(Mapper.Map<ClassViewModel>(newClass));
+                        }
+                    }
+                    else
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        return Json($"Unauthorized to create new class in nursery {nurseryId}");
                     }
                 }
             }
@@ -78,6 +97,7 @@ namespace MyNurserySchool.Controllers.Api
         }
 
         [HttpPut("{nurseryId}")]
+        [Authorize(Roles = "Editor")]
         public JsonResult Put(int nurseryId, [FromBody]ClassViewModel vm)
         {
             try
@@ -85,16 +105,26 @@ namespace MyNurserySchool.Controllers.Api
                 if (ModelState.IsValid)
                 {
                     var newClass = Mapper.Map<Class>(vm);
-                    newClass.Modified = DateTime.Now;
-                    newClass.ModifiedBy = User.Identity.Name;
-                    newClass.NurseryId = nurseryId;
 
-                    _repository.SaveClass(newClass);
-
-                    if (_repository.SaveAll())
+                    var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == nurseryId.ToString());
+                    if (User.IsInRole("Admin") || matchingNurs != null)
                     {
-                        Response.StatusCode = (int)HttpStatusCode.Created;
-                        return Json(Mapper.Map<ClassViewModel>(newClass));
+                        newClass.Modified = DateTime.Now;
+                        newClass.ModifiedBy = User.Identity.Name;
+                        newClass.NurseryId = nurseryId;
+
+                        _repository.SaveClass(newClass);
+
+                        if (_repository.SaveAll())
+                        {
+                            Response.StatusCode = (int)HttpStatusCode.Created;
+                            return Json(Mapper.Map<ClassViewModel>(newClass));
+                        }
+                    }
+                    else
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        return Json("Unauthorized to save this class");
                     }
                 }
             }
@@ -110,10 +140,20 @@ namespace MyNurserySchool.Controllers.Api
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Editor")]
         public JsonResult Delete(int id)
         {
-            _repository.DeleteClass(id);
-            return Json(new { Message = "Deleted" });
+            var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == _repository.GetClassNurseryId(id).ToString());
+            if (User.IsInRole("Admin") || matchingNurs != null)
+            {
+                _repository.DeleteClass(id);
+                return Json(new { Message = "Deleted" });
+            }
+            else
+            {
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return Json("Unauthorized to delete this class");
+            }
         }
     }
 }

@@ -23,13 +23,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" asp-controller="Public" asp-action="Index">Moja škôlka</a>
+                <a class="navbar-brand" asp-controller="Public" asp-action="Index">@ViewBag.Title</a>
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
                 <ul class="nav navbar-nav">
                     <li><a asp-controller="Public" asp-action="Index"><i class="fa fa-home"></i></a></li>
-                    @if (User.Identity.IsAuthenticated && User.Identity.Name == "admin")
+                    @if (User.IsInRole("Admin") || User.FindAll("Nursery").ToList().Count > 1)
                     {
                         <li><a asp-controller="App" asp-action="Nurseries">Prehľad škôlok</a></li>
                     }

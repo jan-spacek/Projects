@@ -9,9 +9,11 @@ using AutoMapper;
 using System.Net;
 using MyNurserySchool.ViewModels;
 using MyNurserySchool.Models;
+using Microsoft.AspNet.Authorization;
 
 namespace MyNurserySchool.Controllers.Api
 {
+    [Authorize]
     [Route("Api/Child")]
     public class ChildController : Controller
     {
@@ -31,22 +33,28 @@ namespace MyNurserySchool.Controllers.Api
             {
                 var result = _repository.GetChildById(childId);
 
-                if (result == null)
+                var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == _repository.GetChildsNurseryId(result).ToString());
+                if (User.IsInRole("Admin") || matchingNurs != null)
                 {
-                    return Json(null);
-                }
+                    if (result == null)
+                        return Json(null);
 
-                return Json(Mapper.Map<ChildViewModel>(result));
+                    return Json(Mapper.Map<ChildViewModel>(result));
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to get class {childId}", ex);
+                _logger.LogError($"Failed to get child {childId}", ex);
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json("Error occurred finding class id");
+                return Json("Error occurred finding child id");
             }
+            
+            Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            return Json($"You are unauthorized to view this child {childId}");
         }
 
         [HttpPost("")]
+        [Authorize(Roles = "Editor")]
         public JsonResult Post([FromBody]ChildViewModel vm)
         {
             try
@@ -54,17 +62,27 @@ namespace MyNurserySchool.Controllers.Api
                 if (ModelState.IsValid)
                 {
                     var child = Mapper.Map<Child>(vm);
-                    child.Created = DateTime.Now;
-                    child.CreatedBy = User.Identity.Name;
-                    child.Modified = DateTime.Now;
-                    child.ModifiedBy = User.Identity.Name;
 
-                    _repository.AddChild(child);
-
-                    if (_repository.SaveAll())
+                    var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == _repository.GetClassNurseryId((int)vm.ClassId).ToString());
+                    if (User.IsInRole("Admin") || matchingNurs != null)
                     {
-                        Response.StatusCode = (int)HttpStatusCode.Created;
-                        return Json(Mapper.Map<ChildViewModel>(child));
+                        child.Created = DateTime.Now;
+                        child.CreatedBy = User.Identity.Name;
+                        child.Modified = DateTime.Now;
+                        child.ModifiedBy = User.Identity.Name;
+
+                        _repository.AddChild(child);
+
+                        if (_repository.SaveAll())
+                        {
+                            Response.StatusCode = (int)HttpStatusCode.Created;
+                            return Json(Mapper.Map<ChildViewModel>(child));
+                        }
+                    }
+                    else
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        return Json("Unauthorized to create new child in this nursery");
                     }
                 }
             }
@@ -78,8 +96,9 @@ namespace MyNurserySchool.Controllers.Api
             Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return Json("Validation failed on new child");
         }
-
+        
         [HttpPut("")]
+        [Authorize(Roles = "Editor")]
         public JsonResult Put([FromBody]ChildViewModel vm)
         {
             try
@@ -87,17 +106,27 @@ namespace MyNurserySchool.Controllers.Api
                 if (ModelState.IsValid)
                 {
                     var child = Mapper.Map<Child>(vm);
-                    child.Modified = DateTime.Now;
-                    child.ModifiedBy = User.Identity.Name;
 
-                    if (child.Address != null)
-                        _repository.SaveAddress(child.Address);
-                    _repository.SaveChild(child);
-
-                    if (_repository.SaveAll())
+                    var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == _repository.GetClassNurseryId((int)vm.ClassId).ToString());
+                    if (User.IsInRole("Admin") || matchingNurs != null)
                     {
-                        Response.StatusCode = (int)HttpStatusCode.OK;
-                        return Json(Mapper.Map<ChildViewModel>(child));
+                        child.Modified = DateTime.Now;
+                        child.ModifiedBy = User.Identity.Name;
+
+                        if (child.Address != null)
+                            _repository.SaveAddress(child.Address);
+                        _repository.SaveChild(child);
+
+                        if (_repository.SaveAll())
+                        {
+                            Response.StatusCode = (int)HttpStatusCode.OK;
+                            return Json(Mapper.Map<ChildViewModel>(child));
+                        }
+                    }
+                    else
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        return Json("Unauthorized to save this child");
                     }
                 }
             }
@@ -111,19 +140,29 @@ namespace MyNurserySchool.Controllers.Api
             Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return Json("Validation failed on child");
         }
-
+        
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Editor")]
         public JsonResult Delete(int id)
         {
             try
             {
-                _repository.DeleteChild(id);
-                return Json(new { Message = "Deleted" });
+                var child = _repository.GetChildById(id);
+
+                var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == _repository.GetChildsNurseryId(child).ToString());
+                if (User.IsInRole("Admin") || matchingNurs != null)
+                {
+                    _repository.DeleteChild(id);
+                    return Json(new { Message = "Deleted" });
+                }
             }
             catch (Exception ex)
             {
                 return Json(new { Message = "Unable to delete: " + ex });
             }
+
+            Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            return Json("Unauthorized to delete this child");
         }
     }
 }

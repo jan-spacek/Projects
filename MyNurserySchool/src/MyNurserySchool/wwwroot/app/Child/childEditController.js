@@ -4,7 +4,7 @@
     angular.module("nursery-app")
         .controller("childEditController", childEditController);
 
-    function childEditController($scope, $http, $location, $routeParams, $controller) {
+    function childEditController($scope, $http, $routeParams, $controller) {
         $controller('baseController', {
             '$scope': $scope
         });
@@ -68,7 +68,7 @@
                 $http.post("/Api/Child/", vm.child)
                     .then(function (response) {
                         toastr.success("Dieťa " + vm.child.firstName + " " + vm.child.lastName + " bolo úspešne vytvorené");
-                        $location.path("#/class/" + vm.classId);
+                        $scope.back();
                     }, function () {
                         toastr.error("Dieťa sa nepodarilo vytvoriť");
                     }).finally(function () {
@@ -82,7 +82,7 @@
                 $http.put("/Api/Child/", vm.child)
                     .then(function (response) {
                         toastr.success("Zmeny v dieťati " + vm.child.firstName + " " + vm.child.lastName + " boli úspešne uložené");
-                        $location.path("#/class/" + vm.classId);
+                        $scope.back();
                     }, function () {
                         toastr.error("Dieťa sa nepodarilo uložiť");
                     }).finally(function () {
@@ -96,7 +96,7 @@
             $http.delete("/Api/Child/" + vm.child.id)
                 .then(function () {
                     toastr.success("Dieťa bolo vymazané");
-                    $location.path("#/class/" + vm.classId);
+                    $scope.back();
                 }, function (error) {
                     toastr.error("Dieťa sa nepodarilo vymazať");
                 })

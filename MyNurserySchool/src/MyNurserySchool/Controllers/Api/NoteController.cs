@@ -9,6 +9,7 @@ using MyNurserySchool.Data;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using MyNurserySchool.Models;
+using Microsoft.AspNet.Authorization;
 
 namespace MyNurserySchool.Controllers.Api
 {
@@ -25,6 +26,7 @@ namespace MyNurserySchool.Controllers.Api
         }
 
         [HttpPost]
+        [Authorize(Roles = "Editor")]
         public JsonResult Post([FromBody]NoteViewModel vm)
         {
             try
@@ -56,6 +58,7 @@ namespace MyNurserySchool.Controllers.Api
         }
         
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Editor")]
         public JsonResult Delete(int id)
         {
             try

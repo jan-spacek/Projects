@@ -7,7 +7,8 @@ namespace MyNurserySchool.Data
     public interface INurseriesRepository
     {
         #region GetAll
-        IEnumerable<Nursery> GetAllNurseries(string name);
+        IEnumerable<Nursery> GetAllNurseries(List<int> nursList);
+        IEnumerable<Nursery> GetAllNurseries();
         IEnumerable<Class> GetAllClasses(int nurseryId);
         IEnumerable<Employee> GetAllEmployees(int nurseryId);
         IEnumerable<Child> GetAllChildren(int nurseryId);
@@ -18,6 +19,9 @@ namespace MyNurserySchool.Data
         Employee GetEmployeeById(int employeeId);
         Child GetChildById(int childId);
         Class GetClassById(int classId);
+        int? GetChildsNurseryId(Child child);
+        int? GetClassNurseryId(int classId);
+        int? GetEmployeeNurseryId(int employeeId);
         #endregion
 
         #region Add

@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 65px;
 }
 
 li .nav li>a {
@@ -13,21 +13,20 @@ ul.nav-vertical {
 ul.nav-subnav {
     margin-top: 3px;
 }
-
 .list-group-item {
     margin-bottom: 0;
 }
-
 .fa {
     min-width: 20px;
 }
-
 h2.modal-header {
     margin-top: 0;
 }
-
 .view {
     margin-bottom: 50px;
+}
+.text-gray {
+    color: darkgray;
 }
 
 .note-header h5 {

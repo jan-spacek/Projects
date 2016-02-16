@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace MyNurserySchool.Migrations
 {
-    public partial class allowedUsersRemoved : Migration
+    public partial class ClaimsAdded : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,6 @@ namespace MyNurserySchool.Migrations
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_StandardUser_UserId", table: "AspNetUserLogins");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_StandardUser_UserId", table: "AspNetUserRoles");
-            migrationBuilder.DropColumn(name: "AllowedUsers", table: "Nursery");
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",
@@ -58,10 +57,6 @@ namespace MyNurserySchool.Migrations
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_StandardUser_UserId", table: "AspNetUserLogins");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_StandardUser_UserId", table: "AspNetUserRoles");
-            migrationBuilder.AddColumn<string>(
-                name: "AllowedUsers",
-                table: "Nursery",
-                nullable: true);
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",

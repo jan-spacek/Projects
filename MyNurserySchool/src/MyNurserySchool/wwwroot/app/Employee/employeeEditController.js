@@ -4,7 +4,7 @@
     angular.module("nursery-app")
         .controller("employeeEditController", employeeEditController);
 
-    function employeeEditController($scope, $http, $location, $routeParams, $controller) {
+    function employeeEditController($scope, $http, $routeParams, $controller) {
         $controller('baseController', {
             '$scope': $scope
         });
@@ -48,7 +48,7 @@
                 $http.post("/Api/Employee/" + $scope.outerId, vm.employee)
                     .then(function (response) {
                         toastr.success("Zamestnanec " + vm.employee.fullName + " bol úspešne vytvorený");
-                        $location.path("#/");
+                        $scope.back();
                     }, function () {
                         toastr.error("Zamestnanca sa nepodarilo vytvoriť");
                     }).finally(function () {
@@ -60,7 +60,7 @@
                 $http.put("/Api/Employee/" + $scope.outerId, vm.employee)
                     .then(function (response) {
                         toastr.success("Zmeny v zamestnancovi " + vm.employee.fullName + " boli úspešne uložené");
-                        $location.path("#/");
+                        $scope.back();
                     }, function () {
                         toastr.error("Zamestnanca sa nepodarilo uložiť");
                     }).finally(function () {
@@ -74,7 +74,7 @@
             $http.delete("/Api/Employee/" + vm.employee.id)
                 .then(function () {
                     toastr.success("Zamestnanec bol vymazaný");
-                    $location.path("#/");
+                    $scope.back();
                 }, function (error) {
                     toastr.error("Zamestnanca sa nepodarilo vymazať");
                 })

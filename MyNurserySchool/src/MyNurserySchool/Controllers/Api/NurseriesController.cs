@@ -29,9 +29,22 @@ namespace MyNurserySchool.Controllers.Api
         [HttpGet("")]
         public JsonResult Get()
         {
-            var results = Mapper.Map<IEnumerable<NurseryViewModel>>(_repository.GetAllNurseries(User.Identity.Name));
-
-            return Json(results);
+            if (User.IsInRole("Admin"))
+            {
+                var results = Mapper.Map<IEnumerable<NurseryViewModel>>(_repository.GetAllNurseries());
+                return Json(results);
+            }
+            else
+            {
+                List<int> nursList = new List<int>();
+                var matchingNurs = User.FindAll("Nursery").ToList();
+                foreach (var nurs in matchingNurs)
+                {
+                    nursList.Add(int.Parse(nurs.Value));
+                }
+                var results = Mapper.Map<IEnumerable<NurseryViewModel>>(_repository.GetAllNurseries(nursList));
+                return Json(results);
+            }
         }
     }
 }

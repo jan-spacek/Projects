@@ -1,4 +1,4 @@
-﻿<div>
+﻿<div ng-if="canEdit">
     <wait-cursor ng-if="vm.isBusy"></wait-cursor>
     <form novalidate name="childEditForm" ng-submit="vm.saveChild()">
         <div class="row">
@@ -81,4 +81,7 @@
         </div>
     </form>
     <created-modified model="vm.child" ng-if="!vm.isNew"></created-modified>
+</div>
+<div ng-if="!canEdit">
+    <div class="alert alert-warning">Nemáte oprávnenie vidieť obsah tejto stránky</div>
 </div>

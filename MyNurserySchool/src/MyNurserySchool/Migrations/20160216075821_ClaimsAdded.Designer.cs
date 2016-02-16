@@ -8,8 +8,8 @@ using MyNurserySchool.Data;
 namespace MyNurserySchool.Migrations
 {
     [DbContext(typeof(NurseryDbContext))]
-    [Migration("20160215190339_allowedUsersRemoved")]
-    partial class allowedUsersRemoved
+    [Migration("20160216075821_ClaimsAdded")]
+    partial class ClaimsAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

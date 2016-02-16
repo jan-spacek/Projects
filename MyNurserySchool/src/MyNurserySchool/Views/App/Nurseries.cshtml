@@ -13,10 +13,10 @@
 
 <div ng-app="nurseries-app">
     <div class="col-sm-3 col-lg-2">
-            @if (User.Identity.Name == "admin")
-            {
-                <a href="#/new" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i>pridať škôlku</a>
-            }
+        @if (User.IsInRole("Admin"))
+        {
+            <a ng-href="#/new" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i>pridať škôlku</a>
+        }
     </div>
     <div class="col-sm-9 col-lg-10">
         <div class="container-fluid">

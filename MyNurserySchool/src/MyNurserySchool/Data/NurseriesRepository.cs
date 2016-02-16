@@ -20,7 +20,7 @@ namespace MyNurserySchool.Data
         }
 
         #region GetAll
-        public IEnumerable<Nursery> GetAllNurseries(string name)
+        public IEnumerable<Nursery> GetAllNurseries(List<int> nursList)
         {
             try {
                 return _context.Nurseries
@@ -29,6 +29,7 @@ namespace MyNurserySchool.Data
                     .Include(n => n.Address)
                     .Include(n => n.Director)
                     .OrderBy(n => n.Name)
+                    .Where(n => nursList.Contains(n.Id))
                     .ToList();
             }
             catch (Exception ex)
@@ -92,11 +93,11 @@ namespace MyNurserySchool.Data
         {
             try
             {
-                var listOfClasses = _context.Classes.Select(r => r.Id).ToList();
+                var listOfClasses = _context.Classes.Where(r => r.NurseryId == nurseryId).Select(r => r.Id).ToList();
                 var children = _context.Children
                     .Include(c => c.Notes)
                     .OrderBy(c => c.BirthDate)
-                    .Where(r => listOfClasses.Contains(r.ClassId ?? 0));
+                    .Where(c => listOfClasses.Contains(c.ClassId ?? 0));
 
                 return children;
             }
@@ -144,6 +145,22 @@ namespace MyNurserySchool.Data
                         .Where(c => c.Id == childId)
                         .FirstOrDefault();
         }
+        public int? GetChildsNurseryId(Child child)
+        {
+            var cls = GetClassById((int)child.ClassId);
+            return cls.NurseryId;
+        }
+        public int? GetClassNurseryId(int classId)
+        {
+            var cls = GetClassById(classId);
+            return cls.NurseryId;
+        }
+
+        public int? GetEmployeeNurseryId(int employeeId)
+        {
+            var emp = GetEmployeeById(employeeId);
+            return emp.NurseryId;
+        }
         #endregion
 
         #region Add
@@ -158,6 +175,8 @@ namespace MyNurserySchool.Data
         }
         public void AddEmployee(Employee employee)
         {
+            if (employee.Address != null)
+                AddAddress(employee.Address);
             _context.Employees.Add(employee);
         }
         public void AddAddress(Address address)
@@ -170,6 +189,8 @@ namespace MyNurserySchool.Data
         }
         public void AddChild(Child child)
         {
+            if (child.Address != null)
+                AddAddress(child.Address);
             _context.Children.Add(child);
         }
         #endregion
@@ -177,15 +198,6 @@ namespace MyNurserySchool.Data
         #region Save
         public void SaveNursery(Nursery nursery)
         {
-            //using (var newContext = new NurseryContext())
-            //{
-            //    newContext.Nurseries.Attach(nursery);
-            //    newContext.Entry(nursery).Property(n => n.Name).IsModified = true;
-            //    newContext.Entry(nursery).Property(n => n.Description).IsModified = true;
-            //    newContext.Entry(nursery).Property(n => n.Director).IsModified = true;
-            //    newContext.SaveChanges();
-            //}
-
             _context.Nurseries.Update(nursery);
         }
         public void SaveClass(Class newClass)
@@ -198,7 +210,10 @@ namespace MyNurserySchool.Data
         }
         public void SaveAddress(Address address)
         {
-            _context.Addresses.Update(address);
+            if (address.Id < 1)
+                _context.Addresses.Add(address);
+            else
+                _context.Addresses.Update(address);
         }
         public void SaveChild(Child child)
         {
@@ -216,7 +231,8 @@ namespace MyNurserySchool.Data
                 {
                     _context.Nurseries.Remove(nur);
 
-                    DeleteAddress(nur.Address.Id);
+                    if (nur.Address != null)
+                        DeleteAddress(nur.Address.Id);
                     foreach (Employee emp in nur.Employees)
                         DeleteEmployee(emp.Id);
                     foreach (Class cls in nur.Classes)
@@ -240,9 +256,9 @@ namespace MyNurserySchool.Data
             foreach (Employee e in _context.Employees.Include(e => e.Address))
                 if (e.Id == id)
                 {
-                    int addrId = e.Address.Id;
                     _context.Employees.Remove(e);
-                    DeleteAddress(addrId);
+                    if (e.Address != null)
+                        DeleteAddress(e.Address.Id);
                 }
             _context.SaveChanges();
         }
@@ -263,9 +279,9 @@ namespace MyNurserySchool.Data
             foreach (Child c in _context.Children)
                 if (c.Id == id)
                 {
-                    int addrId = c.Address.Id;
                     _context.Children.Remove(c);
-                    DeleteAddress(addrId);
+                    if (c.Address != null)
+                        DeleteAddress(c.Address.Id);
                 }
             _context.SaveChanges();
         }

@@ -9,6 +9,7 @@ using MyNurserySchool.Data;
 using MyNurserySchool.ViewModels;
 using System.Collections.Generic;
 using MyNurserySchool.Enums;
+using System.Linq;
 
 namespace MyNurserySchool.Controllers.Api
 {
@@ -28,7 +29,12 @@ namespace MyNurserySchool.Controllers.Api
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
-            return Json(Mapper.Map<NurseryViewModel>(_repository.GetNurseryById(id)));
+            var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == id.ToString());
+
+            if (User.IsInRole("Admin") || matchingNurs != null)
+            {
+                return Json(Mapper.Map<NurseryViewModel>(_repository.GetNurseryById(id)));
+            }
 
             _logger.LogInformation("Attempting to get unauthorized nursery");
             Response.StatusCode = (int)HttpStatusCode.Unauthorized;
@@ -36,21 +42,27 @@ namespace MyNurserySchool.Controllers.Api
         }
 
         [HttpPut("")]
+        [Authorize(Roles = "Editor")]
         public JsonResult Put([FromBody] NurseryViewModel vm)
         {
             try
             {
-                var nursery = Mapper.Map<Nursery>(vm);
-                nursery.Address = vm.Address;
-                nursery.Modified = DateTime.Now;
-                nursery.ModifiedBy = User.Identity.Name;
+                var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == vm.Id.ToString());
 
-                _repository.SaveNursery(nursery);
-                _repository.SaveAddress(nursery.Address);
-
-                if (_repository.SaveAll())
+                if (User.IsInRole("Admin") || matchingNurs != null)
                 {
-                    return Json(Mapper.Map<NurseryViewModel>(nursery));
+                    var nursery = Mapper.Map<Nursery>(vm);
+                    nursery.Address = vm.Address;
+                    nursery.Modified = DateTime.Now;
+                    nursery.ModifiedBy = User.Identity.Name;
+
+                    _repository.SaveNursery(nursery);
+                    _repository.SaveAddress(nursery.Address);
+
+                    if (_repository.SaveAll())
+                    {
+                        return Json(Mapper.Map<NurseryViewModel>(nursery));
+                    }
                 }
             }
             catch (Exception ex)
@@ -68,10 +80,11 @@ namespace MyNurserySchool.Controllers.Api
         }
 
         [HttpPost("")]
+        [Authorize(Roles = "Admin")]
         public JsonResult Post([FromBody] NurseryViewModel vm)
         {
             try {
-                if (ModelState.IsValid && User.Identity.Name == "admin")
+                if (ModelState.IsValid)
                 {
                     var nursery = Mapper.Map<Nursery>(vm);
                     nursery.Address = vm.Address;
@@ -101,37 +114,25 @@ namespace MyNurserySchool.Controllers.Api
             Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return Json(new { Message = "Failed", ModelState = ModelState });            
         }
-        
+
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public JsonResult Delete(int id)
         {
             _repository.DeleteNursery(id);
             return Json(new { Message = "Deleted" });
         }
 
-        [HttpGet("AttendanceStates")]
-        public JsonResult GetAttendanceStates()
-        {
-            var enumVals = new List<object>();
-
-            foreach (var item in Enum.GetValues(typeof(AttendanceState)))
-            {
-                enumVals.Add(new
-                {
-                    id = (int)item,
-                    name = item.ToString()
-                });
-            }
-
-            return Json(enumVals);
-        }
-
         [HttpGet("{nurseryId}/Children")]
         public JsonResult GetChildren(int nurseryId)
         {
-            
+            var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == nurseryId.ToString());
+
+            if (User.IsInRole("Admin") || matchingNurs != null)
+            {
                 var results = Mapper.Map<IEnumerable<ChildViewModel>>(_repository.GetAllChildren(nurseryId));
                 return Json(results);
+            }
 
             _logger.LogInformation("Attempting to get unauthorized nursery");
             Response.StatusCode = (int)HttpStatusCode.Unauthorized;
@@ -141,8 +142,13 @@ namespace MyNurserySchool.Controllers.Api
         [HttpGet("{nurseryId}/Employees")]
         public JsonResult GetEmpoyees(int nurseryId)
         {
+            var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == nurseryId.ToString());
+
+            if (User.IsInRole("Admin") || matchingNurs != null)
+            {
                 var results = Mapper.Map<IEnumerable<EmployeeViewModel>>(_repository.GetAllEmployees(nurseryId));
                 return Json(results);
+            }
 
             _logger.LogInformation("Attempting to get unauthorized nursery");
             Response.StatusCode = (int)HttpStatusCode.Unauthorized;

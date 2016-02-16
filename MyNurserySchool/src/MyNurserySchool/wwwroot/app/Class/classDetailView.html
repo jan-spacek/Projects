@@ -1,11 +1,14 @@
 ﻿<div>
     <div>
         <back-button></back-button>
-        <a ng-href="#/child/0/edit" class="btn btn-primary"><i class="fa fa-user-plus"></i> Pridať dieťa</a>
+        <a ng-href="#/child/0/edit" class="btn btn-primary" ng-if="canEdit"><i class="fa fa-user-plus"></i> Pridať dieťa</a>
     </div>
     <h3>{{ vm.class.name }}</h3>
     <wait-cursor ng-show="vm.isBusy"></wait-cursor>
-    <table class="table table-striped table-responsive table-fixed">
+    <div ng-if="vm.class.children.length < 1">
+        Zoznam je prázdny
+    </div>
+    <table class="table table-striped table-responsive table-fixed" ng-if="vm.class.children.length > 0">
         <thead>
             <tr>
                 <th>Meno</th>
@@ -16,14 +19,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="child in vm.class.children" ng-dblclick="redirect('#/child/' + child.id)">
+            <tr ng-repeat="child in vm.class.children" ng-dblclick="redirect('#/child/' + child.id)" ng-if="child.attendance == 1">
                 <td>{{ child.firstName }}</td>
                 <td>{{ child.lastName }}</td>
                 <td>{{ child.birthDate | date : 'd.M.yyyy' }}</td>
                 <td><span ng-bind-html="child.contacts"></span></td>
                 <td class="text-right">
                     <a ng-href="#/child/{{ child.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
-                    <a ng-href="#/child/{{ child.id }}/edit" class="btn btn-sm btn-primary" title="Editovať"><i class="fa fa-edit"></i></a>
+                    <a ng-href="#/child/{{ child.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
                 </td>
             </tr>
         </tbody>

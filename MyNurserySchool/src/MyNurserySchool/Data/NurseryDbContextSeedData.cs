@@ -28,19 +28,19 @@ namespace MyNurserySchool.Data
             string roleName = "Admin";
             if (await _roleManager.FindByNameAsync("Admin") == null)
             {
-                var str = _roleManager.CreateAsync(new IdentityRole(roleName));
+                var str = await _roleManager.CreateAsync(new IdentityRole(roleName));
             }
 
             roleName = "Editor";
             if (await _roleManager.FindByNameAsync("Editor") == null)
             {
-                var str = _roleManager.CreateAsync(new IdentityRole(roleName));
+                var str = await _roleManager.CreateAsync(new IdentityRole(roleName));
             }
 
             roleName = "Viewer";
             if (await _roleManager.FindByNameAsync("Viewer") == null)
             {
-                var str = _roleManager.CreateAsync(new IdentityRole(roleName));
+                var str = await _roleManager.CreateAsync(new IdentityRole(roleName));
             }
 
             if (await _userManager.FindByNameAsync("admin") == null)
@@ -52,9 +52,8 @@ namespace MyNurserySchool.Data
                 };
 
                 await _userManager.CreateAsync(newUser, "P@ssw0rd");
-                var roleresult = await _userManager.AddToRoleAsync(newUser, "Admin");
-                await _userManager.AddClaimAsync(newUser, new Claim("Nursery", "1"));
-                await _userManager.AddClaimAsync(newUser, new Claim("Nursery", "2"));
+                await _userManager.AddToRoleAsync(newUser, "Admin");
+                await _userManager.AddToRoleAsync(newUser, "Editor");
             }
 
             if (await _userManager.FindByNameAsync("editor") == null)
@@ -66,7 +65,7 @@ namespace MyNurserySchool.Data
                 };
 
                 await _userManager.CreateAsync(newUser, "P@ssw0rd");
-                var roleresult = await _userManager.AddToRoleAsync(newUser, "Editor");
+                await _userManager.AddToRoleAsync(newUser, "Editor");
                 await _userManager.AddClaimAsync(newUser, new Claim("Nursery", "1"));
             }
 
@@ -79,7 +78,7 @@ namespace MyNurserySchool.Data
                 };
 
                 await _userManager.CreateAsync(newUser, "P@ssw0rd");
-                var roleresult = await _userManager.AddToRoleAsync(newUser, "Editor");
+                await _userManager.AddToRoleAsync(newUser, "Editor");
                 await _userManager.AddClaimAsync(newUser, new Claim("Nursery", "1"));
                 await _userManager.AddClaimAsync(newUser, new Claim("Nursery", "2"));
             }
@@ -93,7 +92,7 @@ namespace MyNurserySchool.Data
                 };
 
                 await _userManager.CreateAsync(newUser, "P@ssw0rd");
-                var roleresult = await _userManager.AddToRoleAsync(newUser, "Viewer");
+                await _userManager.AddToRoleAsync(newUser, "Viewer");
                 await _userManager.AddClaimAsync(newUser, new Claim("Nursery", "1"));
             }
 
@@ -212,6 +211,83 @@ namespace MyNurserySchool.Data
                 _context.Nurseries.Add(kidsParadisePet);
                 _context.Addresses.Add(kidsParadisePet.Address);
                 _context.Employees.AddRange(kidsParadisePet.Employees);
+
+                var testNurs = new Nursery()
+                {
+                    Name = "Testovacia škôlka",
+                    Created = DateTime.Now,
+                    CreatedBy = "admin",
+                    Modified = DateTime.Now,
+                    ModifiedBy = "admin",
+                    Address = new Address()
+                    {
+                        Street = "Kvetinková",
+                        Number = "12",
+                        City = "Bratislava",
+                        Zip = 82109
+                    },
+                    Employees = new List<Employee>()
+                    {
+                        new Employee()
+                        {
+                            FullName = "Mgr. Michaela Pekná",
+                            JobTitle = "riaditeľka",
+                            Employment = "plný úväzok",
+                            Created = DateTime.Now,
+                            CreatedBy = "admin",
+                            Modified = DateTime.Now,
+                            ModifiedBy = "admin",
+                            Email = "pekna@pekna.sk"
+                        }
+                    },
+                    Classes = new List<Class>()
+                    {
+                        new Class()
+                        {
+                            Name = "Malkáči",
+                            Created = DateTime.Now,
+                            CreatedBy = "admin",
+                            Modified = DateTime.Now,
+                            ModifiedBy = "admin",
+                            Capacity = 15,
+                            Children = new List<Child>()
+                            {
+                                new Child()
+                                {
+                                    FirstName = "Peter",
+                                    LastName = "Veľký",
+                                    Created = DateTime.Now,
+                                    CreatedBy = "admin",
+                                    Modified = DateTime.Now,
+                                    ModifiedBy = "admin"
+                                },
+                                new Child()
+                                {
+                                    FirstName = "Michal",
+                                    LastName = "Zázračný",
+                                    Created = DateTime.Now,
+                                    CreatedBy = "admin",
+                                    Modified = DateTime.Now,
+                                    ModifiedBy = "admin"
+                                }
+                            }
+                        },
+                        new Class()
+                        {
+                            Name = "Velkáči",
+                            Created = DateTime.Now,
+                            CreatedBy = "admin",
+                            Modified = DateTime.Now,
+                            ModifiedBy = "admin",
+                            Capacity = 17,
+                            Children = new List<Child>()
+                        }
+                    }
+                };
+
+                _context.Nurseries.Add(testNurs);
+                _context.Addresses.Add(testNurs.Address);
+                _context.Employees.AddRange(testNurs.Employees);
 
                 _context.SaveChanges();
             }

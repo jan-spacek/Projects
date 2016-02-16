@@ -8,9 +8,12 @@ using MyNurserySchool.Models;
 using System;
 using System.Collections.Generic;
 using MyNurserySchool.Enums;
+using Microsoft.AspNet.Authorization;
+using System.Linq;
 
 namespace MyNurserySchool.Controllers.Api
 {
+    [Authorize]
     [Route("Api/Employee/")]
     public class EmployeeController : Controller
     {
@@ -30,12 +33,14 @@ namespace MyNurserySchool.Controllers.Api
             {
                 var result = _repository.GetEmployeeById(employeeId);
 
-                if (result == null)
+                var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == result.NurseryId.ToString());
+                if (User.IsInRole("Admin") || matchingNurs != null)
                 {
-                    return Json(null);
-                }
+                    if (result == null)
+                        return Json(null);
 
-                return Json(Mapper.Map<EmployeeViewModel>(result));
+                    return Json(Mapper.Map<EmployeeViewModel>(result));
+                }
             }
             catch (Exception ex)
             {
@@ -43,9 +48,13 @@ namespace MyNurserySchool.Controllers.Api
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json("Error occurred finding class id");
             }
+
+            Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            return Json("Unauthorized to view this employee");
         }
 
         [HttpPost("{nurseryId}")]
+        [Authorize(Roles = "Editor")]
         public JsonResult Post(int nurseryId, [FromBody]EmployeeViewModel vm)
         {
             try
@@ -53,18 +62,28 @@ namespace MyNurserySchool.Controllers.Api
                 if (ModelState.IsValid)
                 {
                     var employee = Mapper.Map<Employee>(vm);
-                    employee.Created = DateTime.Now;
-                    employee.CreatedBy = User.Identity.Name;
-                    employee.Modified = DateTime.Now;
-                    employee.ModifiedBy = User.Identity.Name;
-                    employee.NurseryId = nurseryId;
-                    
-                    _repository.AddEmployee(employee);
 
-                    if (_repository.SaveAll())
+                    var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == nurseryId.ToString());
+                    if (User.IsInRole("Admin") || matchingNurs != null)
                     {
-                        Response.StatusCode = (int)HttpStatusCode.Created;
-                        return Json(Mapper.Map<EmployeeViewModel>(employee));
+                        employee.Created = DateTime.Now;
+                        employee.CreatedBy = User.Identity.Name;
+                        employee.Modified = DateTime.Now;
+                        employee.ModifiedBy = User.Identity.Name;
+                        employee.NurseryId = nurseryId;
+
+                        _repository.AddEmployee(employee);
+
+                        if (_repository.SaveAll())
+                        {
+                            Response.StatusCode = (int)HttpStatusCode.Created;
+                            return Json(Mapper.Map<EmployeeViewModel>(employee));
+                        }
+                    }
+                    else
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        return Json("Unauthorized to create employees in this nursery");
                     }
                 }
             }
@@ -80,6 +99,7 @@ namespace MyNurserySchool.Controllers.Api
         }
 
         [HttpPut("{nurseryId}")]
+        [Authorize(Roles = "Editor")]
         public JsonResult Put(int nurseryId, [FromBody]EmployeeViewModel vm)
         {
             try
@@ -87,18 +107,28 @@ namespace MyNurserySchool.Controllers.Api
                 if (ModelState.IsValid)
                 {
                     var employee = Mapper.Map<Employee>(vm);
-                    employee.Modified = DateTime.Now;
-                    employee.ModifiedBy = User.Identity.Name;
-                    employee.NurseryId = nurseryId;
-                    
-                    if (employee.Address != null)
-                        _repository.SaveAddress(employee.Address);
-                    _repository.SaveEmployee(employee);
 
-                    if (_repository.SaveAll())
+                    var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == employee.NurseryId.ToString());
+                    if (User.IsInRole("Admin") || matchingNurs != null)
                     {
-                        Response.StatusCode = (int)HttpStatusCode.OK;
-                        return Json(Mapper.Map<EmployeeViewModel>(employee));
+                        employee.Modified = DateTime.Now;
+                        employee.ModifiedBy = User.Identity.Name;
+                        employee.NurseryId = nurseryId;
+
+                        if (employee.Address != null)
+                            _repository.SaveAddress(employee.Address);
+                        _repository.SaveEmployee(employee);
+
+                        if (_repository.SaveAll())
+                        {
+                            Response.StatusCode = (int)HttpStatusCode.OK;
+                            return Json(Mapper.Map<EmployeeViewModel>(employee));
+                        }
+                    }
+                    else
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        return Json("Unauthorized to save this employee");
                     }
                 }
             }
@@ -114,16 +144,24 @@ namespace MyNurserySchool.Controllers.Api
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Editor")]
         public JsonResult Delete(int id)
         {
             try {
-                _repository.DeleteEmployee(id);
-                return Json(new { Message = "Deleted" });
+                var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == _repository.GetEmployeeNurseryId(id).ToString());
+                if (User.IsInRole("Admin") || matchingNurs != null)
+                {
+                    _repository.DeleteEmployee(id);
+                    return Json(new { Message = "Deleted" });
+                }
             }
             catch (Exception ex)
             {
                 return Json(new { Message = "Unable to delete: " + ex });
             }
+
+            Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            return Json("Unauthorized to delete this employee");
         }
     }
 }
