@@ -2,8 +2,8 @@
 
     "use strict";
 
-    angular.module("nursery-app", ["simpleControls", "ngRoute", "ngMaterial"])
-        .config(function ($routeProvider, $mdDateLocaleProvider) {
+    angular.module("nursery-app", ["simpleControls", "ngRoute"])
+        .config(function ($routeProvider) {
             $routeProvider.when("/", {
                 controller: "nurseryDetailController",
                 controllerAs: "vm",
@@ -79,32 +79,5 @@
             $routeProvider.otherwise({
                 redirectTo: "/"
             });
-
-            $mdDateLocaleProvider.months = ['január', 'február', 'marec', 'apríl', 'máj', 'jún', 'júl', 'august', 'september', 'október', 'november', 'december'];
-            $mdDateLocaleProvider.shortMonths = ['jan', 'feb', 'mar', 'apr', 'máj', 'jún', 'júl', 'aug', 'sep', 'okt', 'nov', 'dec'];
-            $mdDateLocaleProvider.days = ['nedeľa', 'pondelok', 'utorok', 'streda', 'štvrtok', 'piatok', 'sobota'];
-            $mdDateLocaleProvider.shortDays = ['Ne', 'Po', 'Ut', 'St', 'Št', 'Pi', 'So'];
-            // Can change week display to start on Monday.
-            $mdDateLocaleProvider.firstDayOfWeek = 1;
-            // In addition to date display, date components also need localized messages
-            // for aria-labels for screen-reader users.
-            $mdDateLocaleProvider.weekNumberFormatter = function (weekNumber) {
-                return weekNumber + 'týždeň';
-            };
-            $mdDateLocaleProvider.msgCalendar = 'Kalendár';
-            $mdDateLocaleProvider.msgOpenCalendar = 'Otvoriť kalendár';
-            $mdDateLocaleProvider.formatDate = function (date) {
-                var date = new Date(date);
-                var day = date.getDate();
-                var month = date.getMonth() + 1;
-                var year = date.getFullYear();
-                return day + '.' + month + '.' + year;
-            };
-            $mdDateLocaleProvider.parseDate = function (dateString) {
-                var day = dateString.substring(0, dateString.indexOf("."));
-                var month = dateString.substring(dateString.indexOf(".") + 1, dateString.lastIndexOf("."));
-                var year = dateString.substring(dateString.lastIndexOf(".") + 1);
-                return new Date(year + "-" + month + "-" + day);
-            };
         });
 })();

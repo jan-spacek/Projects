@@ -3,12 +3,10 @@
     ViewBag.Title = @Model.Name;
 }
 @section Scripts {
-    <script src="~/lib/angular/angular.min.js"></script>
+    <script src="~/lib/angular/angular.js"></script>
     <script src="~/lib/angular-route/angular-route.min.js"></script>
-    <script src="~/lib/angular-aria/angular-aria.min.js"></script>
-    <script src="~/lib/angular-material/angular-material.min.js"></script>
     <script src="~/lib/angular-animate/angular-animate.min.js"></script>
-    <script src="~/lib/angular-messages/angular-messages.min.js"></script>
+    <script src="~/lib/angular-ui/build/angular-ui.min.js"></script>
     <script src="~/app/Nursery/nursery-app.js"></script>
     <script src="~/app/Nursery/nurseryDetailController.js"></script>
     <script src="~/app/Nursery/nurseryEditController.js"></script>
@@ -24,11 +22,7 @@
 }
 <div ng-app="nursery-app">
     <div ng-init="outerId = @Model.Id; canEdit = @(User.IsInRole("Editor") ? "true" : "false")">
-        @*<div class="col-xs-12">
-            <h2>@Model.Name</h2>
-            <hr>        
-        </div>*@
-        <div class="col-xs-12 col-sm-3 col-lg-2 affix">
+        <div class="col-xs-12 col-sm-2 affix">
             <ul class="nav nav-pills nav-stacked nav-vertical">
                 <li><a ng-href="#/" class="list-group-item"><i class="fa fa-home"></i>Prehľad</a>
                 <li><!--<a ng-href="" class="list-group-item"><i class="fa fa-cubes"></i>Triedy</a>-->
@@ -49,7 +43,7 @@
             </ul>
         </div>
 
-        <div class="col-sm-offset-3 col-sm-9 col-lg-offset-2 col-lg-10">
+        <div class="col-sm-offset-2 col-sm-10">
             <div class="container-fluid">
                 
                 <div class="view" ng-view></div>

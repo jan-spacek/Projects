@@ -1,32 +1,42 @@
 ﻿<div>
     <div>
-        <back-button></back-button>
-        <a ng-href="#/employee/0/edit" class="btn btn-primary" ng-if="canEdit"><i class="fa fa-user-plus"></i> Pridať zamestnanca</a>
+        <div class="float-left">
+            <back-button></back-button>
+            <a ng-href="#/employee/0/edit" class="btn btn-primary" ng-if="canEdit"><i class="fa fa-user-plus"></i> Pridať zamestnanca</a>
+        </div>
+        <div class="form-group form-find">
+            <div class="input-group">
+                <div class="input-group-addon input-sm"><i class="fa fa-search"></i></div>
+                <input type="text" class="form-control" placeholder="Hľadať..." ng-model="search">
+            </div>
+        </div>
     </div>
     <h3><i class="fa fa-users"></i> Zoznam zamestnancov</h3>
     <wait-cursor ng-if="vm.isBusy"></wait-cursor>
     <div ng-if="vm.employees.length < 1">
         Zoznam je prázdny
     </div>
-    <table class="table table-striped table-condensed" ng-if="vm.employees.length > 0">
-        <thead>
-            <tr>
-                <th width="200">Meno</th>
-                <th width="230">E-mail</th>
-                <th>Telefón</th>
-                <th width="105"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="employee in vm.employees" ng-dblclick="redirect('#/employee/' + employee.id)"  ng-class="employee.attendance == 0 ? 'text-primary' : employee.attendance == 2 ? 'text-gray' : ''">
-                <td>{{ employee.fullName }}</td>
-                <td>{{ employee.email }}</td>
-                <td>{{ employee.workPhone }} {{ employee.privatePhone }}</td>
-                <td class="text-right">
-                    <a ng-href="#/employee/{{ employee.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
-                    <a ng-href="#/employee/{{ employee.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div ng-if="vm.employees.length > 0">
+        <table class="table table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th width="200">Meno</th>
+                    <th width="230">E-mail</th>
+                    <th>Telefón</th>
+                    <th width="105"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="employee in vm.employees | filter:search" ng-dblclick="redirect('#/employee/' + employee.id)" ng-class="employee.attendance == 0 ? 'text-primary' : employee.attendance == 2 ? 'text-gray' : ''">
+                    <td>{{ employee.fullName }}</td>
+                    <td>{{ employee.email }}</td>
+                    <td>{{ employee.workPhone }} {{ employee.privatePhone }}</td>
+                    <td class="text-right">
+                        <a ng-href="#/employee/{{ employee.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
+                        <a ng-href="#/employee/{{ employee.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

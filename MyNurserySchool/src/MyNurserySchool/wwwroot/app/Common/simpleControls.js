@@ -37,7 +37,7 @@
         };
     }
 
-    function baseController($scope, $window) {
+    function baseController($scope, $window, i18nService) {
         $scope.redirect = function (path) {
             $window.location.href = path;
         }
@@ -46,5 +46,4 @@
             $window.history.back();
         };
     }
-
 })();

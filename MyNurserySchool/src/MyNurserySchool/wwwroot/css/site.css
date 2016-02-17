@@ -19,6 +19,9 @@ ul.nav-subnav {
 .fa {
     min-width: 20px;
 }
+.fa.fa-caret-down, .fa.fa-caret-up {
+    min-width: 0;
+}
 h2.modal-header {
     margin-top: 0;
 }
@@ -27,6 +30,10 @@ h2.modal-header {
 }
 .text-gray {
     color: darkgray;
+}
+th>a {
+    text-decoration: none!important;
+    color: inherit;
 }
 
 .note-header h5 {
@@ -50,6 +57,27 @@ h2.modal-header {
 }
 .note-form .form-group-sm {
     margin: 5px 0;
+}
+
+.md-datepicker-input-container, .md-datepicker-button {
+    margin: 0!important;
+}
+
+.form-find {
+    margin: 0;
+}
+.form-find .input-group {
+    padding-left: 3px;
+}
+.form-find .form-control {
+    min-width: 150px;
+}
+.float-left {
+    float: left;
+}
+.required:after {
+    content: " *";
+    color: red;
 }
 
 .wrap {

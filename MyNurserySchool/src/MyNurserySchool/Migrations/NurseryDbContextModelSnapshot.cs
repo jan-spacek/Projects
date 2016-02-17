@@ -261,7 +261,7 @@ namespace MyNurserySchool.Migrations
 
                     b.Property<string>("ModifiedBy");
 
-                    b.Property<int>("Number");
+                    b.Property<int?>("Number");
 
                     b.Property<string>("SocialNumber");
 

@@ -1,5 +1,14 @@
 ﻿<div>
     <wait-cursor ng-show="vm.isBusy"></wait-cursor>
+    <form>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                <input type="text" class="form-control" placeholder="Hľadať" ng-model="search">
+
+            </div>
+        </div>
+    </form>
     <table class="table table-responsive table-striped table-fixed">
         <thead>
             <tr>
@@ -12,7 +21,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="nursery in vm.nurseries" ng-dblclick="redirect('/App/Nursery/' + nursery.id)">
+            <tr ng-repeat="nursery in vm.nurseries | filter:search" ng-dblclick="redirect('/App/Nursery/' + nursery.id)">
                 <td>{{ nursery.name }}</td>
                 <td>{{ nursery.address.city }}</td>
                 <td>{{ nursery.address.street + ' ' + nursery.address.number }}</td>

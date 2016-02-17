@@ -57,37 +57,37 @@
                 });
         }
 
-        vm.saveChild = function () {
-            vm.isBusy = true;
-            vm.child.birthDate = vm.birthDate === null ? "1900-01-01" : vm.birthDate;
-            vm.child.startDate = vm.startDate === null ? "1900-01-01" : vm.startDate;
-            vm.child.leaveDate = vm.leaveDate === null ? "1900-01-01" : vm.leaveDate;
+        vm.saveChild = function (isValid) {
+            if (isValid) {
+                vm.isBusy = true;
+                vm.child.birthDate = vm.birthDate === null ? "1900-01-01" : vm.birthDate;
+                vm.child.startDate = vm.startDate === null ? "1900-01-01" : vm.startDate;
+                vm.child.leaveDate = vm.leaveDate === null ? "1900-01-01" : vm.leaveDate;
 
-            if (vm.isNew)
-            {
-                $http.post("/Api/Child/", vm.child)
-                    .then(function (response) {
-                        toastr.success("Dieťa " + vm.child.firstName + " " + vm.child.lastName + " bolo úspešne vytvorené");
-                        $scope.back();
-                    }, function () {
-                        toastr.error("Dieťa sa nepodarilo vytvoriť");
-                    }).finally(function () {
-                        vm.isBusy = false;
-                    });
-            }
-            else
-            {
-                if (vm.child.classId == null)
-                    vm.child.classId = vm.classId;
-                $http.put("/Api/Child/", vm.child)
-                    .then(function (response) {
-                        toastr.success("Zmeny v dieťati " + vm.child.firstName + " " + vm.child.lastName + " boli úspešne uložené");
-                        $scope.back();
-                    }, function () {
-                        toastr.error("Dieťa sa nepodarilo uložiť");
-                    }).finally(function () {
-                        vm.isBusy = false;
-                    });
+                if (vm.isNew) {
+                    $http.post("/Api/Child/", vm.child)
+                        .then(function (response) {
+                            toastr.success("Dieťa " + vm.child.firstName + " " + vm.child.lastName + " bolo úspešne vytvorené");
+                            $scope.back();
+                        }, function () {
+                            toastr.error("Dieťa sa nepodarilo vytvoriť");
+                        }).finally(function () {
+                            vm.isBusy = false;
+                        });
+                }
+                else {
+                    if (vm.child.classId == null)
+                        vm.child.classId = vm.classId;
+                    $http.put("/Api/Child/", vm.child)
+                        .then(function (response) {
+                            toastr.success("Zmeny v dieťati " + vm.child.firstName + " " + vm.child.lastName + " boli úspešne uložené");
+                            $scope.back();
+                        }, function () {
+                            toastr.error("Dieťa sa nepodarilo uložiť");
+                        }).finally(function () {
+                            vm.isBusy = false;
+                        });
+                }
             }
         }
 

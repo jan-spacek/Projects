@@ -22,17 +22,19 @@
                 vm.isBusy = false;
             });
 
-        vm.saveNursery = function () {
-            vm.isBusy = true;
-            $http.put("/Api/Nursery/", vm.nursery)
-                .then(function (response) {
-                    toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
-                    $location.path("#/");
-                }, function () {
-                    toastr.error("Škôlku sa nepodarilo uložiť");
-                }).finally(function () {
-                    vm.isBusy = false;
-                });
+        vm.saveNursery = function (isValid) {
+            if (isValid) {
+                vm.isBusy = true;
+                $http.put("/Api/Nursery/", vm.nursery)
+                    .then(function (response) {
+                        toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
+                        $location.path("#/");
+                    }, function () {
+                        toastr.error("Škôlku sa nepodarilo uložiť");
+                    }).finally(function () {
+                        vm.isBusy = false;
+                    });
+            }
         }
     }
 })();

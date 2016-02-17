@@ -1,11 +1,12 @@
 ﻿<div ng-if="canEdit">
     <wait-cursor ng-if="vm.isBusy"></wait-cursor>
-    <form novalidate name="employeeEditForm" ng-submit="vm.saveEmployee()">
+    <form novalidate name="editForm" ng-submit="vm.saveEmployee(editForm.$valid)">
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group">
-                    <label for="name">Celé meno</label>
-                    <input ng-model="vm.employee.fullName" type="text" name="name" id="name" class="form-control" />
+                <div class="form-group" ng-class="{ 'has-error' : editForm.name.$invalid && !editForm.name.$pristine }">
+                    <label for="name" class="required">Celé meno</label>
+                    <input ng-model="vm.employee.fullName" type="text" name="name" id="name" class="form-control" required />
+                    <p ng-show="editForm.name.$invalid && !editForm.name.$pristine" class="help-block">Meno je povinná položka</p>
                 </div>
                 <div class="form-group">
                     <label for="email">E-mail</label>
@@ -52,9 +53,10 @@
                     <label for="employment">Pracovný úväzok</label>
                     <input ng-model="vm.employee.employment" type="text" name="employment" id="employment" class="form-control" />
                 </div>
-                <div class="form-group">
-                    <label for="state">Pracovný stav</label>
-                    <select ng-model="vm.employee.attendance" ng-options="o.id as o.name for o in attendance" class="form-control" name="state" id="state" />
+                <div class="form-group" ng-class="{ 'has-error' : editForm.state.$invalid && !editForm.state.$pristine }">
+                    <label for="state" class="required">Pracovný stav</label>
+                    <select ng-model="vm.employee.attendance" ng-options="o.id as o.name for o in attendance" class="form-control" name="state" id="state" required />
+                    <p ng-show="editForm.state.$invalid && !editForm.state.$pristine" class="help-block">Stav je povinná položka</p>
                 </div>
             </div>
             <div col-md-9>
@@ -74,8 +76,8 @@
         </div>
         <div class="row">
             <div class="col-xs-8">
-                <button type="submit" class="btn btn-success" ng-if="!vm.isNew"><i class="fa fa-save"></i> Uložiť zmeny</button>
-                <button type="submit" class="btn btn-success" ng-if="vm.isNew"><i class="fa fa-user-plus"></i> Vytvoriť zamestnanca</button>
+                <button type="submit" class="btn btn-success" ng-if="!vm.isNew" ng-disabled="editForm.$invalid"><i class="fa fa-save"></i> Uložiť zmeny</button>
+                <button type="submit" class="btn btn-success" ng-if="vm.isNew" ng-disabled="editForm.$invalid"><i class="fa fa-user-plus"></i> Vytvoriť zamestnanca</button>
                 <back-button></back-button>
             </div>
             <div class="col-xs-4 text-right">

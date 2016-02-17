@@ -1,11 +1,12 @@
 ﻿<div ng-if="canEdit">
     <wait-cursor ng-if="vm.isBusy"></wait-cursor>
-    <form novalidate name="classEditForm" ng-submit="vm.saveClass()">
+    <form novalidate name="editForm" ng-submit="vm.saveClass(editForm.$valid)">
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group">
-                    <label for="name">Názov</label>
-                    <input ng-model="vm.class.name" type="text" name="name" id="name" class="form-control" />
+                <div class="form-group" ng-class="{ 'has-error' : editForm.name.$invalid && !editForm.name.$pristine }">
+                    <label for="name" class="required">Názov</label>
+                    <input ng-model="vm.class.name" type="text" name="name" id="name" class="form-control" required />
+                    <p ng-show="editForm.name.$invalid && !editForm.name.$pristine" class="help-block">Názov je povinná položka</p>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-9">
@@ -27,8 +28,8 @@
         </div>
         <div class="row">
             <div class="col-xs-8">
-                <button type="submit" class="btn btn-success" ng-if="!vm.isNew"><i class="fa fa-save"></i> Uložiť zmeny</button>
-                <button type="submit" class="btn btn-success" ng-if="vm.isNew"><i class="fa fa-plus-circle"></i> Vytvoriť triedu</button>
+                <button type="submit" class="btn btn-success" ng-if="!vm.isNew" ng-disabled="editForm.$invalid"><i class="fa fa-save"></i> Uložiť zmeny</button>
+                <button type="submit" class="btn btn-success" ng-if="vm.isNew" ng-disabled="editForm.$invalid"><i class="fa fa-plus-circle"></i> Vytvoriť triedu</button>
                 <back-button></back-button>
             </div>
             <div class="col-xs-4 text-right">

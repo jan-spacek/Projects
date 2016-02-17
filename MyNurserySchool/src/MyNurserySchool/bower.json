@@ -12,7 +12,9 @@
     "angular": "~1.4.9",
     "toastr": "~2.1.2",
     "angular-route": "~1.4.9",
-    "angular-material": "~1.0.5"
+    "angular-animate": "~1.5.0",
+    "angular-ui-bootstrap-bower": "~1.1.2",
+    "angular-ui": "~0.4.0"
   },
   "resolutions": {
     "angular": "1.5.0"

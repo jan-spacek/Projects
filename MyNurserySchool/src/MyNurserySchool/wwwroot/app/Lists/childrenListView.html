@@ -1,36 +1,72 @@
 ﻿<div>
     <div>
-        <back-button></back-button>
-        <a ng-href="#/child/0/edit" class="btn btn-primary" ng-if="canEdit"><i class="fa fa-user-plus"></i> Pridať dieťa</a>
+        <div class="float-left">
+            <back-button></back-button>
+            <a ng-href="#/child/0/edit" class="btn btn-primary" ng-if="canEdit"><i class="fa fa-user-plus"></i> Pridať dieťa</a>
+        </div>
+        <div class="form-group form-find">
+            <div class="input-group">
+                <div class="input-group-addon input-sm"><i class="fa fa-search"></i></div>
+                <input type="text" class="form-control" placeholder="Hľadať..." ng-model="search">
+            </div>
+        </div>
     </div>
     <h3><i class="fa fa-child"></i> Zoznam všetkých detí</h3>
     <wait-cursor ng-show="vm.isBusy"></wait-cursor>
     <div ng-if="vm.children.length < 1">
         Zoznam je prázdny
     </div>
-    <table class="table table-striped table-condensed table-fixed" ng-if="vm.children.length > 0">
-        <thead>
-            <tr>
-                <th width="50">Por.č.</th>
-                <th width="120">Meno</th>
-                <th width="120">Priezvisko</th>
-                <th width="150">Dátum narodenia</th>
-                <th>Kontakty</th>
-                <th width="105"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="child in vm.children" ng-dblclick="redirect('#/child/' + child.id)" ng-class="child.attendance == 0 ? 'text-primary' : child.attendance == 2 ? 'text-gray' : ''">
-                <td class="text-right">{{ child.number }}</td>
-                <td>{{ child.firstName }}</td>
-                <td>{{ child.lastName }}</td>
-                <td>{{ child.birthDate | date : 'd.M.yyyy' }}</td>
-                <td><span ng-bind-html="child.contacts"></span></td>
-                <td class="text-right">
-                    <a ng-href="#/child/{{ child.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
-                    <a ng-href="#/child/{{ child.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div ng-if="vm.children.length > 0">
+        <table class="table table-striped table-condensed table-fixed">
+            <thead>
+                <tr>
+                    <th width="65">
+                        <a href="" ng-click="sortType = 'number'; sortReverse = !sortReverse">
+                            Por.č.
+                            <span ng-show="sortType == 'number' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'number' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th width="120">
+                        <a href="" ng-click="sortType = 'firstName'; sortReverse = !sortReverse">
+                            Meno
+                            <span ng-show="sortType == 'firstName' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'firstName' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th width="120">
+                        <a href="" ng-click="sortType = 'lastName'; sortReverse = !sortReverse">
+                            Priezvisko
+                            <span ng-show="sortType == 'lastName' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'lastName' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th width="150">
+                        <a href="" ng-click="sortType = 'birthDate'; sortReverse = !sortReverse">
+                            Dátum narodenia
+                            <span ng-show="sortType == 'birthDate' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'birthDate' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                    </th>
+                    <th width="100">Trieda</th>
+                    <th>Kontakty</th>
+                    <th width="105"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="child in vm.children | orderBy:sortType:sortReverse | filter:search" ng-dblclick="redirect('#/child/' + child.id)" ng-class="child.attendance == 0 ? 'text-primary' : child.attendance == 2 ? 'text-gray' : ''">
+                    <td>{{ child.number }}</td>
+                    <td>{{ child.firstName }}</td>
+                    <td>{{ child.lastName }}</td>
+                    <td>{{ child.birthDate | date : 'd.M.yyyy' }}</td>
+                    <td>{{ vm.classes[child.classId] }}</td>
+                    <td><span ng-bind-html="child.contacts"></span></td>
+                    <td class="text-right">
+                        <a ng-href="#/child/{{ child.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
+                        <a ng-href="#/child/{{ child.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

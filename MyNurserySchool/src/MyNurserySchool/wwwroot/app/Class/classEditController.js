@@ -33,29 +33,31 @@
                 vm.isBusy = false;
             });
 
-        vm.saveClass = function () {
-            vm.isBusy = true;
-            if (vm.isNew) {
-                $http.post("/Api/Class/" + vm.nursery.id, vm.class)
-                    .then(function (response) {
-                        toastr.success("Trieda " + vm.class.name + " bola úspešne vytvorená");
-                        $location.path("#/");
-                    }, function () {
-                        toastr.error("Triedu sa nepodarilo vytvoriť");
-                    }).finally(function () {
-                        vm.isBusy = false;
-                    });
-            }
-            else {
-                $http.put("/Api/Class/" + vm.nursery.id, vm.class)
-                    .then(function (response) {
-                        toastr.success("Zmeny v triede " + vm.class.name + " boli úspešne uložené");
-                        $location.path("#/");
-                    }, function () {
-                        toastr.error("Triedu sa nepodarilo uložiť");
-                    }).finally(function () {
-                        vm.isBusy = false;
-                    });
+        vm.saveClass = function (isValid) {
+            if (isValid) {
+                vm.isBusy = true;
+                if (vm.isNew) {
+                    $http.post("/Api/Class/" + vm.nursery.id, vm.class)
+                        .then(function (response) {
+                            toastr.success("Trieda " + vm.class.name + " bola úspešne vytvorená");
+                            $location.path("#/");
+                        }, function () {
+                            toastr.error("Triedu sa nepodarilo vytvoriť");
+                        }).finally(function () {
+                            vm.isBusy = false;
+                        });
+                }
+                else {
+                    $http.put("/Api/Class/" + vm.nursery.id, vm.class)
+                        .then(function (response) {
+                            toastr.success("Zmeny v triede " + vm.class.name + " boli úspešne uložené");
+                            $location.path("#/");
+                        }, function () {
+                            toastr.error("Triedu sa nepodarilo uložiť");
+                        }).finally(function () {
+                            vm.isBusy = false;
+                        });
+                }
             }
         }
 
