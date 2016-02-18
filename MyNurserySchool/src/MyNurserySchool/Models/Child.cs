@@ -23,7 +23,7 @@ namespace MyNurserySchool.Models
         public Address Address { get; set; }
         public ICollection<Note> Notes { get; set; }
         public AttendanceState Attendance { get; set; }
-
+        public int? NurseryId { get; set; }
         [ForeignKey("Class")]
         public int? ClassId { get; set; }
 

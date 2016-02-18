@@ -14,22 +14,13 @@
         vm.employee = {};
         vm.isNew = vm.employeeId == 0;
         $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
-
-        vm.birthDate = "1900-01-01";
-        vm.startDate = "1900-01-01";
-        vm.leaveDate = "1900-01-01";
+        $scope.employmentTypes = [{ value: 'Dohoda' }, { value: 'Plný úväzok' }, { value: 'Študentská dohoda' }, { value: 'Skrátený úväzok' }, { value: 'Živnosť' }];
 
         if (!vm.isNew) {
             vm.isBusy = true;
             $http.get("/Api/Employee/" + vm.employeeId)
                 .then(function (response) {
                     angular.copy(response.data, vm.employee);
-                    var birthDate = new Date(vm.employee.birthDate);
-                    vm.birthDate = birthDate.getFullYear() < 1901 ? "1900-01-01" : birthDate;
-                    var startDate = new Date(vm.employee.startDate);
-                    vm.startDate = startDate.getFullYear() < 1901 ? "1900-01-01" : startDate;
-                    var leaveDate = new Date(vm.employee.leaveDate);
-                    vm.leaveDate = leaveDate.getFullYear() < 1901 ? "1900-01-01" : leaveDate;
                 }, function () {
                     toastr.error("Nepodarilo sa načítať informácie o zamestnancovi");
                 }).finally(function () {
@@ -40,9 +31,6 @@
         vm.saveEmployee = function (isValid) {
             if (isValid) {
                 vm.isBusy = true;
-                vm.employee.birthDate = vm.birthDate === null ? "1900-01-01" : vm.birthDate;
-                vm.employee.startDate = vm.startDate === null ? "1900-01-01" : vm.startDate;
-                vm.employee.leaveDate = vm.leaveDate === null ? "1900-01-01" : vm.leaveDate;
 
                 if (vm.isNew) {
                     $http.post("/Api/Employee/" + $scope.outerId, vm.employee)

@@ -1,7 +1,6 @@
-﻿<div>
-    <h3>{{ vm.nursery.name }}</h3>
+﻿<div ng-if="isAdmin">
     <wait-cursor ng-if="vm.isBusy"></wait-cursor>
-    <form novalidate name="nurseryEditForm" ng-submit="vm.saveNursery()">
+    <form novalidate name="editForm" ng-submit="vm.saveNursery()">
         <div class="row">
             <div class="col-sm-4">
                 <h4>Škôlka</h4>
@@ -38,13 +37,17 @@
 
         <div class="row">
             <div class="col-sm-6">
-                <input type="submit" value="Uložiť zmeny" class="btn btn-success" />
+                <button type="submit" class="btn btn-success" ng-if="!vm.isNew" ng-disabled="editForm.$invalid"><i class="fa fa-save"></i> Uložiť zmeny</button>
+                <button type="submit" class="btn btn-success" ng-if="vm.isNew" ng-disabled="editForm.$invalid"><i class="fa fa-plus-circle"></i> Vytvoriť škôlku</button>
                 <a href="#/" class="btn btn-warning"><i class="fa fa-reply"></i> Späť</a>
             </div>
             <div class="col-sm-6 text-right">
-                <button type="button" class="btn btn-danger" ng-click="vm.deleteNursery()"><i class="fa fa-trash-o"></i> Vymazať</button>
+                <button type="button" class="btn btn-danger" ng-click="vm.deleteNursery()" ng-if="!vm.isNew"><i class="fa fa-trash-o"></i> Vymazať</button>
             </div>
         </div>
     </form>
-    <created-modified model="vm.nursery"></created-modified>
+    <created-modified model="vm.nursery" ng-if="!vm.isNew"></created-modified>
+</div>
+<div ng-if="!isAdmin">
+    <div class="alert alert-warning">Nemáte oprávnenie vidieť obsah tejto stránky</div>
 </div>

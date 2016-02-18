@@ -9,7 +9,7 @@ using MyNurserySchool.Authentication;
 
 namespace MyNurserySchool.Data
 {
-    public class NurseryDbContext : IdentityDbContext<StandardUser>
+    public class NurseryDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Nursery> Nurseries { get; set; }
         public DbSet<Class> Classes { get; set; }

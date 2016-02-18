@@ -3,10 +3,17 @@
     <form novalidate name="editForm" ng-submit="vm.saveEmployee(editForm.$valid)">
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group" ng-class="{ 'has-error' : editForm.name.$invalid && !editForm.name.$pristine }">
-                    <label for="name" class="required">Celé meno</label>
-                    <input ng-model="vm.employee.fullName" type="text" name="name" id="name" class="form-control" required />
-                    <p ng-show="editForm.name.$invalid && !editForm.name.$pristine" class="help-block">Meno je povinná položka</p>
+                <div class="row">
+                    <div class="form-group col-sm-6" ng-class="{ 'has-error' : editForm.name.$invalid && !editForm.name.$pristine }">
+                        <label for="name" class="required">Celé meno</label>
+                        <input ng-model="vm.employee.fullName" type="text" name="name" id="name" class="form-control" required />
+                        <p ng-show="editForm.name.$invalid && !editForm.name.$pristine" class="help-block">Meno je povinná položka</p>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="birthDate">Dátum narodenia</label>
+                        <input type="text" class="form-control" ng-model="vm.employee.birthDate" name="birthDate" id="birthDate"
+                               bs-datepicker data-date-format="dd.MM.yyyy" data-max-date="today" data-autoclose="1" />
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="email">E-mail</label>
@@ -22,6 +29,36 @@
                         <label for="workPhone">Služobný telefón</label>
                         <input ng-model="vm.employee.workPhone" type="text" name="workPhone" id="workPhone" class="form-control" />
                     </div>
+                </div>
+                <div class="form-group">
+                    <label for="jobTitle">Popis práce</label>
+                    <input ng-model="vm.employee.jobTitle" type="text" name="jobTitle" id="jobTitle" class="form-control" />
+                </div>
+                    
+                <div class="row">
+                    <div class="form-group col-sm-6" ng-class="{ 'has-error' : editForm.state.$invalid && !editForm.state.$pristine }">
+                        <label for="state" class="required">Pracovný stav</label>
+                        <select ng-model="vm.employee.attendance" ng-options="o.id as o.name for o in attendance" class="form-control" name="state" id="state" required />
+                        <p ng-show="editForm.state.$invalid && !editForm.state.$pristine" class="help-block">Stav je povinná položka</p>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="employment">Pracovný úväzok</label>
+                        <select ng-model="vm.employee.employment" ng-options="e.value as e.value for e in employmentTypes" type="text" class="form-control" name="employment" id="employment" />
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="startDate">Dátum nástupu</label>
+                        <input type="text" class="form-control" ng-model="vm.employee.startDate" name="startDate" id="startDate"
+                                bs-datepicker data-date-format="dd.MM.yyyy" data-autoclose="1" />
+                    </div>
+                    <div class="form-group col-sm-6" ng-if="vm.employee.attendance == 2">
+                        <label for="leaveDate">Dátum odchodu</label>
+                        <input type="text" class="form-control" ng-model="vm.employee.leaveDate" name="leaveDate" id="leaveDate"
+                                bs-datepicker data-date-format="dd.MM.yyyy" data-autoclose="1" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
                     <div class="form-group col-sm-8">
                         <label for="street">Ulica</label>
                         <input ng-model="vm.employee.address.street" type="text" name="street" id="street" class="form-control" />
@@ -34,43 +71,14 @@
                         <label for="city">Obec</label>
                         <input ng-model="vm.employee.address.city" type="text" name="city" id="city" class="form-control" />
                     </div>
-                    <div class="form-group col-sm-4">
+                    <div class="form-group col-sm-4" ng-class="{ 'has-error' : editForm.zip.$error.minlength || editForm.zip.$error.maxlength }">
                         <label for="zip">PSČ</label>
-                        <input ng-model="vm.employee.address.zip" type="text" name="zip" id="zip" class="form-control" maxlength="5" />
+                        <input ng-model="vm.employee.address.zip" type="number" name="zip" id="zip" class="form-control" ng-minlength="5" ng-maxlength="5"/>
                     </div>
-                </div>  
-            </div>
-            <div class="col-md-6">
+                </div>
                 <div class="form-group">
                     <label for="description">Popis</label>
                     <textarea ng-model="vm.employee.description" type="text" name="description" id="zip" class="form-control" rows="5"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="jobTitle">Popis práce</label>
-                    <input ng-model="vm.employee.jobTitle" type="text" name="jobTitle" id="jobTitle" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label for="employment">Pracovný úväzok</label>
-                    <input ng-model="vm.employee.employment" type="text" name="employment" id="employment" class="form-control" />
-                </div>
-                <div class="form-group" ng-class="{ 'has-error' : editForm.state.$invalid && !editForm.state.$pristine }">
-                    <label for="state" class="required">Pracovný stav</label>
-                    <select ng-model="vm.employee.attendance" ng-options="o.id as o.name for o in attendance" class="form-control" name="state" id="state" required />
-                    <p ng-show="editForm.state.$invalid && !editForm.state.$pristine" class="help-block">Stav je povinná položka</p>
-                </div>
-            </div>
-            <div col-md-9>
-                <div class="form-group col-md-4 col-lg-3">
-                    <label for="birthDate">Dátum narodenia</label><br>
-                    <md-datepicker ng-model="vm.birthDate" md-placeholder="Zadajte dátum" name="birthDate" id="birthDate"></md-datepicker>
-                </div>
-                <div class="form-group col-md-4 col-lg-3">
-                    <label for="startDate">Dátum nástupu</label><br>
-                    <md-datepicker ng-model="vm.startDate" md-placeholder="Zadajte dátum" name="startDate" id="startDate"></md-datepicker>
-                </div>
-                <div class="form-group col-md-4 col-lg-3" ng-if="vm.employee.attendance == 2">
-                    <label for="leaveDate">Dátum odchodu</label><br>
-                    <md-datepicker ng-model="vm.leaveDate" md-placeholder="Zadajte dátum" name="leaveDate" id="leaveDate"></md-datepicker>
                 </div>
             </div>
         </div>

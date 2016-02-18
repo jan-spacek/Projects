@@ -263,6 +263,8 @@ namespace MyNurserySchool.Migrations
 
                     b.Property<int?>("Number");
 
+                    b.Property<int?>("NurseryId");
+
                     b.Property<string>("SocialNumber");
 
                     b.Property<DateTime?>("StartDate");

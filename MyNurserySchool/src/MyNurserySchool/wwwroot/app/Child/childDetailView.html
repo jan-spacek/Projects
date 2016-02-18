@@ -1,7 +1,7 @@
 ﻿<div>
     <wait-cursor ng-if="vm.isBusy"></wait-cursor>
-    <div class="row">
-        <div class="col-md-6">
+    <div ng-class="{ 'row': canEdit }">
+        <div ng-class="{ 'col-md-6': canEdit }">
             <div class="row">
                 <h3 class="col-xs-6">{{ vm.child.firstName + " " + vm.child.lastName }}</h3>
                 <h3 class="col-xs-6 text-right">{{ vm.child.number }}</h3>
@@ -26,11 +26,11 @@
                 <label>Popis: </label>
                 <p><span ng-bind-html="vm.child.description"></span></p>
             </div>
-            <div ng-if="vm.child.classId != null">
+            <div>
                 <label>Trieda: </label>
                 {{ vm.classTitle }}
             </div>
-            <div ng-if="vm.child.attendance != null">
+            <div>
                 <label>Stav: </label>
                 {{ vm.attendanceStates[vm.child.attendance] }}
             </div>

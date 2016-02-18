@@ -7,6 +7,10 @@
     <script src="~/lib/angular-route/angular-route.min.js"></script>
     <script src="~/lib/angular-animate/angular-animate.min.js"></script>
     <script src="~/lib/angular-ui/build/angular-ui.min.js"></script>
+    <script src="~/lib/angular-strap/dist/angular-strap.min.js"></script>
+    <script src="~/lib/angular-strap/dist/angular-strap.tpl.min.js"></script>
+    <script src="~/lib/angular-i18n/angular-locale_sk-sk.js"></script>
+    <script src="~/lib/angular-strap/src/helpers/dimensions.js"></script>
     <script src="~/app/Nursery/nursery-app.js"></script>
     <script src="~/app/Nursery/nurseryDetailController.js"></script>
     <script src="~/app/Nursery/nurseryEditController.js"></script>
@@ -25,9 +29,20 @@
         <div class="col-xs-12 col-sm-2 affix">
             <ul class="nav nav-pills nav-stacked nav-vertical">
                 <li><a ng-href="#/" class="list-group-item"><i class="fa fa-home"></i>Prehľad</a>
-                <li><!--<a ng-href="" class="list-group-item"><i class="fa fa-cubes"></i>Triedy</a>-->
-                    <a ng-href="#collapse" class="list-group-item" data-toggle="collapse"><i class="fa fa-cubes"></i>Triedy</a>
-                    <ul class="collapse nav nav-pills nav-stacked nav-subnav" id="collapse">
+                <li bs-collapse data-start-collapsed="true">
+                    <a class="list-group-item" ng-click="collapsed = !collapsed" bs-collapse-toggle>
+                        <span class="row">
+                            <span class="col-xs-9">
+                                <i class="fa fa-cubes"></i>
+                                Triedy
+                            </span>
+                            <span class="col-xs-3 text-right">
+                                <i class="fa fa-caret-down" ng-if="!collapsed"></i>
+                                <i class="fa fa-caret-up" ng-if="collapsed"></i>
+                            </span>
+                        </span>
+                    </a>
+                    <ul class="collapse nav nav-pills nav-stacked nav-subnav am-collapse-add" bs-collapse-target> 
                         @foreach (var cla in Model.Classes)
                         {
                             <li><a ng-href="#/class/@cla.Id">@cla.Name</a></li>

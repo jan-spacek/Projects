@@ -20,6 +20,7 @@ namespace MyNurserySchool.ViewModels
         public Address Address { get; set; }
         public ICollection<Note> Notes { get; set; }
         public AttendanceState Attendance { get; set; }
+        public int? NurseryId { get; set; }
         public int? ClassId { get; set; }
 
         public DateTime Created { get; set; }

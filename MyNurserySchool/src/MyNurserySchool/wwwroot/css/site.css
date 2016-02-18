@@ -1,15 +1,11 @@
 ﻿body {
     padding-top: 65px;
-}
-
-li .nav li>a {
+}li .nav li>a {
     padding-left: 25px;
 }
-
 ul.nav-vertical {
     margin-left: 3px;
 }
-
 ul.nav-subnav {
     margin-top: 3px;
 }
@@ -22,9 +18,6 @@ ul.nav-subnav {
 .fa.fa-caret-down, .fa.fa-caret-up {
     min-width: 0;
 }
-h2.modal-header {
-    margin-top: 0;
-}
 .view {
     margin-bottom: 50px;
 }
@@ -35,7 +28,6 @@ th>a {
     text-decoration: none!important;
     color: inherit;
 }
-
 .note-header h5 {
     margin-top: 0;
     margin-bottom: 5px;
@@ -58,11 +50,6 @@ th>a {
 .note-form .form-group-sm {
     margin: 5px 0;
 }
-
-.md-datepicker-input-container, .md-datepicker-button {
-    margin: 0!important;
-}
-
 .form-find {
     margin: 0;
 }
@@ -79,10 +66,17 @@ th>a {
     content: " *";
     color: red;
 }
-
-.wrap {
+li>a.list-group-item[data-toggle='collapse'] {
+    padding: 10px 0;
+}
+li>a.list-group-item .row {
+    margin: 0;
+}
+.truncate {
+    max-width: 70px;
     white-space: nowrap;
-    overflow:hidden !important;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
 }
-

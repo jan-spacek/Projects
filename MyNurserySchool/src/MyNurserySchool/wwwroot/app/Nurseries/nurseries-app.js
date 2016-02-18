@@ -5,15 +5,9 @@
     angular.module("nurseries-app", ["simpleControls", "ngRoute"])
         .config(function ($routeProvider) {
             $routeProvider.when("/", {
-                controller: "nurseriesController",
+                controller: "nurseriesListController",
                 controllerAs: "vm",
-                templateUrl: "/app/Nurseries/nurseriesView.html"
-            });
-
-            $routeProvider.when("/new", {
-                controller: "nurseryNewController",
-                controllerAs: "vm",
-                templateUrl: "/app/Nurseries/nurseryNewView.html"
+                templateUrl: "/app/Nurseries/nurseriesListView.html"
             });
 
             $routeProvider.when("/edit/:id", {

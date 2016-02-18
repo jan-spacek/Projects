@@ -15,11 +15,6 @@
         vm.classId = 0;
         vm.isNew = vm.childId == 0;
         $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Dochádzajúci' }, { id: 2, name: 'Odstúpený' }];
-
-        vm.birthDate = "1900-01-01";
-        vm.startDate = "1900-01-01";
-        vm.leaveDate = "1900-01-01";
-
         vm.classes = [];
 
         $http.get("/Api/Nursery/" + $scope.outerId)
@@ -44,12 +39,6 @@
                 .then(function (response) {
                     angular.copy(response.data, vm.child);
                     vm.classId = vm.child.classId;
-                    var birthDate = new Date(vm.child.birthDate);
-                    vm.birthDate = birthDate.getFullYear() < 1901 ? "1900-01-01" : birthDate;
-                    var startDate = new Date(vm.child.startDate);
-                    vm.startDate = startDate.getFullYear() < 1901 ? "1900-01-01" : startDate;
-                    var leaveDate = new Date(vm.child.leaveDate);
-                    vm.leaveDate = leaveDate.getFullYear() < 1901 ? "1900-01-01" : leaveDate;
                 }, function () {
                     toastr.error("Nepodarilo sa načítať informácie o dieťati");
                 }).finally(function () {
@@ -60,9 +49,7 @@
         vm.saveChild = function (isValid) {
             if (isValid) {
                 vm.isBusy = true;
-                vm.child.birthDate = vm.birthDate === null ? "1900-01-01" : vm.birthDate;
-                vm.child.startDate = vm.startDate === null ? "1900-01-01" : vm.startDate;
-                vm.child.leaveDate = vm.leaveDate === null ? "1900-01-01" : vm.leaveDate;
+                vm.child.nurseryId = $scope.outerId;
 
                 if (vm.isNew) {
                     $http.post("/Api/Child/", vm.child)

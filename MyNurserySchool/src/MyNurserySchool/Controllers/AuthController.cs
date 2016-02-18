@@ -12,9 +12,9 @@ namespace MyNurserySchool.Controllers
 {
     public class AuthController : Controller
     {
-        private SignInManager<StandardUser> _signInManager;
+        private SignInManager<ApplicationUser> _signInManager;
 
-        public AuthController(SignInManager<StandardUser> signInManager)
+        public AuthController(SignInManager<ApplicationUser> signInManager)
         {
             _signInManager = signInManager;
         }

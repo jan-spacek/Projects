@@ -31,15 +31,15 @@ namespace MyNurserySchool.Controllers.Api
         {
             try
             {
-                var result = _repository.GetChildById(childId);
+                var child = _repository.GetChildById(childId);
 
-                var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == _repository.GetChildsNurseryId(result).ToString());
+                var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == child.NurseryId.ToString());
                 if (User.IsInRole("Admin") || matchingNurs != null)
                 {
-                    if (result == null)
+                    if (child == null)
                         return Json(null);
 
-                    return Json(Mapper.Map<ChildViewModel>(result));
+                    return Json(Mapper.Map<ChildViewModel>(child));
                 }
             }
             catch (Exception ex)
@@ -107,7 +107,7 @@ namespace MyNurserySchool.Controllers.Api
                 {
                     var child = Mapper.Map<Child>(vm);
 
-                    var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == _repository.GetClassNurseryId((int)vm.ClassId).ToString());
+                    var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == child.NurseryId.ToString());
                     if (User.IsInRole("Admin") || matchingNurs != null)
                     {
                         child.Modified = DateTime.Now;
@@ -149,7 +149,7 @@ namespace MyNurserySchool.Controllers.Api
             {
                 var child = _repository.GetChildById(id);
 
-                var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == _repository.GetChildsNurseryId(child).ToString());
+                var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == child.NurseryId.ToString());
                 if (User.IsInRole("Admin") || matchingNurs != null)
                 {
                     _repository.DeleteChild(id);

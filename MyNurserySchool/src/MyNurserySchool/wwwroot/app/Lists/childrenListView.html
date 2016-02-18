@@ -23,44 +23,38 @@
                     <th width="65">
                         <a href="" ng-click="sortType = 'number'; sortReverse = !sortReverse">
                             Por.č.
-                            <span ng-show="sortType == 'number' && !sortReverse" class="fa fa-caret-down"></span>
-                            <span ng-show="sortType == 'number' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType == 'number' && sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'number' && !sortReverse" class="fa fa-caret-up"></span>
                         </a>
                     </th>
-                    <th width="120">
-                        <a href="" ng-click="sortType = 'firstName'; sortReverse = !sortReverse">
-                            Meno
-                            <span ng-show="sortType == 'firstName' && !sortReverse" class="fa fa-caret-down"></span>
-                            <span ng-show="sortType == 'firstName' && sortReverse" class="fa fa-caret-up"></span>
-                        </a>
-                    </th>
-                    <th width="120">
+                    <th width="170">
                         <a href="" ng-click="sortType = 'lastName'; sortReverse = !sortReverse">
-                            Priezvisko
-                            <span ng-show="sortType == 'lastName' && !sortReverse" class="fa fa-caret-down"></span>
-                            <span ng-show="sortType == 'lastName' && sortReverse" class="fa fa-caret-up"></span>
+                            Meno
+                            <span ng-show="sortType == 'lastName' && sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'lastName' && !sortReverse" class="fa fa-caret-up"></span>
                         </a>
                     </th>
                     <th width="150">
                         <a href="" ng-click="sortType = 'birthDate'; sortReverse = !sortReverse">
                             Dátum narodenia
-                            <span ng-show="sortType == 'birthDate' && !sortReverse" class="fa fa-caret-down"></span>
-                            <span ng-show="sortType == 'birthDate' && sortReverse" class="fa fa-caret-up"></span>
+                            <span ng-show="sortType == 'birthDate' && sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'birthDate' && !sortReverse" class="fa fa-caret-up"></span>
                         </a>
                     </th>
                     <th width="100">Trieda</th>
-                    <th>Kontakty</th>
+                    <th width="150">Kontakt</th>
+                    <th>Popis</th>
                     <th width="105"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="child in vm.children | orderBy:sortType:sortReverse | filter:search" ng-dblclick="redirect('#/child/' + child.id)" ng-class="child.attendance == 0 ? 'text-primary' : child.attendance == 2 ? 'text-gray' : ''">
                     <td>{{ child.number }}</td>
-                    <td>{{ child.firstName }}</td>
-                    <td>{{ child.lastName }}</td>
+                    <td>{{ child.firstName + " " + child.lastName }}</td>
                     <td>{{ child.birthDate | date : 'd.M.yyyy' }}</td>
                     <td>{{ vm.classes[child.classId] }}</td>
                     <td><span ng-bind-html="child.contacts"></span></td>
+                    <td class="truncate"><span ng-bind-html="child.description"></span></td>
                     <td class="text-right">
                         <a ng-href="#/child/{{ child.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
                         <a ng-href="#/child/{{ child.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>

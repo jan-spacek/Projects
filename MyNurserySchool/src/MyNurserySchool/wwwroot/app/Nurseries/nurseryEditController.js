@@ -7,29 +7,47 @@
     function nurseryEditController($routeParams, $http, $location) {
         var vm = this;
         vm.id = $routeParams.id;
-        vm.isBusy = true;
         vm.nursery = {};
+        vm.isNew = vm.id == 0;
 
-        $http.get("/Api/Nursery/" + vm.id)
-            .then(function (response) {
-                angular.copy(response.data, vm.nursery);
-            }, function () {
-                toastr.error("Nepodarilo sa načítať informácie o škôlke");
-            }).finally(function () {
-                vm.isBusy = false;
-            });
-
-        vm.saveNursery = function () {
+        if (!vm.isNew) {
             vm.isBusy = true;
-            $http.put("/Api/Nursery/", vm.nursery)
+            $http.get("/Api/Nursery/" + vm.id)
                 .then(function (response) {
-                    toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
-                    $location.path("#/");
+                    angular.copy(response.data, vm.nursery);
                 }, function () {
-                    toastr.error("Škôlku sa nepodarilo uložiť");
+                    toastr.error("Nepodarilo sa načítať informácie o škôlke");
                 }).finally(function () {
                     vm.isBusy = false;
                 });
+        }
+
+        vm.saveNursery = function () {
+            vm.isBusy = true;
+
+            if (vm.isNew) {
+                $http.post("/Api/Nursery", vm.nursery)
+                    .then(function (response) {
+                        toastr.success("Bola vytvorená nová škôlka " + vm.nursery.name);
+                        $location.path("#/");
+                    }, function () {
+                        toastr.error("Škôlku sa nepodarilo uložiť");
+                    }).finally(function () {
+                        vm.isBusy = false;
+                    });
+            }
+            else
+            {
+                $http.put("/Api/Nursery/", vm.nursery)
+                    .then(function (response) {
+                        toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
+                        $location.path("#/");
+                    }, function () {
+                        toastr.error("Škôlku sa nepodarilo uložiť");
+                    }).finally(function () {
+                        vm.isBusy = false;
+                    });
+            }
         }
 
         vm.deleteNursery = function () {

@@ -24,6 +24,8 @@
                 for (var i = 0; i < vm.class.children.length; i++) {
                     if (vm.class.children[i].contacts)
                         vm.class.children[i].contacts = $sce.trustAsHtml(vm.class.children[i].contacts.replace(/(\r\n|\n|\r)/gm, '<br />'));
+                    if (vm.class.children[i].description)
+                        vm.class.children[i].description = $sce.trustAsHtml(vm.class.children[i].description.replace(/(\r\n|\n|\r)/gm, '<br />'));
                     if (vm.class.children[i].attendance == 1)
                         vm.children.push(vm.class.children[i]);
                 }

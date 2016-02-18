@@ -25,8 +25,9 @@
                         <input ng-model="vm.child.socialNumber" type="text" name="socialNumber" id="socialNumber" class="form-control" />
                     </div>
                     <div class="form-group col-sm-6 col-lg-5">
-                        <label for="birthDate">Dátum narodenia</label><br />
-                        <uib-datepicker ng-model="vm.child.birthDate" name="birthDate" id="birthDate"></uib-datepicker>
+                        <label for="birthDate">Dátum narodenia</label>
+                        <input type="text" class="form-control" ng-model="vm.child.birthDate" name="birthDate" id="birthDate" 
+                               bs-datepicker data-date-format="dd.MM.yyyy" data-max-date="today" data-autoclose="1" />
                     </div>
                 </div>
                 <div class="form-group" ng-class="{ 'has-error' : editForm.contacts.$invalid && !editForm.contacts.$pristine }">
@@ -34,10 +35,26 @@
                     <textarea ng-model="vm.child.contacts" type="text" name="contacts" id="contacts" class="form-control" rows="5" required></textarea>
                     <p ng-show="editForm.contacts.$invalid && !editForm.contacts.$pristine" class="help-block">Kontakty je povinná položka</p>
                 </div>
-                <div class="form-group" ng-class="{ 'has-error' : editForm.class.$invalid && !editForm.class.$pristine }">
-                    <label for="class" class="required">Trieda</label>
-                    <select ng-model="vm.child.classId" ng-options="class.id as class.name for class in vm.classes" class="form-control" name="class" id="class" required />
-                    <p ng-show="editForm.class.$invalid && !editForm.class.$pristine" class="help-block">Priezvisko je povinná položka</p>
+                <div class="row">
+                    <div class="form-group col-sm-6" ng-class="{ 'has-error' : editForm.state.$invalid && !editForm.state.$pristine }">
+                        <label for="state" class="required">Stav</label>
+                        <select ng-model="vm.child.attendance" ng-options="o.id as o.name for o in attendance" class="form-control" name="state" id="state" required />
+                        <p ng-show="editForm.state.$invalid && !editForm.state.$pristine" class="help-block">Stav je povinná položka</p>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="class">Trieda</label>
+                        <select ng-model="vm.child.classId" ng-options="class.id as class.name for class in vm.classes" class="form-control" name="class" id="class" />
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="startDate">Dátum nástupu</label>
+                        <input type="text" class="form-control" ng-model="vm.child.startDate" name="startDate" id="startDate"
+                               bs-datepicker data-date-format="dd.MM.yyyy" data-autoclose="1" />
+                    </div>
+                    <div class="form-group col-sm-6" ng-if="vm.child.attendance == 2">
+                        <label for="leaveDate">Dátum odchodu</label>
+                        <input type="text" class="form-control" ng-model="vm.child.leaveDate" name="leaveDate" id="leaveDate"
+                               bs-datepicker data-date-format="dd.MM.yyyy" data-autoclose="1" />
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
@@ -63,21 +80,8 @@
                     <label for="description">Popis</label>
                     <textarea ng-model="vm.child.description" type="text" name="description" id="description" class="form-control" rows="5"></textarea>
                 </div>
-                <div class="form-group" ng-class="{ 'has-error' : editForm.state.$invalid && !editForm.state.$pristine }">
-                    <label for="state" class="required">Stav</label>
-                    <select ng-model="vm.child.attendance" ng-options="o.id as o.name for o in attendance" class="form-control" name="state" id="state" required/>
-                    <p ng-show="editForm.state.$invalid && !editForm.state.$pristine" class="help-block">Stav je povinná položka</p>
-                </div>
-                <div class="row">
-                    <div class="form-group col-sm-6">
-                        <label for="startDate">Dátum nástupu</label><br>
-                        <uib-datepicker ng-model="vm.startDate" md-placeholder="Zadajte dátum" name="startDate" id="startDate"></uib-datepicker>
-                    </div>
-                    <div class="form-group col-sm-6" ng-if="vm.child.attendance == 2">
-                        <label for="leaveDate">Dátum odchodu</label><br>
-                        <uib-datepicker ng-model="vm.leaveDate" md-placeholder="Zadajte dátum" name="leaveDate" id="leaveDate"></uib-datepicker>
-                    </div>
-                </div>
+                
+                
             </div>
         </div>
         <div class="row">

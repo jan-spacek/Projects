@@ -13,10 +13,10 @@ namespace MyNurserySchool.Data
     public class NurseryDbContextSeedData
     {
         private NurseryDbContext _context;
-        private UserManager<StandardUser> _userManager;
+        private UserManager<ApplicationUser> _userManager;
         private RoleManager<IdentityRole> _roleManager;
 
-        public NurseryDbContextSeedData(NurseryDbContext context, UserManager<StandardUser> userManager, RoleManager<IdentityRole> roleManager)
+        public NurseryDbContextSeedData(NurseryDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
@@ -45,7 +45,7 @@ namespace MyNurserySchool.Data
 
             if (await _userManager.FindByNameAsync("admin") == null)
             {
-                var newUser = new StandardUser
+                var newUser = new ApplicationUser
                 {
                     UserName = "admin",
                     Email = "admin@example.com"
@@ -58,7 +58,7 @@ namespace MyNurserySchool.Data
 
             if (await _userManager.FindByNameAsync("editor") == null)
             {
-                var newUser = new StandardUser
+                var newUser = new ApplicationUser
                 {
                     UserName = "editor",
                     Email = "editor@example.com"
@@ -71,7 +71,7 @@ namespace MyNurserySchool.Data
 
             if (await _userManager.FindByNameAsync("editor2") == null)
             {
-                var newUser = new StandardUser
+                var newUser = new ApplicationUser
                 {
                     UserName = "editor2",
                     Email = "editor2@example.com"
@@ -85,7 +85,7 @@ namespace MyNurserySchool.Data
 
             if (await _userManager.FindByNameAsync("viewer") == null)
             {
-                var newUser = new StandardUser
+                var newUser = new ApplicationUser
                 {
                     UserName = "viewer",
                     Email = "viewer@example.com"

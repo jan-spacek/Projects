@@ -2,7 +2,7 @@
 
     "use strict";
 
-    angular.module("nursery-app", ["simpleControls", "ngRoute"])
+    angular.module("nursery-app", ["simpleControls", "ngRoute", "mgcrea.ngStrap"])
         .config(function ($routeProvider) {
             $routeProvider.when("/", {
                 controller: "nurseryDetailController",

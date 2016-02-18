@@ -93,13 +93,10 @@ namespace MyNurserySchool.Data
         {
             try
             {
-                var listOfClasses = _context.Classes.Where(r => r.NurseryId == nurseryId).Select(r => r.Id).ToList();
-                var children = _context.Children
+                return _context.Children
                     .Include(c => c.Notes)
                     .OrderBy(c => c.BirthDate)
-                    .Where(c => listOfClasses.Contains(c.ClassId ?? 0));
-
-                return children;
+                    .Where(c => c.NurseryId == nurseryId);
             }
             catch (Exception ex)
             {
@@ -144,11 +141,6 @@ namespace MyNurserySchool.Data
                         .Include(c => c.Notes)
                         .Where(c => c.Id == childId)
                         .FirstOrDefault();
-        }
-        public int? GetChildsNurseryId(Child child)
-        {
-            var cls = GetClassById((int)child.ClassId);
-            return cls.NurseryId;
         }
         public int? GetClassNurseryId(int classId)
         {

@@ -1,19 +1,19 @@
 ﻿<div>
     <wait-cursor ng-if="vm.isBusy"></wait-cursor>
-    <div class="row">
-        <div class="col-md-6">
+    <div ng-class="{ 'row': canEdit }">
+        <div ng-class="{ 'col-md-6': canEdit }">
             <h3>{{ vm.employee.fullName }}</h3>
             {{ vm.employee.birthDate | date : 'd.M.yyyy' }}
             <hr />
-            <div ng-if="vm.employee.email != null">
+            <div>
                 <label>E-mail: </label>
                 {{ vm.employee.email }}
             </div>
-            <div ng-if="vm.employee.privatePhone != null">
+            <div>
                 <label>Súkromný telefón: </label>
                 {{ vm.employee.privatePhone }}
             </div>
-            <div ng-if="vm.employee.workPhone != null">
+            <div>
                 <label>Služobný telefón: </label>
                 {{ vm.employee.workPhone }}
             </div>
@@ -30,15 +30,15 @@
                 <label>Popis: </label>
                 <p><span ng-bind-html="vm.employee.description"></span></p>
             </div>
-            <div ng-if="vm.employee.jobTitle != null">
+            <div>
                 <label>Popis práce: </label>
                 {{ vm.employee.jobTitle }}
             </div>
-            <div ng-if="vm.employee.employment != null">
+            <div>
                 <label>Pracovný úväzok: </label>
                 {{ vm.employee.employment }}
             </div>
-            <div ng-if="vm.employee.attendance != null">
+            <div>
                 <label>Pracovný stav: </label>
                 {{ vm.attendanceStates[vm.employee.attendance] }}
             </div>

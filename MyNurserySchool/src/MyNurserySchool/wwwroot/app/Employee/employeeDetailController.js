@@ -13,7 +13,7 @@
         vm.employeeId = $routeParams.id;
         vm.employee = {};
         vm.newNote = {};
-        vm.attendanceStates = ["žiadateľ", "pracujúci", "odstúpený"];
+        vm.attendanceStates = ["Žiadateľ", "Pracujúci", "Odstúpený"];
 
         vm.isBusy = true;
         $http.get("/Api/Employee/" + vm.employeeId)

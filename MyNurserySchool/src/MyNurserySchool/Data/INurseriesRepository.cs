@@ -19,7 +19,6 @@ namespace MyNurserySchool.Data
         Employee GetEmployeeById(int employeeId);
         Child GetChildById(int childId);
         Class GetClassById(int classId);
-        int? GetChildsNurseryId(Child child);
         int? GetClassNurseryId(int classId);
         int? GetEmployeeNurseryId(int employeeId);
         #endregion
