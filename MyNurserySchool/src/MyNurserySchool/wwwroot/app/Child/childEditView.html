@@ -6,12 +6,12 @@
                 <div class="row">
                     <div class="form-group col-sm-6" ng-class="{ 'has-error' : editForm.firstName.$invalid && !editForm.firstName.$pristine }">
                         <label for="firstName" class="required">Krstné meno</label>
-                        <input ng-model="vm.child.firstName" type="text" name="firstName" id="firstName" class="form-control" required />
+                        <input ng-model="vm.child.firstName" type="text" name="firstName" id="firstName" class="form-control" capitalize-first required />
                         <p ng-show="editForm.firstName.$invalid && !editForm.firstName.$pristine" class="help-block">Krstné meno je povinná položka</p>
                     </div>
                     <div class="form-group col-sm-6" ng-class="{ 'has-error' : editForm.lastName.$invalid && !editForm.lastName.$pristine }">
                         <label for="lastName" class="required">Priezvisko</label>
-                        <input ng-model="vm.child.lastName" type="text" name="lastName" id="lastName" class="form-control" required />
+                        <input ng-model="vm.child.lastName" type="text" name="lastName" id="lastName" class="form-control" capitalize-first required />
                         <p ng-show="editForm.lastName.$invalid && !editForm.lastName.$pristine" class="help-block">Priezvisko je povinná položka</p>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                     <div class="form-group col-sm-6 col-lg-5">
                         <label for="birthDate">Dátum narodenia</label>
                         <input type="text" class="form-control" ng-model="vm.child.birthDate" name="birthDate" id="birthDate" 
-                               bs-datepicker data-date-format="dd.MM.yyyy" data-max-date="today" data-autoclose="1" />
+                               bs-datepicker data-date-format="d.M.yyyy" data-max-date="today" data-autoclose="1" />
                     </div>
                 </div>
                 <div class="form-group" ng-class="{ 'has-error' : editForm.contacts.$invalid && !editForm.contacts.$pristine }">
@@ -48,12 +48,12 @@
                     <div class="form-group col-sm-6">
                         <label for="startDate">Dátum nástupu</label>
                         <input type="text" class="form-control" ng-model="vm.child.startDate" name="startDate" id="startDate"
-                               bs-datepicker data-date-format="dd.MM.yyyy" data-autoclose="1" />
+                               bs-datepicker data-date-format="d.M.yyyy" data-autoclose="1" />
                     </div>
                     <div class="form-group col-sm-6" ng-if="vm.child.attendance == 2">
                         <label for="leaveDate">Dátum odchodu</label>
                         <input type="text" class="form-control" ng-model="vm.child.leaveDate" name="leaveDate" id="leaveDate"
-                               bs-datepicker data-date-format="dd.MM.yyyy" data-autoclose="1" />
+                               bs-datepicker data-date-format="d.M.yyyy" data-autoclose="1" />
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                     </div>
                     <div class="form-group col-sm-8">
                         <label for="city">Obec</label>
-                        <input ng-model="vm.child.address.city" type="text" name="city" id="city" class="form-control" />
+                        <input ng-model="vm.child.address.city" type="text" name="city" id="city" class="form-control" capitalize-first />
                     </div>
                     <div class="form-group col-sm-4">
                         <label for="zip">PSČ</label>

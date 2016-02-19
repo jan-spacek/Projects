@@ -52,7 +52,7 @@
             <tbody>
                 <tr ng-repeat="child in vm.children | orderBy:sortType:sortReverse | filter:search" ng-dblclick="redirect('#/child/' + child.id)" ng-if="child.attendance == 1">
                     <td>{{ child.number }}</td>
-                    <td>{{ child.firstName + " " + child.lastName }}</td>
+                    <td>{{ child.fullName }}</td>
                     <td>{{ child.birthDate | date : 'd.M.yyyy' }}</td>
                     <td><span ng-bind-html="child.contacts"></span></td>
                     <td class="truncate"><span ng-bind-html="child.description"></span></td>

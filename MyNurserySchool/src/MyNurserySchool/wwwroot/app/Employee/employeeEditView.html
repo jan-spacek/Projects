@@ -6,13 +6,13 @@
                 <div class="row">
                     <div class="form-group col-sm-6" ng-class="{ 'has-error' : editForm.name.$invalid && !editForm.name.$pristine }">
                         <label for="name" class="required">Celé meno</label>
-                        <input ng-model="vm.employee.fullName" type="text" name="name" id="name" class="form-control" required />
+                        <input ng-model="vm.employee.fullName" type="text" name="name" id="name" class="form-control" capitalize-all-first required />
                         <p ng-show="editForm.name.$invalid && !editForm.name.$pristine" class="help-block">Meno je povinná položka</p>
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="birthDate">Dátum narodenia</label>
                         <input type="text" class="form-control" ng-model="vm.employee.birthDate" name="birthDate" id="birthDate"
-                               bs-datepicker data-date-format="dd.MM.yyyy" data-max-date="today" data-autoclose="1" />
+                               bs-datepicker data-date-format="d.M.yyyy" data-max-date="today" data-autoclose="1" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -48,12 +48,12 @@
                     <div class="form-group col-sm-6">
                         <label for="startDate">Dátum nástupu</label>
                         <input type="text" class="form-control" ng-model="vm.employee.startDate" name="startDate" id="startDate"
-                                bs-datepicker data-date-format="dd.MM.yyyy" data-autoclose="1" />
+                                bs-datepicker data-date-format="d.M.yyyy" data-autoclose="1" />
                     </div>
                     <div class="form-group col-sm-6" ng-if="vm.employee.attendance == 2">
                         <label for="leaveDate">Dátum odchodu</label>
                         <input type="text" class="form-control" ng-model="vm.employee.leaveDate" name="leaveDate" id="leaveDate"
-                                bs-datepicker data-date-format="dd.MM.yyyy" data-autoclose="1" />
+                                bs-datepicker data-date-format="d.M.yyyy" data-autoclose="1" />
                     </div>
                 </div>
             </div>

@@ -111,7 +111,7 @@ namespace MyNurserySchool.Data
         {
             return _context.Nurseries
                         .Include(n => n.Classes)
-                        .Include(n => n.Director)
+                        .Include(n => n.Director.Address)
                         .Include(n => n.Address)
                         .Include(n => n.Employees)
                         .Where(n => n.Id == nurseryId)
