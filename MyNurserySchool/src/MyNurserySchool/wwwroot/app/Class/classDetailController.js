@@ -16,8 +16,6 @@
         vm.children = [];
         vm.isBusy = true;
 
-        $scope.sortType = 'birthDate';
-
         $http.get("/Api/Class/" + vm.classId)
             .then(function (response) {
                 angular.copy(response.data, vm.class);

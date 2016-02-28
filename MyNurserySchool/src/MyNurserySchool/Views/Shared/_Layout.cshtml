@@ -30,12 +30,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
                 <ul class="nav navbar-nav">
                     <li><a asp-controller="Public" asp-action="Index"><i class="fa fa-home"></i></a></li>
-                    @if (User.IsInRole("Admin") || User.FindAll("Nursery").ToList().Count > 1)
-                    {
-                        <li><a asp-controller="App" asp-action="Nurseries">Prehľad škôlok</a></li>
-                    }
                     <li><a asp-controller="Public" asp-action="Contact">Kontakt</a></li>
-                    <li><a asp-controller="Public" asp-action="About">O nás</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.IsAuthenticated)
@@ -44,8 +39,8 @@
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-user"></i>@User.Identity.Name</a>
                             <ul class="dropdown-menu">
-                                <li><a href="#"><i class="fa fa-lock"></i>Zmena hesla</a></li>
-                                <li><a href="#"><i class="fa fa-cog"></i>Nastavenia</a></li>
+                                <li><a asp-controller="Manage" asp-action="ChangePassword"><i class="fa fa-lock"></i>Zmena hesla</a></li>
+                                @*<li><a href="#"><i class="fa fa-cog"></i>Nastavenia</a></li>*@
                             </ul>
                         </li>
                         <li><a asp-controller="Auth" asp-action="Logout"><i class="fa fa-sign-out"></i>Odhlásiť</a></li>
@@ -62,8 +57,9 @@
     <div>
         @RenderBody()
     </div>
+
     <footer class="panel-footer navbar-fixed-bottom text-center">
-        &copy; @DateTime.Now.Year Čip 
+        &copy; @DateTime.Now.Year Čip
     </footer>
 
     <script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -12,6 +12,7 @@
         var vm = this;
         vm.employees = [];
         vm.isBusy = true;
+        $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
 
         $http.get("/Api/Nursery/" + $scope.outerId + "/employees")
             .then(function (response) {

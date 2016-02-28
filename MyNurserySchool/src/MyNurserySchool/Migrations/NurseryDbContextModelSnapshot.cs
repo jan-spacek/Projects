@@ -98,7 +98,7 @@ namespace MyNurserySchool.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("MyNurserySchool.Authentication.StandardUser", b =>
+            modelBuilder.Entity("MyNurserySchool.Authentication.ApplicationUser", b =>
                 {
                     b.Property<string>("Id");
 
@@ -325,14 +325,14 @@ namespace MyNurserySchool.Migrations
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("MyNurserySchool.Authentication.StandardUser")
+                    b.HasOne("MyNurserySchool.Authentication.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("MyNurserySchool.Authentication.StandardUser")
+                    b.HasOne("MyNurserySchool.Authentication.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
@@ -343,7 +343,7 @@ namespace MyNurserySchool.Migrations
                         .WithMany()
                         .HasForeignKey("RoleId");
 
-                    b.HasOne("MyNurserySchool.Authentication.StandardUser")
+                    b.HasOne("MyNurserySchool.Authentication.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });

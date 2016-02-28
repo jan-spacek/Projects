@@ -1,19 +1,24 @@
 ﻿@{ 
-    ViewBag.Title = "Prehľad škôlok";
+    ViewBag.Title = "Naša škôlka";
 }
 @section Scripts {
     <script src="~/lib/angular/angular.min.js"></script>
     <script src="~/lib/angular-route/angular-route.min.js"></script>
     <script src="~/app/Nurseries/nurseries-app.js"></script>
     <script src="~/app/Nurseries/nurseriesListController.js"></script>
-    <script src="~/app/Nurseries/nurseryNewController.js"></script>
     <script src="~/app/Nurseries/nurseryEditController.js"></script>
     <script src="~/app/Common/simpleControls.js"></script>
 }
 
 <div ng-app="nurseries-app" ng-init="isAdmin = @(User.IsInRole("Admin") ? "true" : "false")">
     <div class="col-sm-3 col-lg-2">
-        <a ng-href="#/edit/0" class="btn btn-primary btn-block" ng-if="isAdmin"><i class="fa fa-plus-circle"></i>pridať škôlku</a>
+        <ul class="nav nav-pills nav-stacked nav-vertical">
+            @if (User.IsInRole("Admin") || User.FindAll("Nursery").ToList().Count > 1)
+            {
+                <li><a ng-href="/" class="list-group-item">Zoznam škôlok</a></li>
+            }
+            <li><a ng-href="" class="list-group-item" ng-if="isAdmin"><i class="fa fa-group"></i> Používatelia</a></li>
+        </ul>
     </div>
     <div class="col-sm-9 col-lg-10">
         <div class="container-fluid">

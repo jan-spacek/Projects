@@ -11,6 +11,7 @@
 
         var vm = this;
         vm.children = [];
+        vm.attendantChildren = [];
         vm.waitingChildren = [];
         vm.archivedChildren = [];
         vm.classes = [];
@@ -44,8 +45,9 @@
 
                     if (vm.children[i].attendance == 0)
                         vm.waitingChildren.push(vm.children[i]);
-
-                    if (vm.children[i].attendance == 2)
+                    else if (vm.children[i].attendance == 1)
+                        vm.attendantChildren.push(vm.children[i]);
+                    else if (vm.children[i].attendance == 2)
                         vm.archivedChildren.push(vm.children[i]);
                 }
             }, function (error) {

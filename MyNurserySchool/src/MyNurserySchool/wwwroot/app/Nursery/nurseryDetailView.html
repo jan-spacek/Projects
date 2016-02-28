@@ -1,5 +1,6 @@
 ﻿<div>
     <wait-cursor ng-if="vm.isBusy"></wait-cursor>
+    <back-to-top></back-to-top>
     <div class="row">
         <div class="col-lg-6">
             <h3><i class="fa fa-cubes"></i> Triedy</h3>
@@ -50,7 +51,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="employee in vm.nursery.employees" ng-dblclick="redirect('#/employee/' + employee.id)">
+                    <tr ng-repeat="employee in vm.nursery.employees" ng-dblclick="redirect('#/employee/' + employee.id)" ng-if="employee.attendance == 1">
                         <td>{{ employee.fullName }}</td>
                         <td>{{ employee.email }}</td>
                         <td>{{ employee.workPhone }} {{ employee.privatePhone }}</td>

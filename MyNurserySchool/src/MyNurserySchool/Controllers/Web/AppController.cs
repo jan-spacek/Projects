@@ -50,11 +50,6 @@ namespace MyNurserySchool.Controllers.Web
             }
         }
 
-        public IActionResult Users()
-        {
-            return View();
-        }
-
         [HttpGet("App/Nursery/{id}")]
         public IActionResult Nursery(int id)
         {

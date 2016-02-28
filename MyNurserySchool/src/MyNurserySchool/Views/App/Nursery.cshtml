@@ -11,6 +11,7 @@
     <script src="~/lib/angular-strap/dist/angular-strap.tpl.min.js"></script>
     <script src="~/lib/angular-i18n/angular-locale_sk-sk.js"></script>
     <script src="~/lib/angular-strap/src/helpers/dimensions.js"></script>
+    <script src="~/lib/tableExport.jquery.plugin/tableExport.min.js"></script>
     <script src="~/app/Nursery/nursery-app.js"></script>
     <script src="~/app/Nursery/nurseryDetailController.js"></script>
     <script src="~/app/Nursery/nurseryEditController.js"></script>
@@ -28,6 +29,10 @@
     <div ng-init="outerId = @Model.Id; canEdit = @(User.IsInRole("Editor") ? "true" : "false")">
         <div class="col-xs-12 col-sm-2 affix">
             <ul class="nav nav-pills nav-stacked nav-vertical">
+                @if (User.IsInRole("Admin") || User.FindAll("Nursery").ToList().Count > 1)
+                {
+                    <li><a asp-controller="App" asp-action="Nurseries" class="list-group-item">Zoznam škôlok</a></li>
+                }
                 <li><a ng-href="#/" class="list-group-item"><i class="fa fa-home"></i>Prehľad</a>
                 <li bs-collapse data-start-collapsed="true">
                     <a class="list-group-item" ng-click="collapsed = !collapsed" bs-collapse-toggle>

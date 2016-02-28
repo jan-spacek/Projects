@@ -1,14 +1,19 @@
 ﻿<div>
-    <wait-cursor ng-show="vm.isBusy"></wait-cursor>
-    <form>
-        <div class="form-group">
+    <div>
+        <div class="float-left">
+            <a ng-href="#/edit/0" class="btn btn-primary btn-block" ng-if="isAdmin"><i class="fa fa-plus-circle"></i>pridať škôlku</a>
+        </div>
+        <div class="form-group form-find">
             <div class="input-group">
                 <div class="input-group-addon"><i class="fa fa-search"></i></div>
                 <input type="text" class="form-control" placeholder="Hľadať" ng-model="search">
 
             </div>
         </div>
-    </form>
+    </div>
+    <h3><i class="fa fa-list"></i> Zoznam škôlok</h3>
+    <wait-cursor ng-show="vm.isBusy"></wait-cursor>
+    <back-to-top></back-to-top>
     <table class="table table-responsive table-striped table-fixed">
         <thead>
             <tr>

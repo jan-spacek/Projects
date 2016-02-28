@@ -72,6 +72,10 @@ li>a.list-group-item[data-toggle='collapse'] {
 li>a.list-group-item .row {
     margin: 0;
 }
+.validation-summary-errors ul {
+    list-style-type: none;
+    padding: 0;
+}
 .truncate {
     max-width: 70px;
     white-space: nowrap;
@@ -80,3 +84,23 @@ li>a.list-group-item .row {
     -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
 }
+#backtop {
+    bottom:55px;
+    left:15px;
+    opacity:0;
+    -moz-transition:all .3s ease-out; 
+    -o-transition:all .3s ease-out; 
+    -webkit-transition:all .3s ease-out; 
+    transition:all .3s ease-out;
+    position:fixed;
+}
+#backtop a {
+    outline:none;
+    border:0;
+    cursor:pointer;
+    color: #222;
+}
+#backtop a:hover {
+    color: #333;
+}
+.show{opacity:1 !important}

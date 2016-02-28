@@ -20,6 +20,10 @@
       "environmentVariables": {
         "Hosting:Environment": "Development"
       }
+    },
+    "IIS Express1": {
+      "commandName": "IISExpress",
+      "launchBrowser": true
     }
   }
 }
