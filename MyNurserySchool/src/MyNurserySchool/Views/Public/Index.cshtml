@@ -1,9 +1,8 @@
-﻿@model IEnumerable<MyNurserySchool.Models.Nursery>
-@{ 
+﻿@{ 
     ViewBag.Title = "Moja škôlka";
 }
 <div class="container">
-    <div class="col-md-12 text-center">
+    <div class="jumbotron">
         <h1>Vitajte v aplikácií Moja škôlka</h1>
         <p>Aplikácia Moja škôlka slúži na evidenciu zamestnancov, tried a detí v škôlke.</p>
         @if (!User.Identity.IsAuthenticated)

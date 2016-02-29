@@ -104,3 +104,15 @@ li>a.list-group-item .row {
     color: #333;
 }
 .show{opacity:1 !important}
+
+table.details-table td {
+    vertical-align: text-top;
+    padding: 3px 0;
+}
+table.details-table tr td:first-child {
+    font-weight: bold;
+    padding-right: 10px;
+}
+table.details-table tr td:first-child:after {
+    content: ":";
+}

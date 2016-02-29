@@ -5,51 +5,54 @@
             <h3>{{ vm.employee.fullName }}</h3>
             {{ vm.employee.birthDate | date : 'd.M.yyyy' }}
             <hr />
-            <div>
-                <label>E-mail: </label>
-                {{ vm.employee.email }}
-            </div>
-            <div>
-                <label>Súkromný telefón: </label>
-                {{ vm.employee.privatePhone }}
-            </div>
-            <div>
-                <label>Služobný telefón: </label>
-                {{ vm.employee.workPhone }}
-            </div>
-            <div ng-if="vm.employee.address != null">
-                <label>Adresa: </label>
-                <p>
-                    {{ vm.employee.address.street }} {{ vm.employee.address.number }}<br>
-                    {{ vm.employee.address.city }}<br>
-                    {{ vm.employee.address.zip }}
-                </p>
-            </div>
-            <hr />
-            <div ng-if="vm.employee.description != null">
-                <label>Popis: </label>
-                <p><span ng-bind-html="vm.employee.description"></span></p>
-            </div>
-            <div>
-                <label>Popis práce: </label>
-                {{ vm.employee.jobTitle }}
-            </div>
-            <div>
-                <label>Pracovný úväzok: </label>
-                {{ vm.employee.employment }}
-            </div>
-            <div>
-                <label>Pracovný stav: </label>
-                {{ vm.attendanceStates[vm.employee.attendance] }}
-            </div>
-            <div ng-if="vm.employee.startDate != null">
-                <label>Dátum nástupu: </label>
-                {{ vm.employee.startDate | date : 'd.M.yyyy' }}
-            </div>
-            <div ng-if="vm.employee.attendance == 2">
-                <label>Dátum odchodu: </label>
-                {{ vm.employee.leaveDate | date : 'd.M.yyyy' }}
-            </div>
+            <table class="details-table">
+                <tr>
+                    <td class="text-right">E-mail</td>
+                    <td class="text-left">{{ vm.employee.email }}</td>
+                </tr>
+                <tr>
+                    <td class="text-right">Súkromný telefón</td>
+                    <td>{{ vm.employee.privatePhone }}</td>
+                </tr>
+                <tr>
+                    <td class="text-right">Služobný telefón</td>
+                    <td>{{ vm.employee.workPhone }}</td>
+                </tr>
+                <tr ng-if="vm.employee.address != null">
+                    <td class="text-right">Adresa</td>
+                    <td>
+                        <p>
+                            {{ vm.employee.address.street }} {{ vm.employee.address.number }}<br>
+                            {{ vm.employee.address.city }}<br>
+                            {{ vm.employee.address.zip }}
+                        </p>
+                    </td>
+                </tr>
+                <tr ng-if="vm.employee.description != null">
+                    <td class="text-right">Popis</td>
+                    <td><p><span ng-bind-html="vm.employee.description"></span></p></td>
+                </tr>
+                <tr>
+                    <td class="text-right">Popis práce</td>
+                    <td>{{ vm.employee.jobTitle }}</td>
+                </tr>
+                <tr>
+                    <td class="text-right">Pracovný úväzok</td>
+                    <td>{{ vm.employee.employment }}</td>
+                </tr>
+                <tr>
+                    <td class="text-right">Pracovný stav</td>
+                    <td>{{ vm.attendanceStates[vm.employee.attendance] }}</td>
+                </tr>
+                <tr ng-if="vm.employee.startDate != null">
+                    <td class="text-right">Dátum nástupu</td>
+                    <td>{{ vm.employee.startDate | date : 'd.M.yyyy' }}</td>
+                </tr>
+                <tr ng-if="vm.employee.attendance == 2">
+                    <td class="text-right">Dátum odchodu</td>
+                    <td>{{ vm.employee.leaveDate | date : 'd.M.yyyy' }}</td>
+                </tr>
+            </table>
             <br />
             <div class="row">
                 <div class="col-xs-8">
