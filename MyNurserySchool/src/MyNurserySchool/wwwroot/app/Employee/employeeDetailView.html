@@ -8,7 +8,7 @@
             <table class="details-table">
                 <tr>
                     <td class="text-right">E-mail</td>
-                    <td class="text-left">{{ vm.employee.email }}</td>
+                    <td>{{ vm.employee.email }}</td>
                 </tr>
                 <tr>
                     <td class="text-right">Súkromný telefón</td>
@@ -21,11 +21,9 @@
                 <tr ng-if="vm.employee.address != null">
                     <td class="text-right">Adresa</td>
                     <td>
-                        <p>
-                            {{ vm.employee.address.street }} {{ vm.employee.address.number }}<br>
-                            {{ vm.employee.address.city }}<br>
-                            {{ vm.employee.address.zip }}
-                        </p>
+                        {{ vm.employee.address.street }} {{ vm.employee.address.number}}<br ng-if="vm.employee.address.city"/>
+                        {{ vm.employee.address.city }}<br ng-if="vm.employee.address.zip"/>
+                        {{ vm.employee.address.zip }}
                     </td>
                 </tr>
                 <tr ng-if="vm.employee.description != null">

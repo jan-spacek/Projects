@@ -9,39 +9,40 @@
             {{ vm.child.birthDate | date : 'd.M.yyyy' }}<br />
             {{ vm.child.socialNumber }}
             <hr />
-            <div>
-                <label>Kontakty: </label>
-                <p><span ng-bind-html="vm.child.contacts"></span></p>
-            </div>
-            <div ng-if="vm.child.address != null">
-                <label>Adresa: </label>
-                <p>
-                    {{ vm.child.address.street }} {{ vm.child.address.number }}<br>
-                    {{ vm.child.address.city }}<br>
-                    {{ vm.child.address.zip }}
-                </p>
-            </div>
-            <hr />
-            <div ng-if="vm.child.description != null">
-                <label>Popis: </label>
-                <p><span ng-bind-html="vm.child.description"></span></p>
-            </div>
-            <div>
-                <label>Trieda: </label>
-                {{ vm.classTitle }}
-            </div>
-            <div>
-                <label>Stav: </label>
-                {{ vm.attendanceStates[vm.child.attendance] }}
-            </div>
-            <div ng-if="vm.child.startDate != null">
-                <label>Dátum nástupu: </label>
-                {{ vm.child.startDate | date : 'd.M.yyyy' }}
-            </div>
-            <div ng-if="vm.child.attendance == 2">
-                <label>Dátum odchodu: </label>
-                {{ vm.child.leaveDate | date : 'd.M.yyyy' }}
-            </div>
+            <table class="details-table">
+                <tr>
+                    <td class="text-right">Kontakty</td>
+                    <td><span ng-bind-html="vm.child.contacts"></span></td>
+                </tr>
+                <tr ng-if="vm.child.address != null">
+                    <td class="text-right">Adresa</td>
+                    <td>
+                        {{ vm.child.address.street }} {{ vm.child.address.number}}<br ng-if="vm.child.address.city" />
+                        {{ vm.child.address.city }}<br ng-if="vm.child.address.zip" />
+                        {{ vm.child.address.zip }}
+                    </td>
+                </tr>
+                <tr ng-if="vm.child.description != null">
+                    <td class="text-right">Popis</td>
+                    <td><span ng-bind-html="vm.child.description"></span></td>
+                </tr>
+                <tr>
+                    <td class="text-right">Trieda</td>
+                    <td>{{ vm.classTitle }}</td>
+                </tr>
+                <tr>
+                    <td class="text-right">Stav</td>
+                    <td>{{ vm.attendanceStates[vm.child.attendance] }}</td>
+                </tr>
+                <tr ng-if="vm.child.startDate != null">
+                    <td class="text-right">Dátum nástupu</td>
+                    <td>{{ vm.child.startDate | date : 'd.M.yyyy' }}</td>
+                </tr>
+                <tr ng-if="vm.child.attendance == 2">
+                    <td class="text-right">Dátum odchodu</td>
+                    <td>{{ vm.child.leaveDate | date : 'd.M.yyyy' }}</td>
+                </tr>
+            </table>
             <br />
             <div class="row">
                 <div class="col-xs-8">
