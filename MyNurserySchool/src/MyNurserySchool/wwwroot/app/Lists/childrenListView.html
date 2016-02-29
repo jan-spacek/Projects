@@ -58,9 +58,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="child in vm.attendantChildren | orderBy:sortType:sortReverse | filter:search" ng-dblclick="redirect('#/child/' + child.id)" ng-class="{'text-gray': child.attendance == 2, 'text-primary': child.attendance == 0}">
+                <tr ng-repeat="child in vm.attendantChildren | orderBySK:sortType:sortReverse | filter:search" ng-dblclick="redirect('#/child/' + child.id)" ng-class="{'text-gray': child.attendance == 2, 'text-primary': child.attendance == 0}">
                     <td>{{ child.number }}</td>
-                    <td>{{ child.fullName }}</td>
+                    <td>{{ child.lastName }}</td>
                     <td>{{ child.birthDate | date : 'd.M.yyyy' }}</td>
                     <td>{{ child.socialNumber }}</td>
                     <td>{{ child.className }}</td>

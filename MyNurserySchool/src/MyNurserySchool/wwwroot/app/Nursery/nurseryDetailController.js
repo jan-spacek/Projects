@@ -13,6 +13,8 @@
         var vm = this;
         vm.nursery = {};
         vm.isBusy = true;
+        $scope.sortType = 'title';
+        $scope.sortReverse = true;
 
         $http.get("/Api/Nursery/" + $scope.outerId)
             .then(function (response) {

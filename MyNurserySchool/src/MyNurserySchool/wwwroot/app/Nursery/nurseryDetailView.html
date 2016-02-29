@@ -23,7 +23,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="class in vm.nursery.classes | orderBy:sortType:sortReverse" ng-dblclick="redirect('#/class/' + class.id)">
+                    <tr ng-repeat="class in vm.nursery.classes | orderBySK:sortType:sortReverse" ng-dblclick="redirect('#/class/' + class.id)">
                         <td>{{ class.name }}</td>
                         <td>{{ class.classTeacher.fullName }}</td>
                         <td>{{ class.children.length + "/" + class.capacity }}</td>

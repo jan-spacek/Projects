@@ -47,10 +47,14 @@
                             </span>
                         </span>
                     </a>
-                    <ul class="collapse nav nav-pills nav-stacked nav-subnav am-collapse-add" bs-collapse-target> 
-                        @foreach (var cla in Model.Classes)
-                        {
-                            <li><a ng-href="#/class/@cla.Id">@cla.Name</a></li>
+                    <ul class="collapse nav nav-pills nav-stacked nav-subnav am-collapse-add" bs-collapse-target>
+                        @{
+                            var classes = Model.Classes.OrderBy(cls => cls.Name);
+                        
+                            foreach (var cla in classes)
+                            {
+                                <li><a ng-href="#/class/@cla.Id">@cla.Name</a></li>
+                            }
                         }
                         <li ng-if="canEdit"><a ng-href="#/class/0/edit"><i class="fa fa-plus-circle"></i>Pridať triedu</a></li>
                     </ul>
