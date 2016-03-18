@@ -3,7 +3,7 @@
     "SiteEmailAddress": "test@test.com"
   },
   "Data": {
-    "NurseriesContextConnection": "Server=localhost\\SQLExpress;Database=MyNurseryDB;Trusted_Connection=true;MultipleActiveResultSets=true;"
+    "NurseriesContextConnection": "Server=localhost\\SQLExpress;Database=MyNurseryDB;Trusted_Connection=true;MultipleActiveResultSets=true;User Id=appuser;Password=JHs2$TvQf8&%GbVM"
   }
 }
  
