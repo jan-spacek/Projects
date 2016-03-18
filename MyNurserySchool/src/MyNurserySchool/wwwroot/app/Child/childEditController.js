@@ -4,7 +4,7 @@
     angular.module("nursery-app")
         .controller("childEditController", childEditController);
 
-    function childEditController($scope, $http, $routeParams, $controller) {
+    function childEditController($scope, $http, $routeParams, $controller, $uibModal) {
         $controller('baseController', {
             '$scope': $scope
         });
@@ -78,6 +78,16 @@
             }
         }
 
+        vm.deleteChildModal = function () {
+            $scope.deleteModalTarget = "dieťa " + vm.child.firstName + " " + vm.child.lastName;
+
+            $uibModal.open({
+                templateUrl: '/app/Common/deleteModal.html',
+                controller: 'deleteModalController',
+                scope: $scope
+            });
+        }
+
         vm.deleteChild = function () {
             vm.isBusy = true;
             $http.delete("/Api/Child/" + vm.child.id)
@@ -90,6 +100,6 @@
                 .finally(function () {
                     vm.isBusy = false;
                 });
-        }
+        }        
     }
 })();

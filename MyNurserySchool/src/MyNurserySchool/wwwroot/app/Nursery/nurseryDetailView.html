@@ -45,16 +45,16 @@
                 <thead>
                     <tr>
                         <th width="200">Meno</th>
-                        <th width="230">E-mail</th>
-                        <th>Telefón</th>
+                        <th>Služobný telefón</th>
+                        <th>Súkromný telefón</th>
                         <th width="105"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="employee in vm.nursery.employees" ng-dblclick="redirect('#/employee/' + employee.id)" ng-if="employee.attendance == 1">
                         <td>{{ employee.fullName }}</td>
-                        <td>{{ employee.email }}</td>
-                        <td>{{ employee.workPhone }} {{ employee.privatePhone }}</td>
+                        <td>{{ employee.workPhone }}</td>
+                        <td>{{ employee.privatePhone }}</td>
                         <td class="text-right">
                             <a ng-href="#/employee/{{ employee.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
                             <a ng-href="#/employee/{{ employee.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>

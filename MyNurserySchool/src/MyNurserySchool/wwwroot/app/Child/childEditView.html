@@ -41,9 +41,10 @@
                         <select ng-model="vm.child.attendance" ng-options="o.id as o.name for o in attendance" class="form-control" name="state" id="state" required />
                         <p ng-show="editForm.state.$invalid && !editForm.state.$pristine" class="help-block">Stav je povinná položka</p>
                     </div>
-                    <div class="form-group col-sm-6">
-                        <label for="class">Trieda</label>
-                        <select ng-model="vm.child.classId" ng-options="class.id as class.name for class in vm.classes" class="form-control" name="class" id="class" />
+                    <div class="form-group col-sm-6" ng-class="{ 'has-error' : editForm.class.$invalid && !editForm.class.$pristine }">
+                        <label for="class" class="required">Trieda</label>
+                        <select ng-model="vm.child.classId" ng-options="class.id as class.name for class in vm.classes" class="form-control" name="class" id="class" required />
+                        <p ng-show="editForm.class.$invalid && !editForm.class.$pristine" class="help-block">Trieda je povinná položka</p>
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="startDate">Dátum nástupu</label>
@@ -91,7 +92,7 @@
                 <back-button></back-button>
             </div>
             <div class="col-xs-4 text-right">
-                <button type="button" class="btn btn-danger" ng-click="vm.deleteChild()" ng-if="!vm.isNew"><i class="fa fa-user-times"></i> Vymazať</button>
+                <button type="button" class="btn btn-danger" ng-click="vm.deleteChildModal()" ng-if="!vm.isNew"><i class="fa fa-user-times"></i> Vymazať</button>
             </div>
         </div>
     </form>
