@@ -12,18 +12,34 @@
     <script src="~/lib/angular-i18n/angular-locale_sk-sk.js"></script>
     <script src="~/lib/angular-strap/src/helpers/dimensions.js"></script>
     <script src="~/lib/tableExport.jquery.plugin/tableExport.min.js"></script>
-    <script src="~/app/Nursery/nursery-app.js"></script>
-    <script src="~/app/Nursery/nurseryDetailController.js"></script>
-    <script src="~/app/Nursery/nurseryEditController.js"></script>
-    <script src="~/app/Class/classEditController.js"></script>
-    <script src="~/app/Class/classDetailController.js"></script>
-    <script src="~/app/Employee/employeeEditController.js"></script>
-    <script src="~/app/Employee/employeeDetailController.js"></script>
-    <script src="~/app/Child/childEditController.js"></script>
-    <script src="~/app/Child/childDetailController.js"></script>
-    <script src="~/app/Lists/employeesListController.js"></script>
-    <script src="~/app/Lists/childrenListController.js"></script>
-    <script src="~/app/Common/simpleControls.js"></script>
+    <environment names="Development">
+        <script src="~/app/Nursery/nursery-app.js"></script>
+        <script src="~/app/Nursery/nurseryDetailController.js"></script>
+        <script src="~/app/Nursery/nurseryEditController.js"></script>
+        <script src="~/app/Class/classEditController.js"></script>
+        <script src="~/app/Class/classDetailController.js"></script>
+        <script src="~/app/Employee/employeeEditController.js"></script>
+        <script src="~/app/Employee/employeeDetailController.js"></script>
+        <script src="~/app/Child/childEditController.js"></script>
+        <script src="~/app/Child/childDetailController.js"></script>
+        <script src="~/app/Lists/employeesListController.js"></script>
+        <script src="~/app/Lists/childrenListController.js"></script>
+        <script src="~/app/Common/simpleControls.js"></script>
+    </environment>
+    <environment names="Production,Staging">
+        <script src="~/lib/_app/Nursery/nursery-app.js"></script>
+        <script src="~/lib/_app/Nursery/nurseryDetailController.js"></script>
+        <script src="~/lib/_app/Nursery/nurseryEditController.js"></script>
+        <script src="~/lib/_app/Class/classEditController.js"></script>
+        <script src="~/lib/_app/Class/classDetailController.js"></script>
+        <script src="~/lib/_app/Employee/employeeEditController.js"></script>
+        <script src="~/lib/_app/Employee/employeeDetailController.js"></script>
+        <script src="~/lib/_app/Child/childEditController.js"></script>
+        <script src="~/lib/_app/Child/childDetailController.js"></script>
+        <script src="~/lib/_app/Lists/employeesListController.js"></script>
+        <script src="~/lib/_app/Lists/childrenListController.js"></script>
+        <script src="~/lib/_app/Common/simpleControls.js"></script>
+    </environment>
 }
 <div ng-app="nursery-app">
     <div ng-init="outerId = @Model.Id; canEdit = @(User.IsInRole("Editor") ? "true" : "false")">

@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
-using MyNurserySchool.Services;
-using MyNurserySchool.ViewModels;
+﻿using Microsoft.AspNet.Mvc;
 
 namespace MyNurserySchool.Controllers.Web
 {
     public class PublicController : Controller
     {
-        private IMailService _mailService;
-
-        public PublicController(IMailService service)
+        public PublicController()
         {
-            _mailService = service;
         }
         
         public IActionResult Index()
@@ -27,31 +18,6 @@ namespace MyNurserySchool.Controllers.Web
 
         public IActionResult Contact()
         {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Contact(ContactViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var email = Startup.Configuration["AppSettings:SiteEmailAddress"];
-
-                if (string.IsNullOrWhiteSpace(email))
-                {
-                    ModelState.AddModelError("", "Could not send email, configuration problem.");
-                }
-
-                if (_mailService.SendMail(email,
-                    email,
-                    $"Contact Page from {model.Name} ({model.Email})",
-                    model.Message))
-                {
-                    ModelState.Clear();
-
-                    ViewBag.Message = "Mail Sent. Thanks!";
-                }
-            }
             return View();
         }
     }

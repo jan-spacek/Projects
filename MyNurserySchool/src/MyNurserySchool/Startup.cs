@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
 using Microsoft.Extensions.DependencyInjection;
-using MyNurserySchool.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.PlatformAbstractions;
 using MyNurserySchool.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using AutoMapper;
-using MyNurserySchool.Controllers.Api;
 using MyNurserySchool.ViewModels;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Authentication.Cookies;
 using System.Net;
 using MyNurserySchool.Data;
@@ -40,11 +33,7 @@ namespace MyNurserySchool
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc(config =>
-            {
-#if !DEBUG
-                config.Filters.Add(new RequireHttpsAttribute());
-#endif
-            })
+            {})
                 .AddJsonOptions(opt =>
                 {
                     opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -84,17 +73,24 @@ namespace MyNurserySchool
             services.AddTransient<NurseryDbContextSeedData>();
             services.AddScoped<INurseriesRepository, NurseriesRepository>();
 
-#if DEBUG
-            services.AddScoped<IMailService, DebugMailService>();
-#else
-            services.AddScoped<IMailService, Real MailService>();
-#endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, NurseryDbContextSeedData seeder, ILoggerFactory loggerFactory)
+        public async void Configure(IApplicationBuilder app, 
+            NurseryDbContextSeedData seeder, 
+            ILoggerFactory loggerFactory,
+            IHostingEnvironment env)
         {
-            loggerFactory.AddDebug(LogLevel.Warning);
+            if (env.IsDevelopment())
+            {
+                loggerFactory.AddDebug(LogLevel.Information);
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                loggerFactory.AddDebug(LogLevel.Error);
+                app.UseExceptionHandler("/App/Error");
+            }
 
             app.UseStaticFiles();
 
