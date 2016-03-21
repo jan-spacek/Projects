@@ -4,7 +4,7 @@
     angular.module("nursery-app")
         .controller("classEditController", classEditController);
 
-    function classEditController($scope, $http, $location, $routeParams, $controller) {
+    function classEditController($scope, $http, $location, $routeParams, $controller, $uibModal) {
         $controller('baseController', {
             '$scope': $scope
         });
@@ -61,13 +61,27 @@
             }
         }
 
+        vm.deleteClassModal = function () {
+            $scope.deleteModalTarget = "triedu " + vm.class.name;
+
+            var modalInstance = $uibModal.open({
+                templateUrl: '/app/Common/deleteModal.html',
+                controller: 'deleteModalController',
+                scope: $scope
+            });
+
+            modalInstance.result.then(function () {
+                vm.deleteClass();
+            });
+        }
+
         vm.deleteClass = function () {
             vm.isBusy = true;
             var className = vm.class.name;
             $http.delete("/Api/Class/" + vm.class.id)
                 .then(function () {                    
                     toastr.success("Trieda " + className + " bola vymazaná");
-                    $location.path("#/");
+                    $scope.back();
                 }, function (error) {
                     toastr.error("Triedu sa nepodarilo vymazať");
                 })

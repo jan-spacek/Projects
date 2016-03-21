@@ -73,7 +73,7 @@
                     </div>
                     <div class="form-group col-sm-4" ng-class="{ 'has-error' : editForm.zip.$error.minlength || editForm.zip.$error.maxlength }">
                         <label for="zip">PSČ</label>
-                        <input ng-model="vm.employee.address.zip" type="number" name="zip" id="zip" class="form-control" ng-minlength="5" ng-maxlength="5"/>
+                        <input ng-model="vm.employee.address.zip" type="text" name="zip" id="zip" class="form-control" ng-minlength="5" ng-maxlength="5"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -89,7 +89,7 @@
                 <back-button></back-button>
             </div>
             <div class="col-xs-4 text-right">
-                <button type="button" class="btn btn-danger" ng-click="vm.deleteEmployee()" ng-if="!vm.isNew"><i class="fa fa-user-times"></i> Vymazať</button>
+                <button type="button" class="btn btn-danger" ng-click="vm.deleteEmployeeModal()" ng-if="!vm.isNew"><i class="fa fa-user-times"></i> Vymazať</button>
             </div>
         </div>
     </form>

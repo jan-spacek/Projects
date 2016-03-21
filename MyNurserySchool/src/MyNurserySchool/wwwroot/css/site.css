@@ -1,5 +1,9 @@
 ﻿body {
     padding-top: 65px;
+}.navbar-brand img {
+    height: 50px;
+    padding: 5px;
+    margin-top: -17px;
 }li .nav li>a {
     padding-left: 25px;
 }

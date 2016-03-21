@@ -37,7 +37,7 @@
                 </div>
                 <div class="form-group col-sm-4" ng-class="{ 'has-error' : editForm.zip.$error.minlength || editForm.zip.$error.maxlength }">
                     <label for="zip">PSČ</label>
-                    <input ng-model="vm.nursery.address.zip" type="number" name="zip" id="zip" class="form-control" ng-minlength="5" ng-maxlength="5" ng-disabled="!canEdit"/>
+                    <input ng-model="vm.nursery.address.zip" type="text" name="zip" id="zip" class="form-control" ng-minlength="5" ng-maxlength="5" ng-disabled="!canEdit"/>
                     <p ng-show="editForm.zip.$error.minlength || editForm.zip.$error.maxlength" class="help-block">PSČ je nesprávne</p>
                 </div>
             </div>

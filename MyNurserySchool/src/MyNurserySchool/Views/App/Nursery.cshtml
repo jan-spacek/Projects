@@ -26,7 +26,6 @@
         <script src="~/app/Lists/employeesListController.js"></script>
         <script src="~/app/Lists/childrenListController.js"></script>
         <script src="~/app/Common/simpleControls.js"></script>
-        <script src="~/app/Common/deleteModalController.js"></script>
     </environment>
     <environment names="Production,Staging">
         <script src="~/lib/_app/Nursery/nursery-app.js"></script>
@@ -41,7 +40,6 @@
         <script src="~/lib/_app/Lists/employeesListController.js"></script>
         <script src="~/lib/_app/Lists/childrenListController.js"></script>
         <script src="~/lib/_app/Common/simpleControls.js"></script>
-        <script src="~/lib/_app/Common/deleteModalController.js"></script>
     </environment>
 }
 <div ng-app="nursery-app">
@@ -50,7 +48,7 @@
             <ul class="nav nav-pills nav-stacked nav-vertical">
                 @if (User.IsInRole("Admin") || User.FindAll("Nursery").ToList().Count > 1)
                 {
-                    <li><a asp-controller="App" asp-action="Nurseries" class="list-group-item">Zoznam škôlok</a></li>
+                    <li><a asp-controller="App" asp-action="Nurseries" class="list-group-item"><i class="fa fa-list"></i> Zoznam škôlok</a></li>
                 }
                 <li><a ng-href="#/" class="list-group-item"><i class="fa fa-home"></i>Prehľad</a>
                 <li bs-collapse data-start-collapsed="true">

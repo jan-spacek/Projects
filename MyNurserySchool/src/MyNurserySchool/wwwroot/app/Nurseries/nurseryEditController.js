@@ -4,7 +4,7 @@
     angular.module("nurseries-app")
         .controller("nurseryEditController", nurseryEditController);
 
-    function nurseryEditController($routeParams, $http, $location) {
+    function nurseryEditController($routeParams, $http, $location, $uibModal, $scope) {
         var vm = this;
         vm.id = $routeParams.id;
         vm.nursery = {};
@@ -50,14 +50,29 @@
             }
         }
 
+        vm.deleteNurseryModal = function () {
+            $scope.deleteModalTarget = "škôlku " + vm.nursery.name;
+
+            var modalInstance = $uibModal.open({
+                templateUrl: '/app/Common/deleteModal.html',
+                controller: 'deleteModalController',
+                scope: $scope
+            });
+
+            modalInstance.result.then(function () {
+                vm.deleteNursery();
+            });
+        }
+
         vm.deleteNursery = function () {
             vm.isBusy = true;
+            var nurseryName = vm.nursery.name;
             $http.delete("/Api/Nursery/" + vm.nursery.id)
                 .then(function () {
-                    toastr.success("Škôlka id:" + vm.id + " bola vymazaná");
+                    toastr.success("Škôlka " + nurseryName + " bola vymazaná");
                     $location.path("#/");
                 }, function (error) {
-                    toastr.error("Škôlku sa nepodarilo vymazať");
+                    toastr.error("Škôlku " + nurseryName + " sa nepodarilo vymazať");
                 })
                 .finally(function () {
                     vm.isBusy = false;

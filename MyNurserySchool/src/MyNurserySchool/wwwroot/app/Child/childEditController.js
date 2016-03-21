@@ -81,10 +81,14 @@
         vm.deleteChildModal = function () {
             $scope.deleteModalTarget = "dieťa " + vm.child.firstName + " " + vm.child.lastName;
 
-            $uibModal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: '/app/Common/deleteModal.html',
                 controller: 'deleteModalController',
                 scope: $scope
+            });
+
+            modalInstance.result.then(function () {
+                vm.deleteChild();
             });
         }
 

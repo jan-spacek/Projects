@@ -4,7 +4,7 @@
     angular.module("nursery-app")
         .controller("employeeEditController", employeeEditController);
 
-    function employeeEditController($scope, $http, $routeParams, $controller) {
+    function employeeEditController($scope, $http, $routeParams, $controller, $uibModal) {
         $controller('baseController', {
             '$scope': $scope
         });
@@ -55,6 +55,20 @@
                         });
                 }
             }
+        }
+
+        vm.deleteEmployeeModal = function () {
+            $scope.deleteModalTarget = "zamestnanca " + vm.employee.fullName;
+
+            var modalInstance = $uibModal.open({
+                templateUrl: '/app/Common/deleteModal.html',
+                controller: 'deleteModalController',
+                scope: $scope
+            });
+
+            modalInstance.result.then(function () {
+                vm.deleteEmployee();
+            });
         }
 
         vm.deleteEmployee = function () {

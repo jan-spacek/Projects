@@ -1,9 +1,10 @@
 ﻿@{ 
-    ViewBag.Title = "Naša škôlka";
+    ViewBag.Title = "";
 }
 @section Scripts {
     <script src="~/lib/angular/angular.min.js"></script>
     <script src="~/lib/angular-route/angular-route.min.js"></script>
+    <script src="~/lib/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
     <environment names="Development">
         <script src="~/app/Nurseries/nurseries-app.js"></script>
         <script src="~/app/Nurseries/nurseriesListController.js"></script>
@@ -22,7 +23,7 @@
         <ul class="nav nav-pills nav-stacked nav-vertical">
             @if (User.IsInRole("Admin") || User.FindAll("Nursery").ToList().Count > 1)
             {
-                <li><a ng-href="/" class="list-group-item">Zoznam škôlok</a></li>
+                <li><a ng-href="/" class="list-group-item"><i class="fa fa-list"></i> Zoznam škôlok</a></li>
             }
             <li><a ng-href="" class="list-group-item" ng-if="isAdmin"><i class="fa fa-group"></i> Používatelia</a></li>
         </ul>

@@ -103,6 +103,10 @@
             $window.history.back();
         };
 
+        $scope.back2 = function () {
+            $window.history.go(-2);
+        };
+
         $scope.exportAction = function(exportTo) { 
             switch (exportTo) {
                 case 'excel': $scope.$broadcast('export-excel', {}); 
