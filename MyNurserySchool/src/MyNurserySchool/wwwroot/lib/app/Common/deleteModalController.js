@@ -1,0 +1,1 @@
+!function(){"use strict";function n(n,c){n.ok=function(){c.close()},n.cancel=function(){c.dismiss("cancel")}}n.$inject=["$scope","$uibModalInstance"],angular.module("nursery-app").controller("deleteModalController",n)}();
