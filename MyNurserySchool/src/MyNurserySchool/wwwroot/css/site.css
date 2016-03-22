@@ -120,3 +120,9 @@ table.details-table tr td:first-child {
 table.details-table tr td:first-child:after {
     content: ":";
 }
+.dropdown-multiselect {
+    width: 100%;
+}
+.dropdown-multiselect>button {
+    text-align: left;
+}

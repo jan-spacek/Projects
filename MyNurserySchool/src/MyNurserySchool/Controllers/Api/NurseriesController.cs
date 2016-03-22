@@ -14,7 +14,7 @@ using MyNurserySchool.ViewModels;
 namespace MyNurserySchool.Controllers.Api
 {
     [Authorize]
-    [Route("api/nurseries")]
+    [Route("Api/Nurseries")]
     public class NurseriesController : Controller
     {
         private ILogger<NurseriesController> _logger;

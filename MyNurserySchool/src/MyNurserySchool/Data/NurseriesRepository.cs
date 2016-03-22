@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyNurserySchool.ViewModels;
+using MyNurserySchool.Authentication;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace MyNurserySchool.Data
 {
@@ -20,6 +22,33 @@ namespace MyNurserySchool.Data
         }
 
         #region GetAll
+        public IEnumerable<ApplicationUser> GetAllUsers()
+        {
+            try
+            {
+                return _context.Users
+                    .Include(n => n.Claims)
+                    .Include(n => n.Roles)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Could not get Users from database", ex);
+                return null;
+            }
+        }
+        public IEnumerable<IdentityRole> GetAllRoles()
+        {
+            try
+            {
+                return _context.Roles.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Could not get Users from database", ex);
+                return null;
+            }
+        }
         public IEnumerable<Nursery> GetAllNurseries(List<int> nursList)
         {
             try {

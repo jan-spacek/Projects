@@ -1,10 +1,10 @@
 ﻿(function () {
     "use strict";
 
-    angular.module("nursery-app")
-        .controller("deleteModalController", deleteModalController);
+    angular.module("nurseries-app")
+        .controller("editUserModalController", editUserModalController);
 
-    function deleteModalController($scope, $uibModalInstance) {
+    function editUserModalController($scope, $uibModalInstance) {
 
         $scope.ok = function () {
             $uibModalInstance.close();

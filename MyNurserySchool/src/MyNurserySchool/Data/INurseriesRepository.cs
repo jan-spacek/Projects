@@ -1,6 +1,8 @@
 ﻿using MyNurserySchool.Models;
 using System.Collections.Generic;
 using MyNurserySchool.ViewModels;
+using MyNurserySchool.Authentication;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace MyNurserySchool.Data
 {
@@ -12,6 +14,8 @@ namespace MyNurserySchool.Data
         IEnumerable<Class> GetAllClasses(int nurseryId);
         IEnumerable<Employee> GetAllEmployees(int nurseryId);
         IEnumerable<Child> GetAllChildren(int nurseryId);
+        IEnumerable<ApplicationUser> GetAllUsers();
+        IEnumerable<IdentityRole> GetAllRoles();
         #endregion
 
         #region Get

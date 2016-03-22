@@ -5,17 +5,22 @@
     <script src="~/lib/angular/angular.min.js"></script>
     <script src="~/lib/angular-route/angular-route.min.js"></script>
     <script src="~/lib/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
+    <script src="~/lib/underscore/underscore-min.js"></script>
     <environment names="Development">
         <script src="~/app/Nurseries/nurseries-app.js"></script>
         <script src="~/app/Nurseries/nurseriesListController.js"></script>
         <script src="~/app/Nurseries/nurseryEditController.js"></script>
+        <script src="~/app/Nurseries/usersListController.js"></script>
         <script src="~/app/Common/simpleControls.js"></script>
+        <script src="~/app/Common/editUserModalController.js"></script>
     </environment>
     <environment names="Production">
         <script src="~/lib/_app/Nurseries/nurseries-app.js"></script>
         <script src="~/lib/_app/Nurseries/nurseriesListController.js"></script>
         <script src="~/lib/_app/Nurseries/nurseryEditController.js"></script>
+        <script src="~/lib/_app/Nurseries/usersListController.js"></script>
         <script src="~/lib/_app/Common/simpleControls.js"></script>
+        <script src="~/lib/_app/Common/editUserModalController.js"></script>
     </environment>
 }
 <div ng-app="nurseries-app" ng-init="isAdmin = @(User.IsInRole("Admin") ? "true" : "false")">
@@ -25,7 +30,7 @@
             {
                 <li><a ng-href="/" class="list-group-item"><i class="fa fa-list"></i> Zoznam škôlok</a></li>
             }
-            <li><a ng-href="" class="list-group-item" ng-if="isAdmin"><i class="fa fa-group"></i> Používatelia</a></li>
+            <li><a ng-href="#/users" class="list-group-item" ng-if="isAdmin"><i class="fa fa-group"></i> Používatelia</a></li>
         </ul>
     </div>
     <div class="col-sm-9 col-lg-10">

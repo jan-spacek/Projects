@@ -16,6 +16,12 @@
                 templateUrl: "/app/Nurseries/nurseryEditView.html"
             });
 
+            $routeProvider.when("/users", {
+                controller: "usersListController",
+                controllerAs: "vm",
+                templateUrl: "/app/Nurseries/usersListView.html"
+            });
+
             $routeProvider.otherwise({
                 redirectTo: "/"
             });
