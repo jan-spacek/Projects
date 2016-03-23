@@ -2,10 +2,10 @@
     "use strict";
 
     angular.module("app.nursery")
-        .controller("employeeDetailController", employeeDetailController);
+        .controller("EmployeeDetailController", EmployeeDetailController);
 
-    function employeeDetailController($scope, $http, $location, $routeParams, $sce, $controller) {
-        $controller('baseController', {
+    function EmployeeDetailController($scope, $http, $location, $routeParams, $sce, $controller) {
+        $controller('BaseController', {
             '$scope': $scope
         });
 

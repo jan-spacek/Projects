@@ -3,9 +3,9 @@
     "use strict";
 
     angular.module("app.nurseries")
-        .controller("nurseriesListController", nurseriesListController);
+        .controller("NurseriesListController", NurseriesListController);
 
-    function nurseriesListController($http, $scope, $window) {
+    function NurseriesListController($http, $scope, $window) {
         var vm = this;
         vm.nurseries = [];
         vm.isBusy = true;

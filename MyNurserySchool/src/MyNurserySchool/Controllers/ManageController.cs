@@ -51,7 +51,7 @@ namespace MyNurserySchool.Controllers
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User changed their password successfully.");
-                    return RedirectToAction("Nursery", "App");
+                    return RedirectToAction("Index", "App");
                 } else
                 {
                     AddErrors(result);

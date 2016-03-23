@@ -58,7 +58,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="child in vm.waitingChildren | orderBySK:sortType:sortReverse | filter:search" ng-dblclick="redirect('#/child/' + child.id)" ng-class="{'text-gray': child.attendance == 2, 'text-primary': child.attendance == 0}">
+                <tr ng-repeat="child in vm.waitingChildren | orderBySk:sortType:sortReverse | filter:search" ng-dblclick="redirect('#/child/' + child.id)" ng-class="{'text-gray': child.attendance == 2, 'text-primary': child.attendance == 0}">
                     <td>{{ child.number }}</td>
                     <td>{{ child.fullName }}</td>
                     <td>{{ child.birthDate | date : 'd.M.yyyy' }}</td>

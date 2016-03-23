@@ -3,10 +3,10 @@
     "use strict";
 
     angular.module("app.nursery")
-        .controller("nurseryDetailController", nurseryDetailController);
+        .controller("NurseryDetailController", NurseryDetailController);
 
-    function nurseryDetailController($scope, $routeParams, $http, $location, $window, $controller) {
-        $controller('baseController', {
+    function NurseryDetailController($scope, $routeParams, $http, $location, $window, $controller) {
+        $controller('BaseController', {
             '$scope': $scope
         });
 

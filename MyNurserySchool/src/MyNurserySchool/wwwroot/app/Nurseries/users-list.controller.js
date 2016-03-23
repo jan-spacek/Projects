@@ -4,9 +4,9 @@
 
     // Geeting the existing module
     angular.module("app.nurseries")
-        .controller("usersListController", usersListController);
+        .controller("UsersListController", UsersListController);
 
-    function usersListController($http, $scope, $window, $uibModal) {
+    function UsersListController($http, $scope, $window, $uibModal) {
         var vm = this;
         vm.users = [];
         vm.roles = [];
@@ -82,8 +82,8 @@
             });
 
             var modalInstance = $uibModal.open({
-                templateUrl: '/app/Common/edit-user-modal.template.html',
-                controller: 'editUserModalController',
+                templateUrl: '/app/nurseries/user-edit-modal.template.html',
+                controller: 'UserEditModalController',
                 scope: $scope
             });
 
@@ -101,8 +101,8 @@
             $scope.deleteModalTarget = "používateľa " + user.userName;
 
             var modalInstance = $uibModal.open({
-                templateUrl: '/app/Common/delete-modal.template.html',
-                controller: 'deleteModalController',
+                templateUrl: '/app/common/templates/delete-modal.template.html',
+                controller: 'DeleteModalController',
                 scope: $scope
             });
 

@@ -2,9 +2,9 @@
     "use strict";
 
     angular.module("app.nurseries")
-        .controller("nurseryEditController", nurseryEditController);
+        .controller("NurseryEditController", NurseryEditController);
 
-    function nurseryEditController($routeParams, $http, $location, $uibModal, $scope) {
+    function NurseryEditController($routeParams, $http, $location, $uibModal, $scope) {
         var vm = this;
         vm.id = $routeParams.id;
         vm.nursery = {};
@@ -54,8 +54,8 @@
             $scope.deleteModalTarget = "škôlku " + vm.nursery.name;
 
             var modalInstance = $uibModal.open({
-                templateUrl: '/app/Common/delete-modal.template.html',
-                controller: 'deleteModalController',
+                templateUrl: '/app/common/templates/delete-modal.template.html',
+                controller: 'DeleteModalController',
                 scope: $scope
             });
 

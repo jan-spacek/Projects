@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using MyNurserySchool.Authentication;
-using MyNurserySchool.Models;
 using MyNurserySchool.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyNurserySchool.Controllers
@@ -41,9 +37,9 @@ namespace MyNurserySchool.Controllers
                     {
                         if (vm.Username == "admin")
                         {
-                            return RedirectToAction("Nurseries", "App");
+                            return RedirectToAction("Index", "App");
                         }
-                        return RedirectToAction("Nursery", "App");
+                        return RedirectToAction("Index", "App");
                     }
                     else
                     {
