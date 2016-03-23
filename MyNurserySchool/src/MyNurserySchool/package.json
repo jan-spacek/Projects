@@ -1,0 +1,12 @@
+{
+	"version": "1.0.0",
+	"name": "MyNurserySchool",
+	"private": true,
+  "devDependencies": {
+    "gulp": "~3.9.1",
+    "gulp-uglify": "~1.5.3",
+    "gulp-concat": "~2.6.0",
+    "gulp-rename": "~1.2.2",
+    "gulp-ng-annotate": "~2.0.0"
+  }
+}

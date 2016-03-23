@@ -1,0 +1,103 @@
+﻿<div ng-if="canEdit">
+    <wait-cursor ng-if="vm.isBusy"></wait-cursor>
+    <form novalidate name="editForm" ng-submit="vm.saveChild(editForm.$valid)">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="form-group col-sm-6" ng-class="{ 'has-error' : editForm.firstName.$invalid && !editForm.firstName.$pristine }">
+                        <label for="firstName" class="required">Krstné meno</label>
+                        <input ng-model="vm.child.firstName" type="text" name="firstName" id="firstName" class="form-control" capitalize-first required />
+                        <p ng-show="editForm.firstName.$invalid && !editForm.firstName.$pristine" class="help-block">Krstné meno je povinná položka</p>
+                    </div>
+                    <div class="form-group col-sm-6" ng-class="{ 'has-error' : editForm.lastName.$invalid && !editForm.lastName.$pristine }">
+                        <label for="lastName" class="required">Priezvisko</label>
+                        <input ng-model="vm.child.lastName" type="text" name="lastName" id="lastName" class="form-control" capitalize-first required />
+                        <p ng-show="editForm.lastName.$invalid && !editForm.lastName.$pristine" class="help-block">Priezvisko je povinná položka</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-6 col-lg-3">
+                        <label for="number">Poradové číslo</label>
+                        <input ng-model="vm.child.number" type="number" name="number" id="number" class="form-control" />
+                    </div>
+                    <div class="form-group col-sm-6 col-lg-4">
+                        <label for="socialNumber">Rodné číslo</label>
+                        <input ng-model="vm.child.socialNumber" type="text" name="socialNumber" id="socialNumber" class="form-control" />
+                    </div>
+                    <div class="form-group col-sm-6 col-lg-5">
+                        <label for="birthDate">Dátum narodenia</label>
+                        <input type="text" class="form-control" ng-model="vm.child.birthDate" name="birthDate" id="birthDate" 
+                               bs-datepicker data-date-format="d.M.yyyy" data-max-date="today" data-autoclose="1" />
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error' : editForm.contacts.$invalid && !editForm.contacts.$pristine }">
+                    <label for="contacts" class="required">Kontakty</label>
+                    <textarea ng-model="vm.child.contacts" type="text" name="contacts" id="contacts" class="form-control" rows="5" required></textarea>
+                    <p ng-show="editForm.contacts.$invalid && !editForm.contacts.$pristine" class="help-block">Kontakty je povinná položka</p>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-6" ng-class="{ 'has-error' : editForm.state.$invalid && !editForm.state.$pristine }">
+                        <label for="state" class="required">Stav</label>
+                        <select ng-model="vm.child.attendance" ng-options="o.id as o.name for o in attendance" class="form-control" name="state" id="state" required />
+                        <p ng-show="editForm.state.$invalid && !editForm.state.$pristine" class="help-block">Stav je povinná položka</p>
+                    </div>
+                    <div class="form-group col-sm-6" ng-class="{ 'has-error' : editForm.class.$invalid && !editForm.class.$pristine }">
+                        <label for="class" class="required">Trieda</label>
+                        <select ng-model="vm.child.classId" ng-options="class.id as class.name for class in vm.classes" class="form-control" name="class" id="class" required />
+                        <p ng-show="editForm.class.$invalid && !editForm.class.$pristine" class="help-block">Trieda je povinná položka</p>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="startDate">Dátum nástupu</label>
+                        <input type="text" class="form-control" ng-model="vm.child.startDate" name="startDate" id="startDate"
+                               bs-datepicker data-date-format="d.M.yyyy" data-autoclose="1" />
+                    </div>
+                    <div class="form-group col-sm-6" ng-if="vm.child.attendance == 2">
+                        <label for="leaveDate">Dátum odchodu</label>
+                        <input type="text" class="form-control" ng-model="vm.child.leaveDate" name="leaveDate" id="leaveDate"
+                               bs-datepicker data-date-format="d.M.yyyy" data-autoclose="1" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="form-group col-sm-8">
+                        <label for="street">Ulica</label>
+                        <input ng-model="vm.child.address.street" type="text" name="street" id="street" class="form-control" />
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="houseNumber">Číslo domu</label>
+                        <input ng-model="vm.child.address.number" type="text" name="houseNumber" id="houseNumber" class="form-control" />
+                    </div>
+                    <div class="form-group col-sm-8">
+                        <label for="city">Obec</label>
+                        <input ng-model="vm.child.address.city" type="text" name="city" id="city" class="form-control" capitalize-first />
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="zip">PSČ</label>
+                        <input ng-model="vm.child.address.zip" type="text" name="zip" id="zip" class="form-control" maxlength="5" />
+                    </div>
+                </div>  
+                <div class="form-group">
+                    <label for="description">Popis</label>
+                    <textarea ng-model="vm.child.description" type="text" name="description" id="description" class="form-control" rows="5"></textarea>
+                </div>
+                
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-8">
+                <button type="submit" class="btn btn-success" ng-if="!vm.isNew" ng-disabled="editForm.$invalid"><i class="fa fa-save"></i> Uložiť zmeny</button>
+                <button type="submit" class="btn btn-success" ng-if="vm.isNew" ng-disabled="editForm.$invalid"><i class="fa fa-user-plus"></i> Vytvoriť dieťa</button>
+                <back-button></back-button>
+            </div>
+            <div class="col-xs-4 text-right">
+                <button type="button" class="btn btn-danger" ng-click="vm.deleteChildModal()" ng-if="!vm.isNew"><i class="fa fa-user-times"></i> Vymazať</button>
+            </div>
+        </div>
+    </form>
+    <created-modified model="vm.child" ng-if="!vm.isNew"></created-modified>
+</div>
+<div ng-if="!canEdit">
+    <div class="alert alert-warning">Nemáte oprávnenie vidieť obsah tejto stránky</div>
+</div>

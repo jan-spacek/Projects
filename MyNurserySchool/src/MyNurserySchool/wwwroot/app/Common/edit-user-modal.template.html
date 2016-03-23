@@ -1,0 +1,34 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title"><i class="fa fa-user"></i> Používateľ {{ actualUser.userName }}</h3>
+</div>
+<form novalidate name="editForm" ng-submit="ok()">
+    <div class="modal-body">
+        <div class="form-group" ng-class="{ 'has-error' : editForm.userName.$invalid && !editForm.userName.$pristine }">
+            <label for="userName" class="required">Používateľské meno</label>
+            <input ng-model="actualUser.userName" type="text" name="userName" id="userName" class="form-control" required />
+            <p ng-show="editForm.userName.$invalid && !editForm.userName.$pristine" class="help-block">Používateľské meno je povinná položka</p>
+        </div>
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input ng-model="actualUser.email" type="email" name="email" id="email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="userRoles">Role používateľa</label><br />
+            <multiselect options="roles" selected-model="actualUser.userRoles" id="userRoles" name="userRoles"
+                         extra-settings="{smartButtonMaxItems: 3, externalIdProp: ''}"></multiselect>
+        </div>
+        <div class="form-group">
+            <label for="userNurseries">Priradené škôlky</label><br />
+            <multiselect options="nurseries" selected-model="actualUser.nurseries" id="userNurseries" name="userNurseries"
+                         extra-settings="{smartButtonMaxItems: 3, externalIdProp: ''}"></multiselect>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" type="submit">
+            <i class="fa fa-save"></i> Uložiť zmeny
+        </button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">
+            <i class="fa fa-reply"></i> Späť
+        </button>
+    </div>
+</form>

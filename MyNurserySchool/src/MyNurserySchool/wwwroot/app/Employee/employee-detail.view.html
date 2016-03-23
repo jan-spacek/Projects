@@ -1,0 +1,96 @@
+﻿<div>
+    <wait-cursor ng-if="vm.isBusy"></wait-cursor>
+    <div ng-class="{ 'row': canEdit }">
+        <div ng-class="{ 'col-md-6': canEdit }">
+            <h3>{{ vm.employee.fullName }}</h3>
+            {{ vm.employee.birthDate | date : 'd.M.yyyy' }}
+            <hr />
+            <table class="details-table">
+                <tr>
+                    <td class="text-right">E-mail</td>
+                    <td>{{ vm.employee.email }}</td>
+                </tr>
+                <tr>
+                    <td class="text-right">Súkromný telefón</td>
+                    <td>{{ vm.employee.privatePhone }}</td>
+                </tr>
+                <tr>
+                    <td class="text-right">Služobný telefón</td>
+                    <td>{{ vm.employee.workPhone }}</td>
+                </tr>
+                <tr ng-if="vm.employee.address != null">
+                    <td class="text-right">Adresa</td>
+                    <td>
+                        {{ vm.employee.address.street }} {{ vm.employee.address.number}}<br ng-if="vm.employee.address.city"/>
+                        {{ vm.employee.address.city }}<br ng-if="vm.employee.address.zip"/>
+                        {{ vm.employee.address.zip }}
+                    </td>
+                </tr>
+                <tr ng-if="vm.employee.description != null">
+                    <td class="text-right">Popis</td>
+                    <td><p><span ng-bind-html="vm.employee.description"></span></p></td>
+                </tr>
+                <tr>
+                    <td class="text-right">Popis práce</td>
+                    <td>{{ vm.employee.jobTitle }}</td>
+                </tr>
+                <tr>
+                    <td class="text-right">Pracovný úväzok</td>
+                    <td>{{ vm.employee.employment }}</td>
+                </tr>
+                <tr>
+                    <td class="text-right">Pracovný stav</td>
+                    <td>{{ vm.attendanceStates[vm.employee.attendance] }}</td>
+                </tr>
+                <tr ng-if="vm.employee.startDate != null">
+                    <td class="text-right">Dátum nástupu</td>
+                    <td>{{ vm.employee.startDate | date : 'd.M.yyyy' }}</td>
+                </tr>
+                <tr ng-if="vm.employee.attendance == 2">
+                    <td class="text-right">Dátum odchodu</td>
+                    <td>{{ vm.employee.leaveDate | date : 'd.M.yyyy' }}</td>
+                </tr>
+            </table>
+            <br />
+            <div class="row">
+                <div class="col-xs-8">
+                    <a href="#/employee/{{ vm.employee.id }}/edit" class="btn btn-default" ng-if="canEdit"><i class="fa fa-edit"></i> Upraviť</a>
+                    <back-button></back-button>
+                </div>
+                <div class="col-xs-4 text-right">
+                    <!--<button type="button" class="btn btn-danger" ng-click="vm.deleteEmployee()" ng-if="canEdit"><i class="fa fa-trash-o"></i> Vymazať</button>-->
+                </div>
+            </div>
+            <created-modified model="vm.employee"></created-modified>
+            <br />
+        </div>
+        <div class="col-md-6" ng-if="canEdit">
+            <div class="note-form">
+                <form name="noteForm" ng-submit="vm.saveNote()">
+                    <div class="form-group-sm">
+                        <input ng-model="vm.newNote.title" type="text" class="form-control" placeholder="Titulok" />
+                    </div>
+                    <div class="form-group-sm">
+                        <textarea ng-model="vm.newNote.text" class="form-control form" rows="3" placeholder="Text"></textarea>
+                    </div>
+                    <div class="form-group-sm text-right">
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i> Zapísať</button>
+                    </div>
+                </form>
+            </div>
+            <div ng-repeat="note in vm.employee.notes | orderBy: '-id'">
+                <hr class="note-divider" />
+                <div class="note-header" ng-if="note.title">
+                    <h5>{{ note.title }}</h5>
+                </div>
+                <div class="note-body" ng-if="note.text">
+                    <p><span ng-bind-html="note.text"></span></p>
+                </div>
+                <div class="note-footer text-right">
+                    {{ note.createdBy }} {{ note.created | date : 'd.M.yyyy HH:mm' }}
+                    <a class="btn btn-sm" ng-click="vm.deleteNote(note.id)" title="Vymazať"><i class="fa fa-trash-o"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

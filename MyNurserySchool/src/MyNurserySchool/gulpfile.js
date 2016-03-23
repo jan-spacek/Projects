@@ -1,10 +1,17 @@
-﻿var gulp = require('gulp');
-var uglify = require('gulp-uglify');
-var ngAnotate = require('gulp-ng-annotate');
+﻿var gulp = require('gulp'),
+    gp_uglify = require('gulp-uglify'),
+    gp_concat = require('gulp-concat'),
+    gp_rename = require('gulp-rename'),
+    ngAnotate = require('gulp-ng-annotate');
 
-gulp.task('minify', function () {
-    return gulp.src("wwwroot/app/*/*.js")
+gulp.task('uglify', function () {
+    return gulp.src(['wwwroot/app/**/*.module.js', 'wwwroot/app/**/*.js'])
         .pipe(ngAnotate())
-        .pipe(uglify())
+        .pipe(gp_concat('concat.js'))
+        .pipe(gulp.dest("wwwroot/lib/_app"))
+        .pipe(gp_rename('uglify.js'))
+        .pipe(gp_uglify())
         .pipe(gulp.dest("wwwroot/lib/_app"));
 });
+
+gulp.task('default', ['uglify'], function () { });

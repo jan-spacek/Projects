@@ -1,0 +1,7 @@
+﻿<hr>
+<div class="row">
+    <div class="col-xs-12">
+        Vytvoril {{ model.createdBy }} {{ model.created | date : 'd.M.yyyy HH:mm' }}<br>
+        <span ng-if="model.modifiedBy">Poslednú zmenu vykonal {{ model.modifiedBy }} {{ model.modified | date : 'd.M.yyyy HH:mm' }}</span>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+﻿<div ng-if="isAdmin">
+    <wait-cursor ng-if="vm.isBusy"></wait-cursor>
+    <form novalidate name="editForm" ng-submit="vm.saveNursery()">
+        <div class="row">
+            <div class="col-sm-4">
+                <h4>Škôlka</h4>
+                <div class="form-group" ng-class="{ 'has-error' : editForm.name.$invalid && !editForm.name.$pristine }">
+                    <label for="name" class="required">Názov</label>
+                    <input ng-model="vm.nursery.name" type="text" name="name" id="name" class="form-control" required />
+                    <p ng-show="editForm.name.$invalid && !editForm.name.$pristine" class="help-block">Názov je povinná položka</p>
+                </div>
+                <div class="form-group">
+                    <label for="description">Popis</label>
+                    <input ng-model="vm.nursery.description" type="text" name="description" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="director">Riaditeľka</label>
+                    <select ng-model="vm.nursery.director" ng-options="option.fullName for option in vm.nursery.employees track by option.id" class="form-control" name="director" id="director" />
+                </div>
+            </div>
+
+            <div class="col-sm-8">
+                <h4 class="col-sm-12">Adresa</h4>
+                <div class="form-group col-sm-8" ng-class="{ 'has-error' : editForm.street.$invalid && !editForm.street.$pristine }">
+                    <label for="street" class="required">Ulica</label>
+                    <input ng-model="vm.nursery.address.street" type="text" name="street" id="street" class="form-control" required />
+                    <p ng-show="editForm.street.$invalid && !editForm.street.$pristine" class="help-block">Ulica je povinná položka</p>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label for="number">Číslo</label>
+                    <input ng-model="vm.nursery.address.number" type="text" name="number" id="number" class="form-control" />
+                </div>
+                <div class="form-group col-sm-8" ng-class="{ 'has-error' : editForm.city.$invalid && !editForm.city.$pristine }">
+                    <label for="city" class="required">Obec</label>
+                    <input ng-model="vm.nursery.address.city" type="text" name="city" id="city" class="form-control" required />
+                    <p ng-show="editForm.city.$invalid && !editForm.city.$pristine" class="help-block">Obec je povinná položka</p>
+                </div>
+                <div class="form-group col-sm-4" ng-class="{ 'has-error' : editForm.zip.$error.minlength || editForm.zip.$error.maxlength }">
+                    <label for="zip">PSČ</label>
+                    <input ng-model="vm.nursery.address.zip" type="text" name="zip" id="zip" class="form-control" ng-minlength="5" ng-maxlength="5" />
+                    <p ng-show="editForm.zip.$error.minlength || editForm.zip.$error.maxlength" class="help-block">PSČ je nesprávne</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <button type="submit" class="btn btn-success" ng-if="!vm.isNew" ng-disabled="editForm.$invalid"><i class="fa fa-save"></i> Uložiť zmeny</button>
+                <button type="submit" class="btn btn-success" ng-if="vm.isNew" ng-disabled="editForm.$invalid"><i class="fa fa-plus-circle"></i> Vytvoriť škôlku</button>
+                <a href="#/" class="btn btn-warning"><i class="fa fa-reply"></i> Späť</a>
+            </div>
+            <div class="col-sm-6 text-right">
+                <button type="button" class="btn btn-danger" ng-click="vm.deleteNurseryModal()" ng-if="!vm.isNew"><i class="fa fa-trash-o"></i> Vymazať</button>
+            </div>
+        </div>
+    </form>
+    <created-modified model="vm.nursery" ng-if="!vm.isNew"></created-modified>
+</div>
+<div ng-if="!isAdmin">
+    <div class="alert alert-warning">Nemáte oprávnenie vidieť obsah tejto stránky</div>
+</div>
