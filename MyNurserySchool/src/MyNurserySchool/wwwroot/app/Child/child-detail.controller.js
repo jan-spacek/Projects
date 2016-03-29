@@ -6,17 +6,17 @@
 
     function ChildDetailController($scope, $http, $location, $routeParams, $sce, $controller) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
         vm.childId = $routeParams.id;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.child = {};
         vm.newNote = {};
         vm.attendanceStates = ["Žiadateľ", "Docházdajúci", "Odstúpený"];
-
-
         vm.isBusy = true;
+
         $http.get("/Api/Child/" + vm.childId)
             .then(function (response) {
                 angular.copy(response.data, vm.child);

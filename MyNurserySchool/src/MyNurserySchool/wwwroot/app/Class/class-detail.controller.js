@@ -7,11 +7,12 @@
 
     function ClassDetailController($scope, $http, $routeParams, $sce, $window, $controller) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
         vm.classId = $routeParams.id;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.class = {};
         vm.children = [];
         vm.isBusy = true;
@@ -30,7 +31,7 @@
                 }
                     
             }, function (error) {
-                toastr.error("Nepodarilo sa načítať dáta: " + error);
+                toastr.error("Nepodarilo sa načítať informácie o triede");
             })
             .finally(function () {
                 vm.isBusy = false;

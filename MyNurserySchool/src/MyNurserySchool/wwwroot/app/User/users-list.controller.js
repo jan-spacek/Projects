@@ -2,8 +2,8 @@
 
     "use strict";
 
-    // Geeting the existing module
-    angular.module("app.nurseries")
+    angular
+        .module("app.nursery")
         .controller("UsersListController", UsersListController);
 
     function UsersListController($http, $scope, $window, $uibModal) {
@@ -19,9 +19,6 @@
                 vm.getRoles();
             }, function (error) {
                 toastr.error("Nepodarilo sa načítať dáta: " + error);
-            })
-            .finally(function () {
-                vm.isBusy = false;
             });
 
         vm.getRoles = function () {
@@ -31,9 +28,6 @@
                     vm.getNurseries();
                 }, function (error) {
                     toastr.error("Nepodarilo sa načítať dáta: " + error);
-                })
-                .finally(function () {
-                    vm.isBusy = false;
                 });
         }
 
@@ -44,9 +38,6 @@
                     vm.joinData();
                 }, function (error) {
                     toastr.error("Nepodarilo sa načítať dáta: " + error);
-                })
-                .finally(function () {
-                    vm.isBusy = false;
                 });
         }
 
@@ -71,20 +62,21 @@
                 });
             });
 
+            vm.isBusy = false;
         }
 
         vm.editModal = function (user) {
-            $scope.actualUser = user;
-            $scope.roles = vm.roles;
-            $scope.nurseries = [];
+           $scope.actualUser = user;
+           $scope.roles = vm.roles;
+           $scope.nurseries = [];
             _.each(vm.nurseries, function (nurs) {
-                $scope.nurseries.push({ id: nurs.id, name: nurs.name })
+               $scope.nurseries.push({ id: nurs.id, name: nurs.name })
             });
 
             var modalInstance = $uibModal.open({
-                templateUrl: '/app/nurseries/user-edit-modal.template.html',
+                templateUrl: '/App/User/user-edit-modal.template.html',
                 controller: 'UserEditModalController',
-                scope: $scope
+                scope:$scope
             });
 
             modalInstance.result.then(function () {
@@ -98,12 +90,12 @@
         }
 
         vm.deleteModal = function (user) {
-            $scope.deleteModalTarget = "používateľa " + user.userName;
+           $scope.deleteModalTarget = "používateľa " + user.userName;
 
             var modalInstance = $uibModal.open({
                 templateUrl: '/app/common/templates/delete-modal.template.html',
                 controller: 'DeleteModalController',
-                scope: $scope
+                scope:$scope
             });
 
             modalInstance.result.then(function () {
@@ -111,7 +103,7 @@
             });
         }
 
-        $scope.redirect = function (path) {
+       $scope.redirect = function (path) {
             $window.location.href = path;
         }
     }

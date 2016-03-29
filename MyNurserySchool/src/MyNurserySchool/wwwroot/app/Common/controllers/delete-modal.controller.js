@@ -2,16 +2,16 @@
     "use strict";
 
     angular
-        .module("app.controls")
+        .module("common")
         .controller("DeleteModalController", DeleteModalController);
 
     function DeleteModalController($scope, $uibModalInstance) {
 
-        $scope.ok = function () {
+       $scope.ok = function () {
             $uibModalInstance.close();
         };
 
-        $scope.cancel = function () {
+       $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
     }

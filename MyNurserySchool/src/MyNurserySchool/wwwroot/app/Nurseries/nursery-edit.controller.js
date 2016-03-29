@@ -1,18 +1,18 @@
 ﻿(function (angular) {
     "use strict";
 
-    angular.module("app.nurseries")
-        .controller("NurseryEditController", NurseryEditController);
+    angular.module("app.nursery")
+        .controller("NurseryAdminEditController", NurseryAdminEditController);
 
-    function NurseryEditController($routeParams, $http, $location, $uibModal, $scope) {
+    function NurseryAdminEditController($routeParams, $http, $location, $uibModal,$scope) {
         var vm = this;
-        vm.id = $routeParams.id;
+        vm.nurseryId = parseInt($routeParams.id);
         vm.nursery = {};
         vm.isNew = vm.id == 0;
 
         if (!vm.isNew) {
             vm.isBusy = true;
-            $http.get("/Api/Nursery/" + vm.id)
+            $http.get("/Api/Nursery/" + vm.nurseryId)
                 .then(function (response) {
                     angular.copy(response.data, vm.nursery);
                 }, function () {
@@ -51,12 +51,12 @@
         }
 
         vm.deleteNurseryModal = function () {
-            $scope.deleteModalTarget = "škôlku " + vm.nursery.name;
+           $scope.deleteModalTarget = "škôlku " + vm.nursery.name;
 
             var modalInstance = $uibModal.open({
                 templateUrl: '/app/common/templates/delete-modal.template.html',
                 controller: 'DeleteModalController',
-                scope: $scope
+                scope:$scope
             });
 
             modalInstance.result.then(function () {

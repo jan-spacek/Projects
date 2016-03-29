@@ -4,16 +4,17 @@
     angular.module("app.nursery")
         .controller("NurseryEditController", NurseryEditController);
 
-    function NurseryEditController($scope, $http, $location, $controller) {
+    function NurseryEditController($scope, $http, $location, $controller, $routeParams) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.nursery = {};
         vm.isBusy = true;
 
-        $http.get("/Api/Nursery/" + $scope.outerId)
+        $http.get("/Api/Nursery/" + vm.nurseryId)
             .then(function (response) {
                 angular.copy(response.data, vm.nursery);
             }, function () {

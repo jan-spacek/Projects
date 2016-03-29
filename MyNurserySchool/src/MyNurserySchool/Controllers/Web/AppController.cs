@@ -19,72 +19,7 @@ namespace MyNurserySchool.Controllers.Web
 
         public IActionResult Index()
         {
-            if (User.IsInRole("Admin") || User.FindAll("Nursery").ToList().Count > 1)
-            {
-                return View();
-            }
-            else if (User.FindFirst("Nursery") != null)
-            {
-                int id = int.Parse(User.FindFirst("Nursery").Value);
-                var nursery = Mapper.Map<NurseryViewModel>(_repository.GetNurseryById(id));
-                return View(nursery);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Public");
-            }
-        }
-
-        //public IActionResult Nursery()
-        //{
-        //    if (User.IsInRole("Admin") || User.FindAll("Nursery").ToList().Count > 1)
-        //    {
-        //        return RedirectToAction("Index", "App");
-        //    }
-        //    else if (User.FindFirst("Nursery") != null)
-        //    {
-        //        int id = int.Parse(User.FindFirst("Nursery").Value);
-        //        var nursery = Mapper.Map<NurseryViewModel>(_repository.GetNurseryById(id));
-        //        return View(nursery);
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("Index", "Public");
-        //    }
-        //}
-
-        //[HttpGet("App/Nursery/{id}")]
-        //public IActionResult Nursery(int id)
-        //{
-        //    var matchingNurs = User.FindAll("Nursery")
-        //            .FirstOrDefault(claim => claim.Value == id.ToString());
-
-        //    if (User.IsInRole("Admin") || matchingNurs != null)
-        //    {
-        //        var nursery = Mapper.Map<NurseryViewModel>(_repository.GetNurseryById(id));
-        //        return View(nursery);
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("Index", "Public");
-        //    }
-        //}
-
-        [HttpGet("App/{id}")]
-        public IActionResult Index(int id)
-        {
-            var matchingNurs = User.FindAll("Nursery")
-                    .FirstOrDefault(claim => claim.Value == id.ToString());
-
-            if (User.IsInRole("Admin") || matchingNurs != null)
-            {
-                var nursery = Mapper.Map<NurseryViewModel>(_repository.GetNurseryById(id));
-                return View(nursery);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Public");
-            }
+            return View();
         }
     }
 }

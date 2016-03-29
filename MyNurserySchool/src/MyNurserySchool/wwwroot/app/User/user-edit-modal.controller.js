@@ -2,16 +2,16 @@
     "use strict";
 
     angular
-        .module("app.nurseries")
+        .module("app.nursery")
         .controller("UserEditModalController", UserEditModalController);
 
     function UserEditModalController($scope, $uibModalInstance) {
 
-        $scope.ok = function () {
+       $scope.ok = function () {
             $uibModalInstance.close();
         };
 
-        $scope.cancel = function () {
+       $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
     }

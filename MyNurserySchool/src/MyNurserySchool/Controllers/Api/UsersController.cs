@@ -5,7 +5,7 @@ using MyNurserySchool.Data;
 
 namespace MyNurserySchool.Controllers.Api
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class UsersController : Controller
     {
         private ILogger<NurseriesController> _logger;
@@ -17,13 +17,15 @@ namespace MyNurserySchool.Controllers.Api
             _logger = logger;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("Api/Users/")]
-        public JsonResult Get()
+        public JsonResult GetUsers()
         {
             var results = _repository.GetAllUsers();
             return Json(results);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("Api/Roles/")]
         public JsonResult GetRoles()
         {

@@ -2,7 +2,7 @@
     "use strict";
 
     angular
-        .module("app.controls")
+        .module("common")
         .directive('backToTop', backToTop);
 
     function backToTop() {

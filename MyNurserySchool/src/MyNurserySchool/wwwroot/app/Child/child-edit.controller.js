@@ -6,28 +6,24 @@
 
     function ChildEditController($scope, $http, $routeParams, $controller, $uibModal) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
         vm.childId = $routeParams.id;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.child = {};
         vm.classId = 0;
         vm.isNew = vm.childId == 0;
-        $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Dochádzajúci' }, { id: 2, name: 'Odstúpený' }];
+       $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Dochádzajúci' }, { id: 2, name: 'Odstúpený' }];
         vm.classes = [];
 
-        $http.get("/Api/Nursery/" + $scope.outerId)
+        $http.get("/Api/Nursery/" + vm.nurseryId + "/Classes/")
             .then(function (response) {
-                for (var i = 0; i < response.data.classes.length; i++) {
-                    vm.classes.push({
-                        id: response.data.classes[i].id,
-                        name: response.data.classes[i].name
-                    });
-                }
-                $scope.classes = vm.classes;
+                angular.copy(response.data, vm.classes);
+               $scope.classes = vm.classes;
             }, function () {
-                toastr.error("Nepodarilo sa načítať informácie o škôlke");
+                toastr.error("Nepodarilo sa načítať informácie o triedach");
             }).finally(function () {
                 vm.isBusy = false;
             });
@@ -49,13 +45,13 @@
         vm.saveChild = function (isValid) {
             if (isValid) {
                 vm.isBusy = true;
-                vm.child.nurseryId = $scope.outerId;
+                vm.child.nurseryId = vm.nurseryId;
 
                 if (vm.isNew) {
                     $http.post("/Api/Child/", vm.child)
                         .then(function (response) {
                             toastr.success("Dieťa " + vm.child.firstName + " " + vm.child.lastName + " bolo úspešne vytvorené");
-                            $scope.back();
+                           $scope.back();
                         }, function () {
                             toastr.error("Dieťa sa nepodarilo vytvoriť");
                         }).finally(function () {
@@ -68,7 +64,7 @@
                     $http.put("/Api/Child/", vm.child)
                         .then(function (response) {
                             toastr.success("Zmeny v dieťati " + vm.child.firstName + " " + vm.child.lastName + " boli úspešne uložené");
-                            $scope.back();
+                           $scope.back();
                         }, function () {
                             toastr.error("Dieťa sa nepodarilo uložiť");
                         }).finally(function () {
@@ -79,12 +75,12 @@
         }
 
         vm.deleteChildModal = function () {
-            $scope.deleteModalTarget = "dieťa " + vm.child.firstName + " " + vm.child.lastName;
+           $scope.deleteModalTarget = "dieťa " + vm.child.firstName + " " + vm.child.lastName;
 
             var modalInstance = $uibModal.open({
                 templateUrl: '/app/common/templates/delete-modal.template.html',
                 controller: 'DeleteModalController',
-                scope: $scope
+                scope:$scope
             });
 
             modalInstance.result.then(function () {
@@ -97,7 +93,7 @@
             $http.delete("/Api/Child/" + vm.child.id)
                 .then(function () {
                     toastr.success("Dieťa bolo vymazané");
-                    $scope.back();
+                   $scope.back();
                 }, function (error) {
                     toastr.error("Dieťa sa nepodarilo vymazať");
                 })

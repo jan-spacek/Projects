@@ -1,5 +1,4 @@
-﻿@model MyNurserySchool.ViewModels.NurseryViewModel
-@{ 
+﻿@{ 
     ViewBag.Title = "";
 }
 @section Scripts {
@@ -11,9 +10,11 @@
     <script src="~/lib/angular-strap/dist/angular-strap.tpl.min.js"></script>
     <script src="~/lib/angular-i18n/angular-locale_sk-sk.js"></script>
     <script src="~/lib/angular-strap/src/helpers/dimensions.js"></script>
-    <script src="~/lib/tableExport.jquery.plugin/tableExport.min.js"></script>
     <script src="~/lib/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
+
+    <script src="~/lib/tableExport.jquery.plugin/tableExport.min.js"></script>
     <script src="~/lib/underscore/underscore-min.js"></script>
+
     <environment names="Development">
     <script src="~/lib/_app/concat.js"></script>
     </environment>
@@ -21,88 +22,50 @@
     <script src="~/lib/_app/uglify.js"></script>
     </environment>
 }
-@if (Model == null) { 
-    @if (User.IsInRole("Admin") || User.FindAll("Nursery").ToList().Count > 1)
-    {
-        <div ng-app="app.nurseries" ng-init="isAdmin = @(User.IsInRole("Admin") ? "true" : "false")">
-            <div class="col-sm-3 col-lg-2">
-                <ul class="nav nav-pills nav-stacked nav-vertical">
-                    <li><a ng-href="#/" class="list-group-item"><i class="fa fa-list"></i> Zoznam škôlok</a></li>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <li><a ng-href="#/users" class="list-group-item"><i class="fa fa-group"></i> Používatelia</a></li>
-                    }
-                </ul>
-            </div>
-            <div class="col-sm-9 col-lg-10">
-                <div class="container-fluid">
-                    <div ng-view></div>
-                </div>
-            </div>
-        </div>
-    } else
-    {
-       <div class="alert alert-danger">
-           Nemáte dostatočné oprávnenie.
-       </div>
-    }
-}
-else
-{
-    <div ng-app="app.nursery">
-        <div ng-init="outerId = @Model.Id; canEdit = @(User.IsInRole("Editor") ? "true" : "false")">
-            <div class="col-xs-12 col-sm-2 affix">
-                <ul class="nav nav-pills nav-stacked nav-vertical">
-                    @if (User.IsInRole("Admin") || User.FindAll("Nursery").ToList().Count > 1)
-                {
-                        <li><a asp-controller="App" asp-action="Index" class="list-group-item"><i class="fa fa-list"></i> Zoznam škôlok</a></li>
-                        @if (User.IsInRole("Admin"))
-                    {
-                            <li><a ng-href="../../App#/users" class="list-group-item"><i class="fa fa-group"></i> Používatelia</a></li>
-                        }
-                        <br />
-                    }
-                    <li><a ng-href="#/" class="list-group-item"><i class="fa fa-home"></i>Prehľad</a>
-                    <li bs-collapse data-start-collapsed="true">
-                        <a class="list-group-item" ng-click="collapsed = !collapsed" bs-collapse-toggle>
-                            <span class="row">
-                                <span class="col-xs-9">
-                                    <i class="fa fa-cubes"></i>
-                                    Triedy
-                                </span>
-                                <span class="col-xs-3 text-right">
-                                    <i class="fa fa-caret-down" ng-if="!collapsed"></i>
-                                    <i class="fa fa-caret-up" ng-if="collapsed"></i>
-                                </span>
+
+<div ng-app="app.nursery">
+    <div ng-init="canEdit = @(User.IsInRole("Editor") ? "true" : "false"); isAdmin = @(User.IsInRole("Admin") ? "true" : "false")">
+        <div class="col-xs-12 col-sm-2 affix">
+            <ul class="nav nav-pills nav-stacked nav-vertical" ng-if="isAdmin">
+                <li><a ng-href="#/" class="list-group-item"><i class="fa fa-list"></i> Zoznam škôlok</a></li>
+                <li><a ng-href="#/users" class="list-group-item"><i class="fa fa-group"></i> Používatelia</a></li>
+                <br />
+            </ul>
+            <ul class="nav nav-pills nav-stacked nav-vertical" ng-if="!!nurseryId">
+                <li><a ng-href="#/{{ nurseryId }}" class="list-group-item"><i class="fa fa-home"></i>Prehľad</a>
+                <li bs-collapse data-start-collapsed="true">
+                    <a class="list-group-item" ng-click="collapsed = !collapsed" bs-collapse-toggle>
+                        <span class="row">
+                            <span class="col-xs-9">
+                                <i class="fa fa-cubes"></i>
+                                Triedy
                             </span>
-                        </a>
-                        <ul class="collapse nav nav-pills nav-stacked nav-subnav am-collapse-add" bs-collapse-target>
-                            @{
-                                var classes = Model.Classes.OrderBy(cls => cls.Name);
+                            <span class="col-xs-3 text-right">
+                                <i class="fa fa-caret-down" ng-if="!collapsed"></i>
+                                <i class="fa fa-caret-up" ng-if="collapsed"></i>
+                            </span>
+                        </span>
+                    </a>
+                    <ul class="collapse nav nav-pills nav-stacked nav-subnav am-collapse-add" bs-collapse-target>
+                        <li ng-repeat="cls in classes" ng-show="classes.length > 0"><a ng-href="#/{{ nurseryId }}/class/{{cls.id}}">{{cls.name}}</a></li>
+                        <li ng-if="canEdit"><a ng-href="#/{{ nurseryId }}/class/0/edit"><i class="fa fa-plus-circle"></i>Pridať triedu</a></li>
+                    </ul>
+                </li>
+                <li><a ng-href="#/{{ nurseryId }}/children" class="list-group-item"><i class="fa fa-child"></i>Všetky deti</a></li>
+                <li><a ng-href="#/{{ nurseryId }}/children/waiting" class="list-group-item"><i class="fa fa-hourglass-half"></i>Žiadatelia</a></li>
+                <li><a ng-href="#/{{ nurseryId }}/children/archive" class="list-group-item"><i class="fa fa-archive"></i>Archív detí</a></li>
+                <li><a ng-href="#/{{ nurseryId }}/employees" class="list-group-item"><i class="fa fa-users"></i>Zamestnanci</a></li>
+                <li><a ng-href="#/{{ nurseryId }}/edit" class="list-group-item"><i class="fa fa-cogs"></i>{{ canEdit ? "Nastavenia škôlky" : "Informácie o škôlke"}}</a></li>
+            </ul>
+        </div>
 
-                                foreach (var cla in classes)
-                                {
-                                    <li><a ng-href="#/class/@cla.Id">@cla.Name</a></li>
-                                }
-                            }
-                            <li ng-if="canEdit"><a ng-href="#/class/0/edit"><i class="fa fa-plus-circle"></i>Pridať triedu</a></li>
-                        </ul>
-                    </li>
-                    <li><a ng-href="#/children" class="list-group-item"><i class="fa fa-child"></i>Všetky deti</a></li>
-                    <li><a ng-href="#/children/waiting" class="list-group-item"><i class="fa fa-hourglass-half"></i>Žiadatelia</a></li>
-                    <li><a ng-href="#/children/archive" class="list-group-item"><i class="fa fa-archive"></i>Archív detí</a></li>
-                    <li><a ng-href="#/employees" class="list-group-item"><i class="fa fa-users"></i>Zamestnanci</a></li>
-                    <li><a ng-href="#/edit" class="list-group-item"><i class="fa fa-cogs"></i>{{ canEdit ? "Nastavenia škôlky" : "Informácie o škôlke"}}</a></li>
-                </ul>
-            </div>
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="container-fluid">
 
-            <div class="col-sm-offset-2 col-sm-10">
-                <div class="container-fluid">
+                <div class="view" ng-view></div>
 
-                    <div class="view" ng-view></div>
-
-                </div>
             </div>
         </div>
     </div>
-}
+</div>
+

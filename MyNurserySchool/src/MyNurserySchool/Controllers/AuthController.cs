@@ -19,7 +19,7 @@ namespace MyNurserySchool.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Nursery", "App");
+                return RedirectToAction("Index", "App");
             }
 
             return View();
@@ -35,10 +35,6 @@ namespace MyNurserySchool.Controllers
                 {
                     if (string.IsNullOrWhiteSpace(returnUrl))
                     {
-                        if (vm.Username == "admin")
-                        {
-                            return RedirectToAction("Index", "App");
-                        }
                         return RedirectToAction("Index", "App");
                     }
                     else

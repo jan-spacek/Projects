@@ -1,7 +1,7 @@
 ﻿(function (angular) {
     "use strict";
 
-    angular.module("app.controls")
+    angular.module("common")
         .directive('capitalizeFirst', capitalizeFirst);
 
     function capitalizeFirst($parse) {

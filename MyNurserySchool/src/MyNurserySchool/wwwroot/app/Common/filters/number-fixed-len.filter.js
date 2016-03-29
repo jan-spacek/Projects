@@ -2,7 +2,7 @@
     "use strict";
 
     angular
-        .module("app.controls")
+        .module("common")
         .filter('numberFixedLen', numberFixedLen);
 
     function numberFixedLen() {

@@ -38,14 +38,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="nursery in vm.nurseries | orderBy:sortType:sortReverse | filter:search" ng-dblclick="redirect('/App/' + nursery.id)">
+            <tr ng-repeat="nursery in vm.nurseries | orderBy:sortType:sortReverse | filter:search" ng-dblclick="vm.nurseryDblClick(nursery)">
                 <td>{{ nursery.name }}</td>
                 <td>{{ nursery.address.city }}</td>
                 <td>{{ nursery.address.street + ' ' + nursery.address.number }}</td>
                 <td>{{ nursery.classes.length }}</td>
                 <td>{{ nursery.modifiedBy }} {{ nursery.modified | date : 'd.M.yyyy HH:mm' }}</td>
                 <td class="text-right">
-                    <a ng-href="/App/Nursery/{{ nursery.id }}" class="btn btn-sm btn-default"><i class="fa fa-folder-open-o"></i></a>
+                    <a ng-href="#/{{ nursery.id }}" class="btn btn-sm btn-default"><i class="fa fa-folder-open-o"></i></a>
                     <a ng-href="#/edit/{{ nursery.id }}" class="btn btn-sm btn-primary" ng-if="isAdmin"><i class="fa fa-edit"></i></a>
                 </td>
             </tr>

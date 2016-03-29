@@ -2,26 +2,37 @@
 
     "use strict";
 
-    angular.module("app.nurseries")
+    angular.module("app.nursery")
         .controller("NurseriesListController", NurseriesListController);
 
-    function NurseriesListController($http, $scope, $window) {
+    function NurseriesListController($http, $scope, $window, $location, $rootScope) {
         var vm = this;
         vm.nurseries = [];
         vm.isBusy = true;
 
-        $http.get("/Api/Nurseries")
-            .then(function (response) {
-                angular.copy(response.data, vm.nurseries);
-            }, function (error) {
-                toastr.error("Nepodarilo sa načítať dáta: " + error);
-            })
-            .finally(function () {
-                vm.isBusy = false;
-            });
+        activate();
 
-        $scope.redirect = function (path) {
-            $window.location.href = path;
+        function activate() {
+            $http.get("/Api/Nurseries")
+                .then(function (response) {
+                    angular.copy(response.data, vm.nurseries);
+                    if (vm.nurseries.length === 1 && !$rootScope.isAdmin) {
+                        vm.nurseryDblClick(vm.nurseries[0]);
+                    } else {
+                        $rootScope.nurseryId = undefined;
+                    }
+                }, function (error) {
+                    toastr.error("Nepodarilo sa načítať dáta: " + error);
+                })
+                .finally(function () {
+                    vm.isBusy = false;
+                });
+        }
+        
+        vm.nurseryDblClick = function (nursery) {
+            $rootScope.nurseryId = nursery.id;
+            $rootScope.classes = nursery.classes;
+            $location.path(nursery.id);
         }
     }
 })(angular);

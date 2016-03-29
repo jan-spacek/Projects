@@ -7,16 +7,17 @@
 
     function NurseryDetailController($scope, $routeParams, $http, $location, $window, $controller) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.nursery = {};
         vm.isBusy = true;
-        $scope.sortType = 'title';
-        $scope.sortReverse = true;
+       $scope.sortType = 'title';
+       $scope.sortReverse = true;
 
-        $http.get("/Api/Nursery/" + $scope.outerId)
+        $http.get("/Api/Nursery/" + vm.nurseryId)
             .then(function (response) {
                 angular.copy(response.data, vm.nursery);
                 if (vm.nursery.classes.length > 0) {

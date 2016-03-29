@@ -1,14 +1,39 @@
 (function (angular) {
     "use strict";
 
-    angular.module("app.controls", []);
+    angular.module("common", []);
 
 })(angular);
 (function (angular) {
 
     "use strict";
 
-    angular.module("app.nurseries", ["app.controls", "ngRoute", "ui.bootstrap"])
+    angular
+        .module("app.nursery", [
+            "common",
+            "ngRoute",
+            "ngAnimate",
+            "mgcrea.ngStrap",
+            "ui.bootstrap"
+        ])
+        .run(["$http", "$location", "$rootScope", function ($http, $location, $rootScope) {
+            var nurseries = [];
+
+            activate();
+
+            function activate() {
+                $http.get("/Api/Nurseries")
+                    .then(function (response) {
+                        angular.copy(response.data, nurseries);
+                        if (!$rootScope.isAdmin && nurseries.length === 1) {
+                            $rootScope.nurseryId = nurseries[0].id;
+                            $rootScope.classes = nurseries[0].classes;
+                        } else {
+                            $location.path('/');
+                        }
+                    });
+            }
+        }])
         .config(["$routeProvider", function ($routeProvider) {
             $routeProvider.when("/", {
                 controller: "NurseriesListController",
@@ -17,7 +42,7 @@
             });
 
             $routeProvider.when("/edit/:id", {
-                controller: "NurseryEditController",
+                controller: "NurseryAdminEditController",
                 controllerAs: "vm",
                 templateUrl: "/app/Nurseries/nursery-edit.view.html"
             });
@@ -25,90 +50,79 @@
             $routeProvider.when("/users", {
                 controller: "UsersListController",
                 controllerAs: "vm",
-                templateUrl: "/app/Nurseries/users-list.view.html"
+                templateUrl: "/app/User/users-list.view.html"
             });
 
-            $routeProvider.otherwise({
-                redirectTo: "/"
-            });
-        }]);        
-})(angular);
-(function (angular) {
-
-    "use strict";
-
-    angular.module("app.nursery", ["app.controls", "ngRoute", "mgcrea.ngStrap", "ui.bootstrap"])
-        .config(["$routeProvider", function ($routeProvider) {
-            $routeProvider.when("/", {
+            $routeProvider.when("/:nursId", {
                 controller: "NurseryDetailController",
                 controllerAs: "vm",
                 templateUrl: "/app/Nursery/nursery-detail.view.html"
             });
 
-            $routeProvider.when("/edit", {
+            $routeProvider.when("/:nursId/edit", {
                 controller: "NurseryEditController",
                 controllerAs: "vm",
                 templateUrl: "/app/Nursery/nursery-edit.view.html"
             });
 
-            $routeProvider.when("/class/:id/edit", {
+            $routeProvider.when("/:nursId/class/:id/edit", {
                 controller: "ClassEditController",
                 controllerAs: "vm",
                 templateUrl: "/app/Class/class-edit.view.html"
             });
 
-            $routeProvider.when("/class/:id", {
+            $routeProvider.when("/:nursId/class/:id", {
                 controller: "ClassDetailController",
                 controllerAs: "vm",
                 templateUrl: "/app/Class/class-detail.view.html"
             });
 
-            $routeProvider.when("/employee/:id/edit", {
+            $routeProvider.when("/:nursId/employee/:id/edit", {
                 controller: "EmployeeEditController",
                 controllerAs: "vm",
                 templateUrl: "/app/Employee/employee-edit.view.html"
             });
 
-            $routeProvider.when("/employee/:id", {
+            $routeProvider.when("/:nursId/employee/:id", {
                 controller: "EmployeeDetailController",
                 controllerAs: "vm",
                 templateUrl: "/app/Employee/employee-detail.view.html"
             });
 
-            $routeProvider.when("/child/:id/edit", {
+            $routeProvider.when("/:nursId/child/:id/edit", {
                 controller: "ChildEditController",
                 controllerAs: "vm",
                 templateUrl: "/app/Child/child-edit.view.html"
             });
 
-            $routeProvider.when("/child/:id", {
+            $routeProvider.when("/:nursId/child/:id", {
                 controller: "ChildDetailController",
                 controllerAs: "vm",
                 templateUrl: "/app/Child/child-detail.view.html"
             });
 
-            $routeProvider.when("/employees", {
+            $routeProvider.when("/:nursId/employees", {
                 controller: "EmployeesListController",
                 controllerAs: "vm",
-                templateUrl: "/app/Lists/employees-list.view.html"
+                templateUrl: "/app/Employee/employees-list.view.html"
             });
 
-            $routeProvider.when("/children", {
+            $routeProvider.when("/:nursId/children", {
                 controller: "ChildrenListController",
                 controllerAs: "vm",
-                templateUrl: "/app/Lists/children-list-all.view.html"
+                templateUrl: "/app/Child/children-list-all.view.html"
             });
 
-            $routeProvider.when("/children/waiting", {
+            $routeProvider.when("/:nursId/children/waiting", {
                 controller: "ChildrenListController",
                 controllerAs: "vm",
-                templateUrl: "/app/Lists/children-list-waiting.view.html"
+                templateUrl: "/app/Child/children-list-waiting.view.html"
             });
 
-            $routeProvider.when("/children/archive", {
+            $routeProvider.when("/:nursId/children/archive", {
                 controller: "ChildrenListController",
                 controllerAs: "vm",
-                templateUrl: "/app/Lists/children-list-archived.view.html"
+                templateUrl: "/app/Child/children-list-archived.view.html"
             });
 
             $routeProvider.otherwise({
@@ -119,23 +133,116 @@
 (function (angular) {
     "use strict";
 
+    angular
+        .module("app.nursery")
+        .factory("dataService", ["$http", DataService]);
+
+    function DataService($http) {
+
+        // Nursery
+        var getNurseries = function () {
+            return $http.get("/Api/Nurseries");
+        }
+        var getNursery = function (id) {
+            return $http.get("/Api/Nursery/" + id);
+        }
+        var insertNursery = function (nursery) {
+            return $http.get("/Api/Nursery", nursery);
+        }
+        var updateNursery = function (nursery) {
+            return $http.get("/Api/Nursery", nursery);
+        }
+        var deleteNursery = function (id) {
+            return $http.delete("/Api/Nursery/" + id);
+        }
+
+        // Class
+        var getClasses = function (nurseryId) {
+            return $http.get("/Api/Nursery/" + nurseryId + "/Classes/");
+        }
+        var getClass = function (id) {
+            return $http.get("/Api/Class/" + id);
+        }
+        var insertClass = function (nurseryId, cls) {
+            return $http.post("/Api/Class/" + nurseryId, cls)
+        }
+        var updateClass = function (nurseryId, cls) {
+            return $http.put("/Api/Class/" + nurseryId, cls)
+        }
+        var deleteClass = function (id) {
+            return $http.delete("/Api/Class/" + id);
+        }
+
+        //Child
+        var getChildren = function (nurseryId) {
+            return $http.get("/Api/Nursery/" + nurseryId + "/children");
+        }
+        var getChild = function (id) {
+            return $http.get("/Api/Child/" + id);
+        }
+        var insertChild = function (child) {
+            return $http.post("/Api/Child/", child)
+        }
+        var updateChild = function (child) {
+            return $http.put("/Api/Child/", child)
+        }
+        var deleteChild = function (id) {
+            return $http.delete("/Api/Child/" + id);
+        }
+
+        //Employee
+        var getEmployees = function (nurseryId) {
+            return $http.get("/Api/Nursery/" + nurseryId + "/employees");
+        }
+        var getEmployee = function (id) {
+            return $http.get("/Api/Employee/" + id);
+        }
+        var insertEmployee = function (nurseryId, employee) {
+            return $http.post("/Api/Employee/" + nurseryId, employee)
+        }
+        var updateEmployee = function (nurseryId, employee) {
+            return $http.put("/Api/Employee/" + nurseryId, employee)
+        }
+        var deleteEmployee = function (id) {
+            return $http.delete("/Api/Employee/" + id);
+        }
+
+        //Note
+        var insertNote = function (note) {
+            return $http.post("/Api/Note/", note)
+        }
+        var deleteNote = function (id) {
+            return $http.delete("/Api/Note/" + id);
+        }
+
+        //Roles
+        var getRoles = function () {
+            return $http.get("/Api/Roles");
+        }
+
+        return this;
+    };
+})(angular);
+(function (angular) {
+    "use strict";
+
     ChildDetailController.$inject = ["$scope", "$http", "$location", "$routeParams", "$sce", "$controller"];
     angular.module("app.nursery")
         .controller("ChildDetailController", ChildDetailController);
 
     function ChildDetailController($scope, $http, $location, $routeParams, $sce, $controller) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
         vm.childId = $routeParams.id;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.child = {};
         vm.newNote = {};
         vm.attendanceStates = ["Žiadateľ", "Docházdajúci", "Odstúpený"];
-
-
         vm.isBusy = true;
+
         $http.get("/Api/Child/" + vm.childId)
             .then(function (response) {
                 angular.copy(response.data, vm.child);
@@ -224,28 +331,24 @@
 
     function ChildEditController($scope, $http, $routeParams, $controller, $uibModal) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
         vm.childId = $routeParams.id;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.child = {};
         vm.classId = 0;
         vm.isNew = vm.childId == 0;
-        $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Dochádzajúci' }, { id: 2, name: 'Odstúpený' }];
+       $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Dochádzajúci' }, { id: 2, name: 'Odstúpený' }];
         vm.classes = [];
 
-        $http.get("/Api/Nursery/" + $scope.outerId)
+        $http.get("/Api/Nursery/" + vm.nurseryId + "/Classes/")
             .then(function (response) {
-                for (var i = 0; i < response.data.classes.length; i++) {
-                    vm.classes.push({
-                        id: response.data.classes[i].id,
-                        name: response.data.classes[i].name
-                    });
-                }
-                $scope.classes = vm.classes;
+                angular.copy(response.data, vm.classes);
+               $scope.classes = vm.classes;
             }, function () {
-                toastr.error("Nepodarilo sa načítať informácie o škôlke");
+                toastr.error("Nepodarilo sa načítať informácie o triedach");
             }).finally(function () {
                 vm.isBusy = false;
             });
@@ -267,13 +370,13 @@
         vm.saveChild = function (isValid) {
             if (isValid) {
                 vm.isBusy = true;
-                vm.child.nurseryId = $scope.outerId;
+                vm.child.nurseryId = vm.nurseryId;
 
                 if (vm.isNew) {
                     $http.post("/Api/Child/", vm.child)
                         .then(function (response) {
                             toastr.success("Dieťa " + vm.child.firstName + " " + vm.child.lastName + " bolo úspešne vytvorené");
-                            $scope.back();
+                           $scope.back();
                         }, function () {
                             toastr.error("Dieťa sa nepodarilo vytvoriť");
                         }).finally(function () {
@@ -286,7 +389,7 @@
                     $http.put("/Api/Child/", vm.child)
                         .then(function (response) {
                             toastr.success("Zmeny v dieťati " + vm.child.firstName + " " + vm.child.lastName + " boli úspešne uložené");
-                            $scope.back();
+                           $scope.back();
                         }, function () {
                             toastr.error("Dieťa sa nepodarilo uložiť");
                         }).finally(function () {
@@ -297,12 +400,12 @@
         }
 
         vm.deleteChildModal = function () {
-            $scope.deleteModalTarget = "dieťa " + vm.child.firstName + " " + vm.child.lastName;
+           $scope.deleteModalTarget = "dieťa " + vm.child.firstName + " " + vm.child.lastName;
 
             var modalInstance = $uibModal.open({
                 templateUrl: '/app/common/templates/delete-modal.template.html',
                 controller: 'DeleteModalController',
-                scope: $scope
+                scope:$scope
             });
 
             modalInstance.result.then(function () {
@@ -315,7 +418,7 @@
             $http.delete("/Api/Child/" + vm.child.id)
                 .then(function () {
                     toastr.success("Dieťa bolo vymazané");
-                    $scope.back();
+                   $scope.back();
                 }, function (error) {
                     toastr.error("Dieťa sa nepodarilo vymazať");
                 })
@@ -323,6 +426,80 @@
                     vm.isBusy = false;
                 });
         }        
+    }
+})(angular);
+(function (angular) {
+    "use strict";
+
+    ChildrenListController.$inject = ["$scope", "$http", "$sce", "$controller", "$routeParams"];
+    angular.module("app.nursery")
+        .controller("ChildrenListController", ChildrenListController);
+
+    function ChildrenListController($scope, $http, $sce, $controller, $routeParams) {
+        $controller('BaseController', {
+            '$scope':$scope
+        });
+
+        var vm = this;
+        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.children = [];
+        vm.attendantChildren = [];
+        vm.waitingChildren = [];
+        vm.archivedChildren = [];
+        vm.classes = [];
+        vm.isBusy = true;
+
+        $scope.sortType = 'birthDate';
+
+        activate();
+
+        function activate() {
+            getNursery();
+            getChildren();
+        }
+
+        function getNursery() {
+            $http.get("/Api/Nursery/" + vm.nurseryId)
+                .then(function (response) {
+                    if (response.data.classes) {
+                        for (var i = 0; i < response.data.classes.length; i++)
+                            vm.classes[response.data.classes[i].id] = response.data.classes[i].name;
+                    }
+                }, function (error) {
+                    toastr.error("Nepodarilo sa načítať zoznam škôlok:<br/>" + error.data.message);
+                });
+        }
+
+        function getChildren() {
+            $http.get("/Api/Nursery/" + vm.nurseryId + "/children")
+                .then(function (response) {
+                    angular.copy(response.data, vm.children);
+                    if (vm.children.length > 0) {
+                        for (var i = 0; i < vm.children.length; i++) {
+                            vm.children[i].fullName = vm.children[i].firstName + " " + vm.children[i].lastName;
+                            vm.children[i].className = vm.classes[vm.children[i].classId];
+
+                            if (vm.children[i].contacts)
+                                vm.children[i].contacts = $sce.trustAsHtml(vm.children[i].contacts.replace(/(\r\n|\n|\r)/gm, '<br />'));
+
+                            if (vm.children[i].description)
+                                vm.children[i].description = $sce.trustAsHtml(vm.children[i].description.replace(/(\r\n|\n|\r)/gm, '<br />'));
+
+                            if (vm.children[i].attendance == 0)
+                                vm.waitingChildren.push(vm.children[i]);
+                            else if (vm.children[i].attendance == 1)
+                                vm.attendantChildren.push(vm.children[i]);
+                            else if (vm.children[i].attendance == 2)
+                                vm.archivedChildren.push(vm.children[i]);
+                        }
+                    }
+                }, function (error) {
+                    toastr.error("Nepodarilo sa načítať zoznam detí:<br/>" + error.data.message);
+                })
+                .finally(function () {
+                    vm.isBusy = false;
+                });
+        }
     }
 })(angular);
 (function (angular) {
@@ -335,11 +512,12 @@
 
     function ClassDetailController($scope, $http, $routeParams, $sce, $window, $controller) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
         vm.classId = $routeParams.id;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.class = {};
         vm.children = [];
         vm.isBusy = true;
@@ -358,7 +536,7 @@
                 }
                     
             }, function (error) {
-                toastr.error("Nepodarilo sa načítať dáta: " + error);
+                toastr.error("Nepodarilo sa načítať informácie o triede");
             })
             .finally(function () {
                 vm.isBusy = false;
@@ -374,17 +552,18 @@
 
     function ClassEditController($scope, $http, $location, $routeParams, $controller, $uibModal) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
         vm.classId = $routeParams.id;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.nursery = {};
         vm.class = {};
         vm.isNew = vm.classId == 0;
         vm.isBusy = true;
 
-        $http.get("/Api/Nursery/" + $scope.outerId)
+        $http.get("/Api/Nursery/" + vm.nurseryId)
             .then(function (response) {
                 angular.copy(response.data, vm.nursery);
                 if (!vm.isNew) {
@@ -430,12 +609,12 @@
         }
 
         vm.deleteClassModal = function () {
-            $scope.deleteModalTarget = "triedu " + vm.class.name;
+           $scope.deleteModalTarget = "triedu " + vm.class.name;
 
             var modalInstance = $uibModal.open({
                 templateUrl: '/app/common/templates/delete-modal.template.html',
                 controller: 'DeleteModalController',
-                scope: $scope
+                scope:$scope
             });
 
             modalInstance.result.then(function () {
@@ -449,7 +628,7 @@
             $http.delete("/Api/Class/" + vm.class.id)
                 .then(function () {                    
                     toastr.success("Trieda " + className + " bola vymazaná");
-                    $scope.back();
+                   $scope.back();
                 }, function (error) {
                     toastr.error("Triedu sa nepodarilo vymazať");
                 })
@@ -468,11 +647,12 @@
 
     function EmployeeDetailController($scope, $http, $location, $routeParams, $sce, $controller) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
         vm.employeeId = $routeParams.id;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.employee = {};
         vm.newNote = {};
         vm.attendanceStates = ["Žiadateľ", "Pracujúci", "Odstúpený"];
@@ -486,24 +666,10 @@
                     if (vm.employee.notes[i].text != null)
                         vm.employee.notes[i].text = $sce.trustAsHtml(vm.employee.notes[i].text.replace(/(\r\n|\n|\r)/gm, '<br />'));
             }, function () {
-                toastr.error("Nepodarilo sa načítať informácie o zamestnancovi");
+                toastr.error("Nepodarilo sa načítať informácie o zamestnancovi:<br/>");
             }).finally(function () {
                 vm.isBusy = false;
             });
-
-        vm.deleteEmployee = function () {
-            vm.isBusy = true;
-            $http.delete("/Api/Employee/" + vm.employee.id)
-                .then(function () {
-                    toastr.success("Zamestnanec bol vymazaný");
-                    $location.path("#/");
-                }, function (error) {
-                    toastr.error("Zamestnanca sa nepodarilo vymazať");
-                })
-                .finally(function () {
-                    vm.isBusy = false;
-                });
-        }
 
         vm.saveNote = function () {
             vm.isBusy = true;
@@ -551,15 +717,16 @@
 
     function EmployeeEditController($scope, $http, $routeParams, $controller, $uibModal) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
         vm.employeeId = $routeParams.id;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.employee = {};
         vm.isNew = vm.employeeId == 0;
-        $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
-        $scope.employmentTypes = [{ value: 'Dohoda' }, { value: 'Plný úväzok' }, { value: 'Študentská dohoda' }, { value: 'Skrátený úväzok' }, { value: 'Živnosť' }];
+       $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
+       $scope.employmentTypes = [{ value: 'Dohoda' }, { value: 'Plný úväzok' }, { value: 'Študentská dohoda' }, { value: 'Skrátený úväzok' }, { value: 'Živnosť' }];
 
         if (!vm.isNew) {
             vm.isBusy = true;
@@ -578,10 +745,10 @@
                 vm.isBusy = true;
 
                 if (vm.isNew) {
-                    $http.post("/Api/Employee/" + $scope.outerId, vm.employee)
+                    $http.post("/Api/Employee/" + vm.nurseryId, vm.employee)
                         .then(function (response) {
                             toastr.success("Zamestnanec " + vm.employee.fullName + " bol úspešne vytvorený");
-                            $scope.back();
+                           $scope.back();
                         }, function () {
                             toastr.error("Zamestnanca sa nepodarilo vytvoriť");
                         }).finally(function () {
@@ -589,10 +756,10 @@
                         });
                 }
                 else {
-                    $http.put("/Api/Employee/" + $scope.outerId, vm.employee)
+                    $http.put("/Api/Employee/" + vm.nurseryId, vm.employee)
                         .then(function (response) {
                             toastr.success("Zmeny v zamestnancovi " + vm.employee.fullName + " boli úspešne uložené");
-                            $scope.back();
+                           $scope.back();
                         }, function () {
                             toastr.error("Zamestnanca sa nepodarilo uložiť");
                         }).finally(function () {
@@ -603,12 +770,12 @@
         }
 
         vm.deleteEmployeeModal = function () {
-            $scope.deleteModalTarget = "zamestnanca " + vm.employee.fullName;
+           $scope.deleteModalTarget = "zamestnanca " + vm.employee.fullName;
 
             var modalInstance = $uibModal.open({
                 templateUrl: '/app/common/templates/delete-modal.template.html',
                 controller: 'DeleteModalController',
-                scope: $scope
+                scope:$scope
             });
 
             modalInstance.result.then(function () {
@@ -621,7 +788,7 @@
             $http.delete("/Api/Employee/" + vm.employee.id)
                 .then(function () {
                     toastr.success("Zamestnanec bol vymazaný");
-                    $scope.back();
+                   $scope.back();
                 }, function (error) {
                     toastr.error("Zamestnanca sa nepodarilo vymazať");
                 })
@@ -634,82 +801,22 @@
 (function (angular) {
     "use strict";
 
-    ChildrenListController.$inject = ["$scope", "$http", "$sce", "$window", "$controller"];
-    angular.module("app.nursery")
-        .controller("ChildrenListController", ChildrenListController);
-
-    function ChildrenListController($scope, $http, $sce, $window, $controller) {
-        $controller('BaseController', {
-            '$scope': $scope
-        });
-
-        var vm = this;
-        vm.children = [];
-        vm.attendantChildren = [];
-        vm.waitingChildren = [];
-        vm.archivedChildren = [];
-        vm.classes = [];
-        vm.isBusy = true;
-
-        $scope.sortType = 'birthDate';
-
-        $http.get("/Api/Nursery/" + $scope.outerId)
-            .then(function (response) {
-                for (var i = 0; i < response.data.classes.length; i++)
-                    vm.classes[response.data.classes[i].id] = response.data.classes[i].name;
-            }, function (error) {
-                toastr.error("Nepodarilo sa načítať zoznam detí");
-            })
-            .finally(function () {
-                vm.isBusy = false;
-            });
-
-        $http.get("/Api/Nursery/" + $scope.outerId + "/children")
-            .then(function (response) {
-                angular.copy(response.data, vm.children);
-                for (var i = 0; i < vm.children.length; i++) {
-                    vm.children[i].fullName = vm.children[i].firstName + " " + vm.children[i].lastName;
-                    vm.children[i].className = vm.classes[vm.children[i].classId];
-
-                    if (vm.children[i].contacts)
-                        vm.children[i].contacts = $sce.trustAsHtml(vm.children[i].contacts.replace(/(\r\n|\n|\r)/gm, '<br />'));
-
-                    if (vm.children[i].description)
-                        vm.children[i].description = $sce.trustAsHtml(vm.children[i].description.replace(/(\r\n|\n|\r)/gm, '<br />'));
-
-                    if (vm.children[i].attendance == 0)
-                        vm.waitingChildren.push(vm.children[i]);
-                    else if (vm.children[i].attendance == 1)
-                        vm.attendantChildren.push(vm.children[i]);
-                    else if (vm.children[i].attendance == 2)
-                        vm.archivedChildren.push(vm.children[i]);
-                }
-            }, function (error) {
-                toastr.error("Nepodarilo sa načítať zoznam detí");
-            })
-            .finally(function () {
-                vm.isBusy = false;
-            });
-    }
-})(angular);
-(function (angular) {
-    "use strict";
-
-    EmployeesListController.$inject = ["$scope", "$http", "$window", "$controller"];
+    EmployeesListController.$inject = ["$scope", "$http", "$window", "$controller", "$routeParams"];
     angular.module("app.nursery")
         .controller("EmployeesListController", EmployeesListController);
 
-    function EmployeesListController($scope, $http, $window, $controller) {
+    function EmployeesListController($scope, $http, $window, $controller, $routeParams) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.employees = [];
         vm.isBusy = true;
-        $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
+       $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
 
-        $http.get("/Api/Nursery/" + $scope.outerId + "/employees")
+        $http.get("/Api/Nursery/" + vm.nurseryId + "/employees")
             .then(function (response) {
                 angular.copy(response.data, vm.employees);
             }, function (error) {
@@ -724,46 +831,276 @@
 
     "use strict";
 
-    NurseriesListController.$inject = ["$http", "$scope", "$window"];
-    angular.module("app.nurseries")
-        .controller("NurseriesListController", NurseriesListController);
+    NurseryDetailController.$inject = ["$scope", "$routeParams", "$http", "$location", "$window", "$controller"];
+    angular.module("app.nursery")
+        .controller("NurseryDetailController", NurseryDetailController);
 
-    function NurseriesListController($http, $scope, $window) {
+    function NurseryDetailController($scope, $routeParams, $http, $location, $window, $controller) {
+        $controller('BaseController', {
+            '$scope':$scope
+        });
+
         var vm = this;
-        vm.nurseries = [];
+        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nursery = {};
         vm.isBusy = true;
+       $scope.sortType = 'title';
+       $scope.sortReverse = true;
 
-        $http.get("/Api/Nurseries")
+        $http.get("/Api/Nursery/" + vm.nurseryId)
             .then(function (response) {
-                angular.copy(response.data, vm.nurseries);
-            }, function (error) {
-                toastr.error("Nepodarilo sa načítať dáta: " + error);
-            })
-            .finally(function () {
+                angular.copy(response.data, vm.nursery);
+                if (vm.nursery.classes.length > 0) {
+                    vm.isBusy = true;
+                    for (var i = 0; i < vm.nursery.classes.length; i++) {
+                        getClass(i);
+                    }
+                }
+            }, function () {
+                toastr.error("Nepodarilo sa načítať informácie o škôlke");
+            }).finally(function () {
                 vm.isBusy = false;
             });
 
-        $scope.redirect = function (path) {
-            $window.location.href = path;
+        function getClass(i) {
+            $http.get("/Api/Class/" + vm.nursery.classes[i].id)
+                .then(function (response) {
+                    for (var j = 0; j < response.data.children.length; j++)
+                        if (response.data.children[j].attendance == 1)
+                            vm.nursery.classes[i].children.push(response.data.children[j]);
+                }, function () {
+                    toastr.error("Nepodarilo sa načítať informácie o triede");
+                });
         }
     }
 })(angular);
 (function (angular) {
     "use strict";
 
-    NurseryEditController.$inject = ["$routeParams", "$http", "$location", "$uibModal", "$scope"];
-    angular.module("app.nurseries")
+    NurseryEditController.$inject = ["$scope", "$http", "$location", "$controller", "$routeParams"];
+    angular.module("app.nursery")
         .controller("NurseryEditController", NurseryEditController);
 
-    function NurseryEditController($routeParams, $http, $location, $uibModal, $scope) {
+    function NurseryEditController($scope, $http, $location, $controller, $routeParams) {
+        $controller('BaseController', {
+            '$scope':$scope
+        });
+
         var vm = this;
-        vm.id = $routeParams.id;
+        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nursery = {};
+        vm.isBusy = true;
+
+        $http.get("/Api/Nursery/" + vm.nurseryId)
+            .then(function (response) {
+                angular.copy(response.data, vm.nursery);
+            }, function () {
+                toastr.error("Nepodarilo sa načítať informácie o škôlke");
+            }).finally(function () {
+                vm.isBusy = false;
+            });
+
+        vm.saveNursery = function (isValid) {
+            if (isValid) {
+                vm.isBusy = true;
+                $http.put("/Api/Nursery/", vm.nursery)
+                    .then(function (response) {
+                        toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
+                        $location.path("#/");
+                    }, function () {
+                        toastr.error("Škôlku sa nepodarilo uložiť");
+                    }).finally(function () {
+                        vm.isBusy = false;
+                    });
+            }
+        }
+    }
+})(angular);
+(function (angular) {
+    "use strict";
+
+    UserEditModalController.$inject = ["$scope", "$uibModalInstance"];
+    angular
+        .module("app.nursery")
+        .controller("UserEditModalController", UserEditModalController);
+
+    function UserEditModalController($scope, $uibModalInstance) {
+
+       $scope.ok = function () {
+            $uibModalInstance.close();
+        };
+
+       $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+    }
+})(angular);
+(function (angular) {
+
+    "use strict";
+
+    UsersListController.$inject = ["$http", "$scope", "$window", "$uibModal"];
+    angular
+        .module("app.nursery")
+        .controller("UsersListController", UsersListController);
+
+    function UsersListController($http, $scope, $window, $uibModal) {
+        var vm = this;
+        vm.users = [];
+        vm.roles = [];
+        vm.nurseries = [];
+        vm.isBusy = true;
+
+        $http.get("/Api/Users")
+            .then(function (response) {
+                angular.copy(response.data, vm.users);
+                vm.getRoles();
+            }, function (error) {
+                toastr.error("Nepodarilo sa načítať dáta: " + error);
+            });
+
+        vm.getRoles = function () {
+            $http.get("/Api/Roles")
+                .then(function (response) {
+                    angular.copy(response.data, vm.roles);
+                    vm.getNurseries();
+                }, function (error) {
+                    toastr.error("Nepodarilo sa načítať dáta: " + error);
+                });
+        }
+
+        vm.getNurseries = function () {
+            $http.get("/Api/Nurseries")
+                .then(function (response) {
+                    angular.copy(response.data, vm.nurseries);
+                    vm.joinData();
+                }, function (error) {
+                    toastr.error("Nepodarilo sa načítať dáta: " + error);
+                });
+        }
+
+        vm.joinData = function () {
+
+            _.each(vm.users, function (user) {
+                user.nurseries = [];
+                _.each(user.claims, function (claim) {
+                    if (claim.claimType === "Nursery") {
+                        var nursery = _.find(vm.nurseries, function (nurs) {
+                            return nurs.id === parseInt(claim.claimValue);
+                        });
+                        user.nurseries.push({ id: parseInt(claim.claimValue), name: nursery.name });
+                    }
+                });
+                user.userRoles = [];
+                _.each(user.roles, function (role) {
+                    var userRole = _.find(vm.roles, function (ur) {
+                        return ur.id == role.roleId;
+                    });
+                    user.userRoles.push({ id: userRole.id, name: userRole.name });
+                });
+            });
+
+            vm.isBusy = false;
+        }
+
+        vm.editModal = function (user) {
+           $scope.actualUser = user;
+           $scope.roles = vm.roles;
+           $scope.nurseries = [];
+            _.each(vm.nurseries, function (nurs) {
+               $scope.nurseries.push({ id: nurs.id, name: nurs.name })
+            });
+
+            var modalInstance = $uibModal.open({
+                templateUrl: '/App/User/user-edit-modal.template.html',
+                controller: 'UserEditModalController',
+                scope:$scope
+            });
+
+            modalInstance.result.then(function () {
+
+                
+            });
+        }
+
+        vm.generateModal = function (user) {
+
+        }
+
+        vm.deleteModal = function (user) {
+           $scope.deleteModalTarget = "používateľa " + user.userName;
+
+            var modalInstance = $uibModal.open({
+                templateUrl: '/app/common/templates/delete-modal.template.html',
+                controller: 'DeleteModalController',
+                scope:$scope
+            });
+
+            modalInstance.result.then(function () {
+                
+            });
+        }
+
+       $scope.redirect = function (path) {
+            $window.location.href = path;
+        }
+    }
+})(angular);
+(function (angular) {
+
+    "use strict";
+
+    NurseriesListController.$inject = ["$http", "$scope", "$window", "$location", "$rootScope"];
+    angular.module("app.nursery")
+        .controller("NurseriesListController", NurseriesListController);
+
+    function NurseriesListController($http, $scope, $window, $location, $rootScope) {
+        var vm = this;
+        vm.nurseries = [];
+        vm.isBusy = true;
+
+        activate();
+
+        function activate() {
+            $http.get("/Api/Nurseries")
+                .then(function (response) {
+                    angular.copy(response.data, vm.nurseries);
+                    if (vm.nurseries.length === 1 && !$rootScope.isAdmin) {
+                        vm.nurseryDblClick(vm.nurseries[0]);
+                    } else {
+                        $rootScope.nurseryId = undefined;
+                    }
+                }, function (error) {
+                    toastr.error("Nepodarilo sa načítať dáta: " + error);
+                })
+                .finally(function () {
+                    vm.isBusy = false;
+                });
+        }
+        
+        vm.nurseryDblClick = function (nursery) {
+            $rootScope.nurseryId = nursery.id;
+            $rootScope.classes = nursery.classes;
+            $location.path(nursery.id);
+        }
+    }
+})(angular);
+(function (angular) {
+    "use strict";
+
+    NurseryAdminEditController.$inject = ["$routeParams", "$http", "$location", "$uibModal", "$scope"];
+    angular.module("app.nursery")
+        .controller("NurseryAdminEditController", NurseryAdminEditController);
+
+    function NurseryAdminEditController($routeParams, $http, $location, $uibModal,$scope) {
+        var vm = this;
+        vm.nurseryId = parseInt($routeParams.id);
         vm.nursery = {};
         vm.isNew = vm.id == 0;
 
         if (!vm.isNew) {
             vm.isBusy = true;
-            $http.get("/Api/Nursery/" + vm.id)
+            $http.get("/Api/Nursery/" + vm.nurseryId)
                 .then(function (response) {
                     angular.copy(response.data, vm.nursery);
                 }, function () {
@@ -802,12 +1139,12 @@
         }
 
         vm.deleteNurseryModal = function () {
-            $scope.deleteModalTarget = "škôlku " + vm.nursery.name;
+           $scope.deleteModalTarget = "škôlku " + vm.nursery.name;
 
             var modalInstance = $uibModal.open({
                 templateUrl: '/app/common/templates/delete-modal.template.html',
                 controller: 'DeleteModalController',
-                scope: $scope
+                scope:$scope
             });
 
             modalInstance.result.then(function () {
@@ -834,254 +1171,29 @@
 (function (angular) {
     "use strict";
 
-    UserEditModalController.$inject = ["$scope", "$uibModalInstance"];
-    angular
-        .module("app.nurseries")
-        .controller("UserEditModalController", UserEditModalController);
-
-    function UserEditModalController($scope, $uibModalInstance) {
-
-        $scope.ok = function () {
-            $uibModalInstance.close();
-        };
-
-        $scope.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
-        };
-    }
-})(angular);
-(function (angular) {
-
-    "use strict";
-
-    // Geeting the existing module
-    UsersListController.$inject = ["$http", "$scope", "$window", "$uibModal"];
-    angular.module("app.nurseries")
-        .controller("UsersListController", UsersListController);
-
-    function UsersListController($http, $scope, $window, $uibModal) {
-        var vm = this;
-        vm.users = [];
-        vm.roles = [];
-        vm.nurseries = [];
-        vm.isBusy = true;
-
-        $http.get("/Api/Users")
-            .then(function (response) {
-                angular.copy(response.data, vm.users);
-                vm.getRoles();
-            }, function (error) {
-                toastr.error("Nepodarilo sa načítať dáta: " + error);
-            })
-            .finally(function () {
-                vm.isBusy = false;
-            });
-
-        vm.getRoles = function () {
-            $http.get("/Api/Roles")
-                .then(function (response) {
-                    angular.copy(response.data, vm.roles);
-                    vm.getNurseries();
-                }, function (error) {
-                    toastr.error("Nepodarilo sa načítať dáta: " + error);
-                })
-                .finally(function () {
-                    vm.isBusy = false;
-                });
-        }
-
-        vm.getNurseries = function () {
-            $http.get("/Api/Nurseries")
-                .then(function (response) {
-                    angular.copy(response.data, vm.nurseries);
-                    vm.joinData();
-                }, function (error) {
-                    toastr.error("Nepodarilo sa načítať dáta: " + error);
-                })
-                .finally(function () {
-                    vm.isBusy = false;
-                });
-        }
-
-        vm.joinData = function () {
-
-            _.each(vm.users, function (user) {
-                user.nurseries = [];
-                _.each(user.claims, function (claim) {
-                    if (claim.claimType === "Nursery") {
-                        var nursery = _.find(vm.nurseries, function (nurs) {
-                            return nurs.id === parseInt(claim.claimValue);
-                        });
-                        user.nurseries.push({ id: parseInt(claim.claimValue), name: nursery.name });
-                    }
-                });
-                user.userRoles = [];
-                _.each(user.roles, function (role) {
-                    var userRole = _.find(vm.roles, function (ur) {
-                        return ur.id == role.roleId;
-                    });
-                    user.userRoles.push({ id: userRole.id, name: userRole.name });
-                });
-            });
-
-        }
-
-        vm.editModal = function (user) {
-            $scope.actualUser = user;
-            $scope.roles = vm.roles;
-            $scope.nurseries = [];
-            _.each(vm.nurseries, function (nurs) {
-                $scope.nurseries.push({ id: nurs.id, name: nurs.name })
-            });
-
-            var modalInstance = $uibModal.open({
-                templateUrl: '/app/nurseries/user-edit-modal.template.html',
-                controller: 'UserEditModalController',
-                scope: $scope
-            });
-
-            modalInstance.result.then(function () {
-
-                
-            });
-        }
-
-        vm.generateModal = function (user) {
-
-        }
-
-        vm.deleteModal = function (user) {
-            $scope.deleteModalTarget = "používateľa " + user.userName;
-
-            var modalInstance = $uibModal.open({
-                templateUrl: '/app/common/templates/delete-modal.template.html',
-                controller: 'DeleteModalController',
-                scope: $scope
-            });
-
-            modalInstance.result.then(function () {
-                
-            });
-        }
-
-        $scope.redirect = function (path) {
-            $window.location.href = path;
-        }
-    }
-})(angular);
-(function (angular) {
-
-    "use strict";
-
-    NurseryDetailController.$inject = ["$scope", "$routeParams", "$http", "$location", "$window", "$controller"];
-    angular.module("app.nursery")
-        .controller("NurseryDetailController", NurseryDetailController);
-
-    function NurseryDetailController($scope, $routeParams, $http, $location, $window, $controller) {
-        $controller('BaseController', {
-            '$scope': $scope
-        });
-
-        var vm = this;
-        vm.nursery = {};
-        vm.isBusy = true;
-        $scope.sortType = 'title';
-        $scope.sortReverse = true;
-
-        $http.get("/Api/Nursery/" + $scope.outerId)
-            .then(function (response) {
-                angular.copy(response.data, vm.nursery);
-                if (vm.nursery.classes.length > 0) {
-                    vm.isBusy = true;
-                    for (var i = 0; i < vm.nursery.classes.length; i++) {
-                        getClass(i);
-                    }
-                }
-            }, function () {
-                toastr.error("Nepodarilo sa načítať informácie o škôlke");
-            }).finally(function () {
-                vm.isBusy = false;
-            });
-
-        function getClass(i) {
-            $http.get("/Api/Class/" + vm.nursery.classes[i].id)
-                .then(function (response) {
-                    for (var j = 0; j < response.data.children.length; j++)
-                        if (response.data.children[j].attendance == 1)
-                            vm.nursery.classes[i].children.push(response.data.children[j]);
-                }, function () {
-                    toastr.error("Nepodarilo sa načítať informácie o triede");
-                });
-        }
-    }
-})(angular);
-(function (angular) {
-    "use strict";
-
-    NurseryEditController.$inject = ["$scope", "$http", "$location", "$controller"];
-    angular.module("app.nursery")
-        .controller("NurseryEditController", NurseryEditController);
-
-    function NurseryEditController($scope, $http, $location, $controller) {
-        $controller('BaseController', {
-            '$scope': $scope
-        });
-
-        var vm = this;
-        vm.nursery = {};
-        vm.isBusy = true;
-
-        $http.get("/Api/Nursery/" + $scope.outerId)
-            .then(function (response) {
-                angular.copy(response.data, vm.nursery);
-            }, function () {
-                toastr.error("Nepodarilo sa načítať informácie o škôlke");
-            }).finally(function () {
-                vm.isBusy = false;
-            });
-
-        vm.saveNursery = function (isValid) {
-            if (isValid) {
-                vm.isBusy = true;
-                $http.put("/Api/Nursery/", vm.nursery)
-                    .then(function (response) {
-                        toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
-                        $location.path("#/");
-                    }, function () {
-                        toastr.error("Škôlku sa nepodarilo uložiť");
-                    }).finally(function () {
-                        vm.isBusy = false;
-                    });
-            }
-        }
-    }
-})(angular);
-(function (angular) {
-    "use strict";
-
     BaseController.$inject = ["$scope", "$window"];
     angular
-        .module("app.controls")
+        .module("common")
         .controller("BaseController", BaseController);
 
     function BaseController($scope, $window) {
-        $scope.redirect = function (path) {
+       $scope.redirect = function (path) {
             $window.location.href = path;
         }
 
-        $scope.back = function () {
+       $scope.back = function () {
             $window.history.back();
         };
 
-        $scope.back2 = function () {
+       $scope.back2 = function () {
             $window.history.go(-2);
         };
 
-        $scope.exportAction = function (exportTo) {
+       $scope.exportAction = function (exportTo) {
             switch (exportTo) {
-                case 'excel': $scope.$broadcast('export-excel', {});
+                case 'excel':$scope.$broadcast('export-excel', {});
                     break;
-                case 'doc': $scope.$broadcast('export-doc', {});
+                case 'doc':$scope.$broadcast('export-doc', {});
                     break;
                 default: console.log('no event caught');
             }
@@ -1094,16 +1206,16 @@
 
     DeleteModalController.$inject = ["$scope", "$uibModalInstance"];
     angular
-        .module("app.controls")
+        .module("common")
         .controller("DeleteModalController", DeleteModalController);
 
     function DeleteModalController($scope, $uibModalInstance) {
 
-        $scope.ok = function () {
+       $scope.ok = function () {
             $uibModalInstance.close();
         };
 
-        $scope.cancel = function () {
+       $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
     }
@@ -1114,7 +1226,7 @@
 
     backButton.$inject = ["$window"];
     angular
-        .module("app.controls")
+        .module("common")
         .directive("backButton", backButton);
 
     function backButton($window) {
@@ -1131,7 +1243,7 @@
     "use strict";
 
     angular
-        .module("app.controls")
+        .module("common")
         .directive('backToTop', backToTop);
 
     function backToTop() {
@@ -1205,7 +1317,7 @@
     "use strict";
 
     capitalizeAllFirst.$inject = ["$parse"];
-    angular.module("app.controls")
+    angular.module("common")
         .directive('capitalizeAllFirst', capitalizeAllFirst);
 
     function capitalizeAllFirst($parse) {
@@ -1233,7 +1345,7 @@
     "use strict";
 
     capitalizeFirst.$inject = ["$parse"];
-    angular.module("app.controls")
+    angular.module("common")
         .directive('capitalizeFirst', capitalizeFirst);
 
     function capitalizeFirst($parse) {
@@ -1261,7 +1373,7 @@
     "use strict";
 
     angular
-        .module("app.controls")
+        .module("common")
         .directive("createdModified", createdModified);
 
     function createdModified() {
@@ -1280,7 +1392,7 @@
 
     dropdownMultiselect.$inject = ["$filter", "$document", "$compile", "$parse"];
     angular
-        .module("app.controls")
+        .module("common")
         .directive('dropdownMultiselect', dropdownMultiselect);
 
     function dropdownMultiselect($filter, $document, $compile, $parse) {
@@ -1336,16 +1448,16 @@
             link: function ($scope, $element, $attrs) {
                 var $dropdownTrigger = $element.children()[0];
 
-                $scope.toggleDropdown = function () {
-                    $scope.open = !$scope.open;
+               $scope.toggleDropdown = function () {
+                   $scope.open = !$scope.open;
                 };
 
-                $scope.checkboxClick = function ($event, id) {
-                    $scope.setSelectedItem(id);
+               $scope.checkboxClick = function ($event, id) {
+                   $scope.setSelectedItem(id);
                     $event.stopImmediatePropagation();
                 };
 
-                $scope.externalEvents = {
+               $scope.externalEvents = {
                     onItemSelect: angular.noop,
                     onItemDeselect: angular.noop,
                     onSelectAll: angular.noop,
@@ -1354,7 +1466,7 @@
                     onMaxSelectionReached: angular.noop
                 };
 
-                $scope.settings = {
+               $scope.settings = {
                     dynamicTitle: true,
                     scrollable: false,
                     scrollableHeight: '300px',
@@ -1375,7 +1487,7 @@
                     smartButtonTextConverter: angular.noop
                 };
 
-                $scope.texts = {
+               $scope.texts = {
                     checkAll: 'Označ všetko',
                     uncheckAll: 'Odznač všetko',
                     selectionCount: 'checked',
@@ -1385,21 +1497,21 @@
                     dynamicButtonTextSuffix: 'checked'
                 };
 
-                $scope.searchFilter = $scope.searchFilter || '';
+               $scope.searchFilter =$scope.searchFilter || '';
 
                 if (angular.isDefined($scope.settings.groupBy)) {
-                    $scope.$watch('options', function (newValue) {
+                   $scope.$watch('options', function (newValue) {
                         if (angular.isDefined(newValue)) {
-                            $scope.orderedItems = $filter('orderBy')(newValue, $scope.settings.groupBy);
+                           $scope.orderedItems = $filter('orderBy')(newValue,$scope.settings.groupBy);
                         }
                     });
                 }
 
-                angular.extend($scope.settings, $scope.extraSettings || []);
-                angular.extend($scope.externalEvents, $scope.events || []);
-                angular.extend($scope.texts, $scope.translationTexts);
+                angular.extend($scope.settings,$scope.extraSettings || []);
+                angular.extend($scope.externalEvents,$scope.events || []);
+                angular.extend($scope.texts,$scope.translationTexts);
 
-                $scope.singleSelection = $scope.settings.selectionLimit === 1;
+               $scope.singleSelection =$scope.settings.selectionLimit === 1;
 
                 function getFindObj(id) {
                     var findObj = {};
@@ -1420,7 +1532,7 @@
                 }
 
                 if ($scope.singleSelection) {
-                    if (angular.isArray($scope.selectedModel) && $scope.selectedModel.length === 0) {
+                    if (angular.isArray($scope.selectedModel) &&$scope.selectedModel.length === 0) {
                         clearObject($scope.selectedModel);
                     }
                 }
@@ -1440,14 +1552,14 @@
                         }
 
                         if (!parentFound) {
-                            $scope.$apply(function () {
-                                $scope.open = false;
+                           $scope.$apply(function () {
+                               $scope.open = false;
                             });
                         }
                     });
                 }
 
-                $scope.getGroupTitle = function (groupValue) {
+               $scope.getGroupTitle = function (groupValue) {
                     if ($scope.settings.groupByTextProvider !== null) {
                         return $scope.settings.groupByTextProvider(groupValue);
                     }
@@ -1455,22 +1567,22 @@
                     return groupValue;
                 };
 
-                $scope.getButtonText = function () {
+               $scope.getButtonText = function () {
                     if ($scope.settings.dynamicTitle && ($scope.selectedModel.length > 0 || (angular.isObject($scope.selectedModel) && _.keys($scope.selectedModel).length > 0))) {
                         if ($scope.settings.smartButtonMaxItems > 0) {
                             var itemsText = [];
 
                             angular.forEach($scope.options, function (optionItem) {
-                                if ($scope.isChecked($scope.getPropertyForObject(optionItem, $scope.settings.idProp))) {
-                                    var displayText = $scope.getPropertyForObject(optionItem, $scope.settings.displayProp);
-                                    var converterResponse = $scope.settings.smartButtonTextConverter(displayText, optionItem);
+                                if ($scope.isChecked($scope.getPropertyForObject(optionItem,$scope.settings.idProp))) {
+                                    var displayText =$scope.getPropertyForObject(optionItem,$scope.settings.displayProp);
+                                    var converterResponse =$scope.settings.smartButtonTextConverter(displayText, optionItem);
 
                                     itemsText.push(converterResponse ? converterResponse : displayText);
                                 }
                             });
 
-                            if ($scope.selectedModel.length > $scope.settings.smartButtonMaxItems) {
-                                itemsText = itemsText.slice(0, $scope.settings.smartButtonMaxItems);
+                            if ($scope.selectedModel.length >$scope.settings.smartButtonMaxItems) {
+                                itemsText = itemsText.slice(0,$scope.settings.smartButtonMaxItems);
                                 itemsText.push('...');
                             }
 
@@ -1481,13 +1593,13 @@
                             if ($scope.singleSelection) {
                                 totalSelected = ($scope.selectedModel !== null && angular.isDefined($scope.selectedModel[$scope.settings.idProp])) ? 1 : 0;
                             } else {
-                                totalSelected = angular.isDefined($scope.selectedModel) ? $scope.selectedModel.length : 0;
+                                totalSelected = angular.isDefined($scope.selectedModel) ?$scope.selectedModel.length : 0;
                             }
 
                             if (totalSelected === 0) {
                                 return $scope.texts.buttonDefaultText;
                             } else {
-                                return totalSelected + ' ' + $scope.texts.dynamicButtonTextSuffix;
+                                return totalSelected + ' ' +$scope.texts.dynamicButtonTextSuffix;
                             }
                         }
                     } else {
@@ -1495,7 +1607,7 @@
                     }
                 };
 
-                $scope.getPropertyForObject = function (object, property) {
+               $scope.getPropertyForObject = function (object, property) {
                     if (angular.isDefined(object) && object.hasOwnProperty(property)) {
                         return object[property];
                     }
@@ -1503,30 +1615,30 @@
                     return '';
                 };
 
-                $scope.selectAll = function () {
-                    $scope.deselectAll(false);
-                    $scope.externalEvents.onSelectAll();
+               $scope.selectAll = function () {
+                   $scope.deselectAll(false);
+                   $scope.externalEvents.onSelectAll();
 
                     angular.forEach($scope.options, function (value) {
-                        $scope.setSelectedItem(value[$scope.settings.idProp], true);
+                       $scope.setSelectedItem(value[$scope.settings.idProp], true);
                     });
                 };
 
-                $scope.deselectAll = function (sendEvent) {
+               $scope.deselectAll = function (sendEvent) {
                     sendEvent = sendEvent || true;
 
                     if (sendEvent) {
-                        $scope.externalEvents.onDeselectAll();
+                       $scope.externalEvents.onDeselectAll();
                     }
 
                     if ($scope.singleSelection) {
                         clearObject($scope.selectedModel);
                     } else {
-                        $scope.selectedModel.splice(0, $scope.selectedModel.length);
+                       $scope.selectedModel.splice(0,$scope.selectedModel.length);
                     }
                 };
 
-                $scope.setSelectedItem = function (id, dontRemove) {
+               $scope.setSelectedItem = function (id, dontRemove) {
                     var findObj = getFindObj(id);
                     var finalObj = null;
 
@@ -1539,7 +1651,7 @@
                     if ($scope.singleSelection) {
                         clearObject($scope.selectedModel);
                         angular.extend($scope.selectedModel, finalObj);
-                        $scope.externalEvents.onItemSelect(finalObj);
+                       $scope.externalEvents.onItemSelect(finalObj);
 
                         return;
                     }
@@ -1549,23 +1661,23 @@
                     var exists = _.findIndex($scope.selectedModel, findObj) !== -1;
 
                     if (!dontRemove && exists) {
-                        $scope.selectedModel.splice(_.findIndex($scope.selectedModel, findObj), 1);
-                        $scope.externalEvents.onItemDeselect(findObj);
-                    } else if (!exists && ($scope.settings.selectionLimit === 0 || $scope.selectedModel.length < $scope.settings.selectionLimit)) {
-                        $scope.selectedModel.push(finalObj);
-                        $scope.externalEvents.onItemSelect(finalObj);
+                       $scope.selectedModel.splice(_.findIndex($scope.selectedModel, findObj), 1);
+                       $scope.externalEvents.onItemDeselect(findObj);
+                    } else if (!exists && ($scope.settings.selectionLimit === 0 ||$scope.selectedModel.length <$scope.settings.selectionLimit)) {
+                       $scope.selectedModel.push(finalObj);
+                       $scope.externalEvents.onItemSelect(finalObj);
                     }
                 };
 
-                $scope.isChecked = function (id) {
+               $scope.isChecked = function (id) {
                     if ($scope.singleSelection) {
-                        return $scope.selectedModel !== null && angular.isDefined($scope.selectedModel[$scope.settings.idProp]) && $scope.selectedModel[$scope.settings.idProp] === getFindObj(id)[$scope.settings.idProp];
+                        return $scope.selectedModel !== null && angular.isDefined($scope.selectedModel[$scope.settings.idProp]) &&$scope.selectedModel[$scope.settings.idProp] === getFindObj(id)[$scope.settings.idProp];
                     }
 
                     return _.findIndex($scope.selectedModel, getFindObj(id)) !== -1;
                 };
 
-                $scope.externalEvents.onInitDone();
+               $scope.externalEvents.onInitDone();
             }
         };
     }
@@ -1575,15 +1687,15 @@
     "use strict";
 
     angular
-        .module("app.controls")
+        .module("common")
         .directive('exportTable', exportTable);
 
     function exportTable() {
         var link = function ($scope, elm, attr) {
-            $scope.$on('export-excel', function (e, d) {
+           $scope.$on('export-excel', function (e, d) {
                 elm.tableExport({ type: 'excel', escape: false });
             });
-            $scope.$on('export-doc', function (e, d) {
+           $scope.$on('export-doc', function (e, d) {
                 elm.tableExport({ type: 'doc', escape: false });
             });
         }
@@ -1599,7 +1711,7 @@
     "use strict";
 
     angular
-        .module("app.controls")
+        .module("common")
         .directive("waitCursor", waitCursor);
 
     function waitCursor() {
@@ -1613,7 +1725,7 @@
     "use strict";
 
     angular
-        .module("app.controls")
+        .module("common")
         .filter('numberFixedLen', numberFixedLen);
 
     function numberFixedLen() {
@@ -1628,7 +1740,7 @@
 
     orderBySk.$inject = ["$parse"];
     angular
-        .module("app.controls")
+        .module("common")
         .filter('orderBySk', orderBySk);
 
     function orderBySk($parse) {
@@ -1737,134 +1849,7 @@
         function compare(v1, v2) {
             var result = 0;
             if (v1.type === 'string') {
-                result = v1.value.toString().localeCompare(v2.value.toString(), function orderBySk($parse) {
-        return function (array, sortPredicate, reverseOrder) {
-            if (!array || !angular.isArray(array)) return array;
-
-            if (!angular.isArray(sortPredicate)) { sortPredicate = [sortPredicate]; }
-            if (sortPredicate.length === 0) { sortPredicate = ['+']; }
-
-            var predicates = processPredicates(sortPredicate, reverseOrder);
-            // Add a predicate at the end that evaluates to the element index. This makes the
-            // sort stable as it works as a tie-breaker when all the input predicates cannot
-            // distinguish between two elements.
-            predicates.push({ get: function () { return {}; }, descending: reverseOrder ? -1 : 1 });
-
-            // The next three lines are a version of a Swartzian Transform idiom from Perl
-            // (sometimes called the Decorate-Sort-Undecorate idiom)
-            // See https://en.wikipedia.org/wiki/Schwartzian_transform
-            var compareValues = Array.prototype.map.call(array, getComparisonObject);
-            compareValues.sort(doComparison);
-            array = compareValues.map(function (item) { return item.value; });
-
-            return array;
-
-            function getComparisonObject(value, index) {
-                return {
-                    value: value,
-                    predicateValues: predicates.map(function (predicate) {
-                        return getPredicateValue(predicate.get(value), index);
-                    })
-                };
-            }
-
-            function doComparison(v1, v2) {
-                var result = 0;
-                for (var index = 0, length = predicates.length; index < length; ++index) {
-                    result = compare(v1.predicateValues[index], v2.predicateValues[index], predicates[index].localeAware) * predicates[index].descending;
-                    if (result) break;
-                }
-                return result;
-            }
-        };
-
-        function processPredicates(sortPredicate, reverseOrder) {
-            reverseOrder = reverseOrder ? -1 : 1;
-            return sortPredicate.map(function (predicate) {
-                var descending = 1, get = angular.identity, localeAware = false;
-
-                if (angular.isFunction(predicate)) {
-                    get = predicate;
-                } else if (angular.isString(predicate)) {
-                    if (predicate.charAt(0) == '@') {
-                        localeAware = true;
-                        predicate = predicate.substring(1);
-                    }
-                    if ((predicate.charAt(0) == '+' || predicate.charAt(0) == '-')) {
-                        descending = predicate.charAt(0) == '-' ? -1 : 1;
-                        predicate = predicate.substring(1);
-                    }
-                    if (predicate !== '') {
-                        get = $parse(predicate);
-                        if (get.constant) {
-                            var key = get();
-                            get = function (value) { return value[key]; };
-                        }
-                    }
-                }
-                return { get: get, descending: descending * reverseOrder, localeAware: localeAware };
-            });
-        }
-
-        function isPrimitive(value) {
-            switch (typeof value) {
-                case 'number': /* falls through */
-                case 'boolean': /* falls through */
-                case 'string':
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        function objectValue(value, index) {
-            // If `valueOf` is a valid function use that
-            if (typeof value.valueOf === 'function') {
-                value = value.valueOf();
-                if (isPrimitive(value)) return value;
-            }
-            // If `toString` is a valid function and not the one from `Object.prototype` use that
-            if (hasCustomToString(value)) {
-                value = value.toString();
-                if (isPrimitive(value)) return value;
-            }
-            // We have a basic object so we use the position of the object in the collection
-            return index;
-        }
-
-        function getPredicateValue(value, index) {
-            var type = typeof value;
-            if (value === null) {
-                type = 'string';
-                value = 'null';
-            } else if (type === 'string') {
-                value = value.toLowerCase();
-            } else if (type === 'object') {
-                value = objectValue(value, index);
-            }
-            return { value: value, type: type };
-        }
-
-        function compare(v1, v2) {
-            var result = 0;
-            if (v1.type === 'string') {
                 result = v1.value.toString().localeCompare(v2.value.toString(), 'sk');
-            } else {
-                if (v1.type === v2.type) {
-                    if (v1.value !== v2.value) {
-                        result = v1.value < v2.value ? -1 : 1;
-                    }
-                } else {
-                    result = v1.type < v2.type ? -1 : 1;
-                }
-            }
-            return result;
-        }
-
-        function hasCustomToString(obj) {
-            return angular.isFunction(obj.toString) && obj.toString !== Object.prototype.toString;
-        }
-    });
             } else {
                 if (v1.type === v2.type) {
                     if (v1.value !== v2.value) {

@@ -6,11 +6,12 @@
 
     function EmployeeDetailController($scope, $http, $location, $routeParams, $sce, $controller) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
         vm.employeeId = $routeParams.id;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.employee = {};
         vm.newNote = {};
         vm.attendanceStates = ["Žiadateľ", "Pracujúci", "Odstúpený"];
@@ -24,24 +25,10 @@
                     if (vm.employee.notes[i].text != null)
                         vm.employee.notes[i].text = $sce.trustAsHtml(vm.employee.notes[i].text.replace(/(\r\n|\n|\r)/gm, '<br />'));
             }, function () {
-                toastr.error("Nepodarilo sa načítať informácie o zamestnancovi");
+                toastr.error("Nepodarilo sa načítať informácie o zamestnancovi:<br/>");
             }).finally(function () {
                 vm.isBusy = false;
             });
-
-        vm.deleteEmployee = function () {
-            vm.isBusy = true;
-            $http.delete("/Api/Employee/" + vm.employee.id)
-                .then(function () {
-                    toastr.success("Zamestnanec bol vymazaný");
-                    $location.path("#/");
-                }, function (error) {
-                    toastr.error("Zamestnanca sa nepodarilo vymazať");
-                })
-                .finally(function () {
-                    vm.isBusy = false;
-                });
-        }
 
         vm.saveNote = function () {
             vm.isBusy = true;

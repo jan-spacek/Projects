@@ -37,7 +37,7 @@ namespace MyNurserySchool.Controllers.Api
             }
 
             _logger.LogInformation("Attempting to get unauthorized nursery");
-            Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return Json(new { Message = "Do not have permissionts to view this item" });
         }
 
@@ -76,7 +76,7 @@ namespace MyNurserySchool.Controllers.Api
             }
 
             Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return Json(new { Message = "Failed", ModelState = ModelState });   
+            return Json(new { Message = "Failed", ModelState = ModelState });
         }
 
         [HttpPost("")]
@@ -112,7 +112,7 @@ namespace MyNurserySchool.Controllers.Api
             }
 
             Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return Json(new { Message = "Failed", ModelState = ModelState });            
+            return Json(new { Message = "Failed", ModelState = ModelState });
         }
 
         [HttpDelete("{id}")]
@@ -135,7 +135,7 @@ namespace MyNurserySchool.Controllers.Api
             }
 
             _logger.LogInformation("Attempting to get unauthorized nursery");
-            Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return Json(new { Message = "Do not have permissionts to view this item" });
         }
 
@@ -151,7 +151,23 @@ namespace MyNurserySchool.Controllers.Api
             }
 
             _logger.LogInformation("Attempting to get unauthorized nursery");
-            Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return Json(new { Message = "Do not have permissionts to view this item" });
+        }
+
+        [HttpGet("{nurseryId}/Classes")]
+        public JsonResult GetClasses(int nurseryId)
+        {
+            var matchingNurs = User.FindAll("Nursery").FirstOrDefault(claim => claim.Value == nurseryId.ToString());
+
+            if (User.IsInRole("Admin") || matchingNurs != null)
+            {
+                var results = Mapper.Map<IEnumerable<ClassViewModel>>(_repository.GetAllClasses(nurseryId));
+                return Json(results);
+            }
+
+            _logger.LogInformation("Attempting to get unauthorized nursery");
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return Json(new { Message = "Do not have permissionts to view this item" });
         }
     }

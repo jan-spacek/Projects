@@ -4,17 +4,18 @@
     angular.module("app.nursery")
         .controller("EmployeesListController", EmployeesListController);
 
-    function EmployeesListController($scope, $http, $window, $controller) {
+    function EmployeesListController($scope, $http, $window, $controller, $routeParams) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.employees = [];
         vm.isBusy = true;
-        $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
+       $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
 
-        $http.get("/Api/Nursery/" + $scope.outerId + "/employees")
+        $http.get("/Api/Nursery/" + vm.nurseryId + "/employees")
             .then(function (response) {
                 angular.copy(response.data, vm.employees);
             }, function (error) {

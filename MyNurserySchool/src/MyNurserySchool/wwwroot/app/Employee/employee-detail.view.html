@@ -54,11 +54,8 @@
             <br />
             <div class="row">
                 <div class="col-xs-8">
-                    <a href="#/employee/{{ vm.employee.id }}/edit" class="btn btn-default" ng-if="canEdit"><i class="fa fa-edit"></i> Upraviť</a>
+                    <a href="#/{{ vm.nurseryId }}/employee/{{ vm.employee.id }}/edit" class="btn btn-default" ng-if="canEdit"><i class="fa fa-edit"></i> Upraviť</a>
                     <back-button></back-button>
-                </div>
-                <div class="col-xs-4 text-right">
-                    <!--<button type="button" class="btn btn-danger" ng-click="vm.deleteEmployee()" ng-if="canEdit"><i class="fa fa-trash-o"></i> Vymazať</button>-->
                 </div>
             </div>
             <created-modified model="vm.employee"></created-modified>

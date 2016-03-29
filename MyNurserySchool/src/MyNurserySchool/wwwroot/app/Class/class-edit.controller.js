@@ -6,17 +6,18 @@
 
     function ClassEditController($scope, $http, $location, $routeParams, $controller, $uibModal) {
         $controller('BaseController', {
-            '$scope': $scope
+            '$scope':$scope
         });
 
         var vm = this;
         vm.classId = $routeParams.id;
+        vm.nurseryId = parseInt($routeParams.nursId);
         vm.nursery = {};
         vm.class = {};
         vm.isNew = vm.classId == 0;
         vm.isBusy = true;
 
-        $http.get("/Api/Nursery/" + $scope.outerId)
+        $http.get("/Api/Nursery/" + vm.nurseryId)
             .then(function (response) {
                 angular.copy(response.data, vm.nursery);
                 if (!vm.isNew) {
@@ -62,12 +63,12 @@
         }
 
         vm.deleteClassModal = function () {
-            $scope.deleteModalTarget = "triedu " + vm.class.name;
+           $scope.deleteModalTarget = "triedu " + vm.class.name;
 
             var modalInstance = $uibModal.open({
                 templateUrl: '/app/common/templates/delete-modal.template.html',
                 controller: 'DeleteModalController',
-                scope: $scope
+                scope:$scope
             });
 
             modalInstance.result.then(function () {
@@ -81,7 +82,7 @@
             $http.delete("/Api/Class/" + vm.class.id)
                 .then(function () {                    
                     toastr.success("Trieda " + className + " bola vymazaná");
-                    $scope.back();
+                   $scope.back();
                 }, function (error) {
                     toastr.error("Triedu sa nepodarilo vymazať");
                 })

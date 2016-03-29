@@ -14,8 +14,8 @@
         </div>
     </div>
     <div class="row">
-        <h3 class="col-xs-6">{{ vm.class.name }}</h3>
-        <h3 class="col-xs-6 text-right">{{ vm.class.children.length + "/" + vm.class.capacity }}</h3>
+        <h3 class="col-xs-9">{{ vm.class.name }}</h3>
+        <h3 class="col-xs-3 text-right">{{ vm.class.children.length + "/" + vm.class.capacity }}</h3>
     </div>
     <wait-cursor ng-show="vm.isBusy"></wait-cursor>
     <back-to-top></back-to-top>
@@ -54,7 +54,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="child in vm.children | orderBySk:sortType:sortReverse | filter:search" ng-dblclick="redirect('#/child/' + child.id)" ng-class="{'text-gray': child.attendance == 2, 'text-primary': child.attendance == 0}">
+                <tr ng-repeat="child in vm.children | orderBySk:sortType:sortReverse | filter:search" ng-dblclick="redirect('#/' + vm.nurseryId + '/child/' + child.id)" ng-class="{'text-gray': child.attendance == 2, 'text-primary': child.attendance == 0}">
                     <td>{{ child.number }}</td>
                     <td>{{ child.fullName }}</td>
                     <td>{{ child.birthDate | date : 'd.M.yyyy' }}</td>
@@ -62,8 +62,8 @@
                     <td><span ng-bind-html="child.contacts"></span></td>
                     <td class="truncate"><span ng-bind-html="child.description"></span></td>
                     <td class="text-right">
-                        <a ng-href="#/child/{{ child.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
-                        <a ng-href="#/child/{{ child.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
+                        <a ng-href="#/{{ vm.nurseryId }}/child/{{ child.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
+                        <a ng-href="#/{{ vm.nurseryId }}/child/{{ child.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
                     </td>
                 </tr>
             </tbody>
