@@ -3,8 +3,8 @@
         <div class="float-left">
             <back-button></back-button>
             <a ng-href="#/child/0/edit" class="btn btn-primary" ng-if="canEdit"><i class="fa fa-user-plus"></i> Pridať dieťa</a>
-            <a ng-click="exportAction('excel')" class="btn btn-success" title="Export do Excelu"><i class="fa fa-lg fa-file-excel-o"></i></a>
-            <a ng-click="exportAction('doc')" class="btn btn-primary" title="Export do Wordu"><i class="fa fa-lg fa-file-word-o"></i></a>
+            <a ng-click="exportAction('excel')" class="btn btn-success" title="Export do Excelu" ng-if="vm.attendantChildren.length > 0"><i class="fa fa-lg fa-file-excel-o"></i></a>
+            <a ng-click="exportAction('doc')" class="btn btn-primary" title="Export do Wordu" ng-if="vm.attendantChildren.length > 0"><i class="fa fa-lg fa-file-word-o"></i></a>
         </div>
         <div class="form-group form-find">
             <div class="input-group">
@@ -19,7 +19,7 @@
     </div>
     <wait-cursor ng-show="vm.isBusy"></wait-cursor>
     <back-to-top></back-to-top>
-    <div ng-if="vm.children.length < 1">
+    <div ng-if="vm.children.length < 1 && !vm.isBusy">
         Zoznam je prázdny
     </div>
     <div ng-if="vm.children.length > 0">
@@ -54,7 +54,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="child in vm.children | orderBySk:sortType:sortReverse | filter:search" ng-dblclick="redirect('#/' + vm.nurseryId + '/child/' + child.id)" ng-class="{'text-gray': child.attendance == 2, 'text-primary': child.attendance == 0}">
+                <tr ng-repeat="child in vm.children | orderBySk:sortType:sortReverse | filter:search" ng-dblclick="redirect('#/child/' + child.id)" ng-class="{'text-gray': child.attendance == 2, 'text-primary': child.attendance == 0}">
                     <td>{{ child.number }}</td>
                     <td>{{ child.fullName }}</td>
                     <td>{{ child.birthDate | date : 'd.M.yyyy' }}</td>
@@ -62,8 +62,8 @@
                     <td><span ng-bind-html="child.contacts"></span></td>
                     <td class="truncate"><span ng-bind-html="child.description"></span></td>
                     <td class="text-right">
-                        <a ng-href="#/{{ vm.nurseryId }}/child/{{ child.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
-                        <a ng-href="#/{{ vm.nurseryId }}/child/{{ child.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
+                        <a ng-href="#/child/{{ child.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
+                        <a ng-href="#/child/{{ child.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
                     </td>
                 </tr>
             </tbody>

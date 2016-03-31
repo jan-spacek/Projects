@@ -103,6 +103,8 @@ namespace MyNurserySchool
                 config.CreateMap<Employee, EmployeeViewModel>().ReverseMap();
                 config.CreateMap<Child, ChildViewModel>().ReverseMap();
                 config.CreateMap<Note, NoteViewModel>().ReverseMap();
+                config.CreateMap<Nursery, NurseryBasicViewModel>().ReverseMap();
+                config.CreateMap<Class, ClassBasicViewModel>().ReverseMap();
             });
 
             app.UseMvc(config =>

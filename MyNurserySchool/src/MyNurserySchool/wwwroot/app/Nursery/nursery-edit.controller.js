@@ -4,13 +4,13 @@
     angular.module("app.nursery")
         .controller("NurseryEditController", NurseryEditController);
 
-    function NurseryEditController($scope, $http, $location, $controller, $routeParams) {
+    function NurseryEditController($scope, $http, $location, $controller, $rootScope) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nurseryId = $rootScope.nursery.id;
         vm.nursery = {};
         vm.isBusy = true;
 

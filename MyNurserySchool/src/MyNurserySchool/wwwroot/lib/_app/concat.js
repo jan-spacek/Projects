@@ -16,26 +16,8 @@
             "mgcrea.ngStrap",
             "ui.bootstrap"
         ])
-        .run(["$http", "$location", "$rootScope", function ($http, $location, $rootScope) {
-            var nurseries = [];
-
-            activate();
-
-            function activate() {
-                $http.get("/Api/Nurseries")
-                    .then(function (response) {
-                        angular.copy(response.data, nurseries);
-                        if (!$rootScope.isAdmin && nurseries.length === 1) {
-                            $rootScope.nurseryId = nurseries[0].id;
-                            $rootScope.classes = nurseries[0].classes;
-                        } else {
-                            $location.path('/');
-                        }
-                    });
-            }
-        }])
         .config(["$routeProvider", function ($routeProvider) {
-            $routeProvider.when("/", {
+            $routeProvider.when("/nurseries", {
                 controller: "NurseriesListController",
                 controllerAs: "vm",
                 templateUrl: "/app/Nurseries/nurseries-list.view.html"
@@ -53,73 +35,73 @@
                 templateUrl: "/app/User/users-list.view.html"
             });
 
-            $routeProvider.when("/:nursId", {
+            $routeProvider.when("/", {
                 controller: "NurseryDetailController",
                 controllerAs: "vm",
                 templateUrl: "/app/Nursery/nursery-detail.view.html"
             });
 
-            $routeProvider.when("/:nursId/edit", {
+            $routeProvider.when("/edit", {
                 controller: "NurseryEditController",
                 controllerAs: "vm",
                 templateUrl: "/app/Nursery/nursery-edit.view.html"
             });
 
-            $routeProvider.when("/:nursId/class/:id/edit", {
+            $routeProvider.when("/class/:id/edit", {
                 controller: "ClassEditController",
                 controllerAs: "vm",
                 templateUrl: "/app/Class/class-edit.view.html"
             });
 
-            $routeProvider.when("/:nursId/class/:id", {
+            $routeProvider.when("/class/:id", {
                 controller: "ClassDetailController",
                 controllerAs: "vm",
                 templateUrl: "/app/Class/class-detail.view.html"
             });
 
-            $routeProvider.when("/:nursId/employee/:id/edit", {
+            $routeProvider.when("/employee/:id/edit", {
                 controller: "EmployeeEditController",
                 controllerAs: "vm",
                 templateUrl: "/app/Employee/employee-edit.view.html"
             });
 
-            $routeProvider.when("/:nursId/employee/:id", {
+            $routeProvider.when("/employee/:id", {
                 controller: "EmployeeDetailController",
                 controllerAs: "vm",
                 templateUrl: "/app/Employee/employee-detail.view.html"
             });
 
-            $routeProvider.when("/:nursId/child/:id/edit", {
+            $routeProvider.when("/child/:id/edit", {
                 controller: "ChildEditController",
                 controllerAs: "vm",
                 templateUrl: "/app/Child/child-edit.view.html"
             });
 
-            $routeProvider.when("/:nursId/child/:id", {
+            $routeProvider.when("/child/:id", {
                 controller: "ChildDetailController",
                 controllerAs: "vm",
                 templateUrl: "/app/Child/child-detail.view.html"
             });
 
-            $routeProvider.when("/:nursId/employees", {
+            $routeProvider.when("/employees", {
                 controller: "EmployeesListController",
                 controllerAs: "vm",
                 templateUrl: "/app/Employee/employees-list.view.html"
             });
 
-            $routeProvider.when("/:nursId/children", {
+            $routeProvider.when("/children", {
                 controller: "ChildrenListController",
                 controllerAs: "vm",
                 templateUrl: "/app/Child/children-list-all.view.html"
             });
 
-            $routeProvider.when("/:nursId/children/waiting", {
+            $routeProvider.when("/children/waiting", {
                 controller: "ChildrenListController",
                 controllerAs: "vm",
                 templateUrl: "/app/Child/children-list-waiting.view.html"
             });
 
-            $routeProvider.when("/:nursId/children/archive", {
+            $routeProvider.when("/children/archive", {
                 controller: "ChildrenListController",
                 controllerAs: "vm",
                 templateUrl: "/app/Child/children-list-archived.view.html"
@@ -325,18 +307,18 @@
 (function (angular) {
     "use strict";
 
-    ChildEditController.$inject = ["$scope", "$http", "$routeParams", "$controller", "$uibModal"];
+    ChildEditController.$inject = ["$scope", "$rootScope", "$http", "$routeParams", "$controller", "$uibModal"];
     angular.module("app.nursery")
         .controller("ChildEditController", ChildEditController);
 
-    function ChildEditController($scope, $http, $routeParams, $controller, $uibModal) {
+    function ChildEditController($scope, $rootScope, $http, $routeParams, $controller, $uibModal) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
         vm.childId = $routeParams.id;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nurseryId = $rootScope.nursery.id;
         vm.child = {};
         vm.classId = 0;
         vm.isNew = vm.childId == 0;
@@ -431,17 +413,17 @@
 (function (angular) {
     "use strict";
 
-    ChildrenListController.$inject = ["$scope", "$http", "$sce", "$controller", "$routeParams"];
+    ChildrenListController.$inject = ["$scope", "$http", "$sce", "$controller", "$rootScope"];
     angular.module("app.nursery")
         .controller("ChildrenListController", ChildrenListController);
 
-    function ChildrenListController($scope, $http, $sce, $controller, $routeParams) {
+    function ChildrenListController($scope, $http, $sce, $controller, $rootScope) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nurseryId = $rootScope.nursery.id;
         vm.children = [];
         vm.attendantChildren = [];
         vm.waitingChildren = [];
@@ -506,18 +488,18 @@
 
     "use strict";
 
-    ClassDetailController.$inject = ["$scope", "$http", "$routeParams", "$sce", "$window", "$controller"];
+    ClassDetailController.$inject = ["$scope", "$rootScope", "$http", "$routeParams", "$sce", "$window", "$controller"];
     angular.module("app.nursery")
         .controller("ClassDetailController", ClassDetailController);
 
-    function ClassDetailController($scope, $http, $routeParams, $sce, $window, $controller) {
+    function ClassDetailController($scope, $rootScope, $http, $routeParams, $sce, $window, $controller) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
         vm.classId = $routeParams.id;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nurseryId = $rootScope.nursery.id;
         vm.class = {};
         vm.children = [];
         vm.isBusy = true;
@@ -546,18 +528,18 @@
 (function () {
     "use strict";
 
-    ClassEditController.$inject = ["$scope", "$http", "$location", "$routeParams", "$controller", "$uibModal"];
+    ClassEditController.$inject = ["$scope", "$rootScope", "$http", "$location", "$routeParams", "$controller", "$uibModal"];
     angular.module("app.nursery")
         .controller("ClassEditController", ClassEditController);
 
-    function ClassEditController($scope, $http, $location, $routeParams, $controller, $uibModal) {
+    function ClassEditController($scope, $rootScope, $http, $location, $routeParams, $controller, $uibModal) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
         vm.classId = $routeParams.id;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nurseryId = $rootScope.nursery.id;
         vm.nursery = {};
         vm.class = {};
         vm.isNew = vm.classId == 0;
@@ -641,18 +623,18 @@
 (function (angular) {
     "use strict";
 
-    EmployeeDetailController.$inject = ["$scope", "$http", "$location", "$routeParams", "$sce", "$controller"];
+    EmployeeDetailController.$inject = ["$scope", "$rootScope", "$http", "$location", "$routeParams", "$sce", "$controller"];
     angular.module("app.nursery")
         .controller("EmployeeDetailController", EmployeeDetailController);
 
-    function EmployeeDetailController($scope, $http, $location, $routeParams, $sce, $controller) {
+    function EmployeeDetailController($scope, $rootScope, $http, $location, $routeParams, $sce, $controller) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
         vm.employeeId = $routeParams.id;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nurseryId = $rootScope.nursery.id;
         vm.employee = {};
         vm.newNote = {};
         vm.attendanceStates = ["Žiadateľ", "Pracujúci", "Odstúpený"];
@@ -711,18 +693,18 @@
 (function (angular) {
     "use strict";
 
-    EmployeeEditController.$inject = ["$scope", "$http", "$routeParams", "$controller", "$uibModal"];
+    EmployeeEditController.$inject = ["$scope", "$rootScope", "$http", "$routeParams", "$controller", "$uibModal"];
     angular.module("app.nursery")
         .controller("EmployeeEditController", EmployeeEditController);
 
-    function EmployeeEditController($scope, $http, $routeParams, $controller, $uibModal) {
+    function EmployeeEditController($scope, $rootScope, $http, $routeParams, $controller, $uibModal) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
         vm.employeeId = $routeParams.id;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nurseryId = $rootScope.nursery.id;
         vm.employee = {};
         vm.isNew = vm.employeeId == 0;
        $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
@@ -801,17 +783,17 @@
 (function (angular) {
     "use strict";
 
-    EmployeesListController.$inject = ["$scope", "$http", "$window", "$controller", "$routeParams"];
+    EmployeesListController.$inject = ["$scope", "$http", "$window", "$controller", "$rootScope"];
     angular.module("app.nursery")
         .controller("EmployeesListController", EmployeesListController);
 
-    function EmployeesListController($scope, $http, $window, $controller, $routeParams) {
+    function EmployeesListController($scope, $http, $window, $controller, $rootScope) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nurseryId = $rootScope.nursery.id;
         vm.employees = [];
         vm.isBusy = true;
        $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
@@ -831,36 +813,165 @@
 
     "use strict";
 
-    NurseryDetailController.$inject = ["$scope", "$routeParams", "$http", "$location", "$window", "$controller"];
+    NurseriesListController.$inject = ["$http", "$scope", "$window", "$location", "$rootScope"];
+    angular.module("app.nursery")
+        .controller("NurseriesListController", NurseriesListController);
+
+    function NurseriesListController($http, $scope, $window, $location, $rootScope) {
+        var vm = this;
+        vm.nurseries = [];
+        vm.isBusy = true;
+
+        activate();
+
+        function activate() {
+            $http.get("/Api/Nurseries")
+                .then(function (response) {
+                    angular.copy(response.data, vm.nurseries);
+                    $rootScope.nursery = null;
+                }, function (error) {
+                    toastr.error("Nepodarilo sa načítať dáta: " + error);
+                })
+                .finally(function () {
+                    vm.isBusy = false;
+                });
+        }
+        
+        vm.nurseryDblClick = function (nursery) {
+            $window.location = "/App/" + nursery.id ;
+        }
+    }
+})(angular);
+(function (angular) {
+    "use strict";
+
+    NurseryAdminEditController.$inject = ["$routeParams", "$http", "$location", "$uibModal", "$scope"];
+    angular.module("app.nursery")
+        .controller("NurseryAdminEditController", NurseryAdminEditController);
+
+    function NurseryAdminEditController($routeParams, $http, $location, $uibModal,$scope) {
+        var vm = this;
+        vm.nurseryId = parseInt($routeParams.id);
+        vm.nursery = {};
+        vm.isNew = vm.id == 0;
+
+        if (!vm.isNew) {
+            vm.isBusy = true;
+            $http.get("/Api/Nursery/" + vm.nurseryId)
+                .then(function (response) {
+                    angular.copy(response.data, vm.nursery);
+                }, function () {
+                    toastr.error("Nepodarilo sa načítať informácie o škôlke");
+                }).finally(function () {
+                    vm.isBusy = false;
+                });
+        }
+
+        vm.saveNursery = function () {
+            vm.isBusy = true;
+
+            if (vm.isNew) {
+                $http.post("/Api/Nursery", vm.nursery)
+                    .then(function (response) {
+                        toastr.success("Bola vytvorená nová škôlka " + vm.nursery.name);
+                        $location.path("#/");
+                    }, function () {
+                        toastr.error("Škôlku sa nepodarilo uložiť");
+                    }).finally(function () {
+                        vm.isBusy = false;
+                    });
+            }
+            else
+            {
+                $http.put("/Api/Nursery/", vm.nursery)
+                    .then(function (response) {
+                        toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
+                        $location.path("#/");
+                    }, function () {
+                        toastr.error("Škôlku sa nepodarilo uložiť");
+                    }).finally(function () {
+                        vm.isBusy = false;
+                    });
+            }
+        }
+
+        vm.deleteNurseryModal = function () {
+           $scope.deleteModalTarget = "škôlku " + vm.nursery.name;
+
+            var modalInstance = $uibModal.open({
+                templateUrl: '/app/common/templates/delete-modal.template.html',
+                controller: 'DeleteModalController',
+                scope:$scope
+            });
+
+            modalInstance.result.then(function () {
+                vm.deleteNursery();
+            });
+        }
+
+        vm.deleteNursery = function () {
+            vm.isBusy = true;
+            var nurseryName = vm.nursery.name;
+            $http.delete("/Api/Nursery/" + vm.nursery.id)
+                .then(function () {
+                    toastr.success("Škôlka " + nurseryName + " bola vymazaná");
+                    $location.path("#/");
+                }, function (error) {
+                    toastr.error("Škôlku " + nurseryName + " sa nepodarilo vymazať");
+                })
+                .finally(function () {
+                    vm.isBusy = false;
+                });
+        }
+    }
+})(angular);
+(function (angular) {
+
+    "use strict";
+
+    NurseryDetailController.$inject = ["$scope", "$rootScope", "$http", "$location", "$window", "$controller"];
     angular.module("app.nursery")
         .controller("NurseryDetailController", NurseryDetailController);
 
-    function NurseryDetailController($scope, $routeParams, $http, $location, $window, $controller) {
+    function NurseryDetailController($scope, $rootScope, $http, $location, $window, $controller) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        
         vm.nursery = {};
         vm.isBusy = true;
-       $scope.sortType = 'title';
-       $scope.sortReverse = true;
+        $scope.sortType = 'title';
+        $scope.sortReverse = true;
 
-        $http.get("/Api/Nursery/" + vm.nurseryId)
-            .then(function (response) {
-                angular.copy(response.data, vm.nursery);
-                if (vm.nursery.classes.length > 0) {
-                    vm.isBusy = true;
-                    for (var i = 0; i < vm.nursery.classes.length; i++) {
-                        getClass(i);
+        activate()
+
+        function activate() {
+            if ($rootScope.nursery != null) {
+                vm.nurseryId = $rootScope.nursery.id;
+                getNursery();
+            } else {
+                $location.path("/nurseries");
+            }
+        }
+
+        function getNursery() {
+            $http.get("/Api/Nursery/" + vm.nurseryId)
+                .then(function (response) {
+                    angular.copy(response.data, vm.nursery);
+                    if (vm.nursery.classes.length > 0) {
+                        vm.isBusy = true;
+                        for (var i = 0; i < vm.nursery.classes.length; i++) {
+                            getClass(i);
+                        }
                     }
-                }
-            }, function () {
-                toastr.error("Nepodarilo sa načítať informácie o škôlke");
-            }).finally(function () {
-                vm.isBusy = false;
-            });
+                }, function () {
+                    toastr.error("Nepodarilo sa načítať informácie o škôlke");
+                }).finally(function () {
+                    vm.isBusy = false;
+                });
+        }
 
         function getClass(i) {
             $http.get("/Api/Class/" + vm.nursery.classes[i].id)
@@ -877,17 +988,17 @@
 (function (angular) {
     "use strict";
 
-    NurseryEditController.$inject = ["$scope", "$http", "$location", "$controller", "$routeParams"];
+    NurseryEditController.$inject = ["$scope", "$http", "$location", "$controller", "$rootScope"];
     angular.module("app.nursery")
         .controller("NurseryEditController", NurseryEditController);
 
-    function NurseryEditController($scope, $http, $location, $controller, $routeParams) {
+    function NurseryEditController($scope, $http, $location, $controller, $rootScope) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nurseryId = $rootScope.nursery.id;
         vm.nursery = {};
         vm.isBusy = true;
 
@@ -1043,128 +1154,6 @@
 
        $scope.redirect = function (path) {
             $window.location.href = path;
-        }
-    }
-})(angular);
-(function (angular) {
-
-    "use strict";
-
-    NurseriesListController.$inject = ["$http", "$scope", "$window", "$location", "$rootScope"];
-    angular.module("app.nursery")
-        .controller("NurseriesListController", NurseriesListController);
-
-    function NurseriesListController($http, $scope, $window, $location, $rootScope) {
-        var vm = this;
-        vm.nurseries = [];
-        vm.isBusy = true;
-
-        activate();
-
-        function activate() {
-            $http.get("/Api/Nurseries")
-                .then(function (response) {
-                    angular.copy(response.data, vm.nurseries);
-                    if (vm.nurseries.length === 1 && !$rootScope.isAdmin) {
-                        vm.nurseryDblClick(vm.nurseries[0]);
-                    } else {
-                        $rootScope.nurseryId = undefined;
-                    }
-                }, function (error) {
-                    toastr.error("Nepodarilo sa načítať dáta: " + error);
-                })
-                .finally(function () {
-                    vm.isBusy = false;
-                });
-        }
-        
-        vm.nurseryDblClick = function (nursery) {
-            $rootScope.nurseryId = nursery.id;
-            $rootScope.classes = nursery.classes;
-            $location.path(nursery.id);
-        }
-    }
-})(angular);
-(function (angular) {
-    "use strict";
-
-    NurseryAdminEditController.$inject = ["$routeParams", "$http", "$location", "$uibModal", "$scope"];
-    angular.module("app.nursery")
-        .controller("NurseryAdminEditController", NurseryAdminEditController);
-
-    function NurseryAdminEditController($routeParams, $http, $location, $uibModal,$scope) {
-        var vm = this;
-        vm.nurseryId = parseInt($routeParams.id);
-        vm.nursery = {};
-        vm.isNew = vm.id == 0;
-
-        if (!vm.isNew) {
-            vm.isBusy = true;
-            $http.get("/Api/Nursery/" + vm.nurseryId)
-                .then(function (response) {
-                    angular.copy(response.data, vm.nursery);
-                }, function () {
-                    toastr.error("Nepodarilo sa načítať informácie o škôlke");
-                }).finally(function () {
-                    vm.isBusy = false;
-                });
-        }
-
-        vm.saveNursery = function () {
-            vm.isBusy = true;
-
-            if (vm.isNew) {
-                $http.post("/Api/Nursery", vm.nursery)
-                    .then(function (response) {
-                        toastr.success("Bola vytvorená nová škôlka " + vm.nursery.name);
-                        $location.path("#/");
-                    }, function () {
-                        toastr.error("Škôlku sa nepodarilo uložiť");
-                    }).finally(function () {
-                        vm.isBusy = false;
-                    });
-            }
-            else
-            {
-                $http.put("/Api/Nursery/", vm.nursery)
-                    .then(function (response) {
-                        toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
-                        $location.path("#/");
-                    }, function () {
-                        toastr.error("Škôlku sa nepodarilo uložiť");
-                    }).finally(function () {
-                        vm.isBusy = false;
-                    });
-            }
-        }
-
-        vm.deleteNurseryModal = function () {
-           $scope.deleteModalTarget = "škôlku " + vm.nursery.name;
-
-            var modalInstance = $uibModal.open({
-                templateUrl: '/app/common/templates/delete-modal.template.html',
-                controller: 'DeleteModalController',
-                scope:$scope
-            });
-
-            modalInstance.result.then(function () {
-                vm.deleteNursery();
-            });
-        }
-
-        vm.deleteNursery = function () {
-            vm.isBusy = true;
-            var nurseryName = vm.nursery.name;
-            $http.delete("/Api/Nursery/" + vm.nursery.id)
-                .then(function () {
-                    toastr.success("Škôlka " + nurseryName + " bola vymazaná");
-                    $location.path("#/");
-                }, function (error) {
-                    toastr.error("Škôlku " + nurseryName + " sa nepodarilo vymazať");
-                })
-                .finally(function () {
-                    vm.isBusy = false;
-                });
         }
     }
 })(angular);

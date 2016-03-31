@@ -16,11 +16,7 @@
             $http.get("/Api/Nurseries")
                 .then(function (response) {
                     angular.copy(response.data, vm.nurseries);
-                    if (vm.nurseries.length === 1 && !$rootScope.isAdmin) {
-                        vm.nurseryDblClick(vm.nurseries[0]);
-                    } else {
-                        $rootScope.nurseryId = undefined;
-                    }
+                    $rootScope.nursery = null;
                 }, function (error) {
                     toastr.error("Nepodarilo sa načítať dáta: " + error);
                 })
@@ -30,9 +26,7 @@
         }
         
         vm.nurseryDblClick = function (nursery) {
-            $rootScope.nurseryId = nursery.id;
-            $rootScope.classes = nursery.classes;
-            $location.path(nursery.id);
+            $window.location = "/App/" + nursery.id ;
         }
     }
 })(angular);

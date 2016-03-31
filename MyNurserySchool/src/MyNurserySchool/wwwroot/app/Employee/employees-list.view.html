@@ -16,7 +16,7 @@
     <h3><i class="fa fa-users"></i> Zoznam zamestnancov</h3>
     <wait-cursor ng-if="vm.isBusy"></wait-cursor>
     <back-to-top></back-to-top>
-    <div ng-if="vm.employees.length < 1">
+    <div ng-if="vm.employees.length < 1 && !vm.isBusy">
         Zoznam je prázdny
     </div>
     <div ng-if="vm.employees.length > 0">
@@ -31,14 +31,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="employee in vm.employees | filter:search" ng-dblclick="redirect('#/' + vm.nurseryId + '/employee/' + employee.id)" ng-class="employee.attendance == 0 ? 'text-primary' : employee.attendance == 2 ? 'text-gray' : ''">
+                <tr ng-repeat="employee in vm.employees | filter:search" ng-dblclick="redirect('#/employee/' + employee.id)" ng-class="employee.attendance == 0 ? 'text-primary' : employee.attendance == 2 ? 'text-gray' : ''">
                     <td>{{ employee.fullName }}</td>
                     <td>{{ employee.email }}</td>
                     <td>{{ employee.workPhone }} {{ employee.privatePhone }}</td>
                     <td>{{ attendance[employee.attendance].name }}</td>
                     <td class="text-right">
-                        <a ng-href="#/{{ vm.nurseryId }}/employee/{{ employee.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
-                        <a ng-href="#/{{ vm.nurseryId }}/employee/{{ employee.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
+                        <a ng-href="#/employee/{{ employee.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
+                        <a ng-href="#/employee/{{ employee.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
                     </td>
                 </tr>
             </tbody>

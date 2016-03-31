@@ -4,14 +4,14 @@
     angular.module("app.nursery")
         .controller("EmployeeEditController", EmployeeEditController);
 
-    function EmployeeEditController($scope, $http, $routeParams, $controller, $uibModal) {
+    function EmployeeEditController($scope, $rootScope, $http, $routeParams, $controller, $uibModal) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
         vm.employeeId = $routeParams.id;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nurseryId = $rootScope.nursery.id;
         vm.employee = {};
         vm.isNew = vm.employeeId == 0;
        $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];

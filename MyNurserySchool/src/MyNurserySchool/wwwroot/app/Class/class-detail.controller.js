@@ -5,14 +5,14 @@
     angular.module("app.nursery")
         .controller("ClassDetailController", ClassDetailController);
 
-    function ClassDetailController($scope, $http, $routeParams, $sce, $window, $controller) {
+    function ClassDetailController($scope, $rootScope, $http, $routeParams, $sce, $window, $controller) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
         vm.classId = $routeParams.id;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nurseryId = $rootScope.nursery.id;
         vm.class = {};
         vm.children = [];
         vm.isBusy = true;

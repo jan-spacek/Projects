@@ -10,26 +10,8 @@
             "mgcrea.ngStrap",
             "ui.bootstrap"
         ])
-        .run(function ($http, $location, $rootScope) {
-            var nurseries = [];
-
-            activate();
-
-            function activate() {
-                $http.get("/Api/Nurseries")
-                    .then(function (response) {
-                        angular.copy(response.data, nurseries);
-                        if (!$rootScope.isAdmin && nurseries.length === 1) {
-                            $rootScope.nurseryId = nurseries[0].id;
-                            $rootScope.classes = nurseries[0].classes;
-                        } else {
-                            $location.path('/');
-                        }
-                    });
-            }
-        })
         .config(function ($routeProvider) {
-            $routeProvider.when("/", {
+            $routeProvider.when("/nurseries", {
                 controller: "NurseriesListController",
                 controllerAs: "vm",
                 templateUrl: "/app/Nurseries/nurseries-list.view.html"
@@ -47,73 +29,73 @@
                 templateUrl: "/app/User/users-list.view.html"
             });
 
-            $routeProvider.when("/:nursId", {
+            $routeProvider.when("/", {
                 controller: "NurseryDetailController",
                 controllerAs: "vm",
                 templateUrl: "/app/Nursery/nursery-detail.view.html"
             });
 
-            $routeProvider.when("/:nursId/edit", {
+            $routeProvider.when("/edit", {
                 controller: "NurseryEditController",
                 controllerAs: "vm",
                 templateUrl: "/app/Nursery/nursery-edit.view.html"
             });
 
-            $routeProvider.when("/:nursId/class/:id/edit", {
+            $routeProvider.when("/class/:id/edit", {
                 controller: "ClassEditController",
                 controllerAs: "vm",
                 templateUrl: "/app/Class/class-edit.view.html"
             });
 
-            $routeProvider.when("/:nursId/class/:id", {
+            $routeProvider.when("/class/:id", {
                 controller: "ClassDetailController",
                 controllerAs: "vm",
                 templateUrl: "/app/Class/class-detail.view.html"
             });
 
-            $routeProvider.when("/:nursId/employee/:id/edit", {
+            $routeProvider.when("/employee/:id/edit", {
                 controller: "EmployeeEditController",
                 controllerAs: "vm",
                 templateUrl: "/app/Employee/employee-edit.view.html"
             });
 
-            $routeProvider.when("/:nursId/employee/:id", {
+            $routeProvider.when("/employee/:id", {
                 controller: "EmployeeDetailController",
                 controllerAs: "vm",
                 templateUrl: "/app/Employee/employee-detail.view.html"
             });
 
-            $routeProvider.when("/:nursId/child/:id/edit", {
+            $routeProvider.when("/child/:id/edit", {
                 controller: "ChildEditController",
                 controllerAs: "vm",
                 templateUrl: "/app/Child/child-edit.view.html"
             });
 
-            $routeProvider.when("/:nursId/child/:id", {
+            $routeProvider.when("/child/:id", {
                 controller: "ChildDetailController",
                 controllerAs: "vm",
                 templateUrl: "/app/Child/child-detail.view.html"
             });
 
-            $routeProvider.when("/:nursId/employees", {
+            $routeProvider.when("/employees", {
                 controller: "EmployeesListController",
                 controllerAs: "vm",
                 templateUrl: "/app/Employee/employees-list.view.html"
             });
 
-            $routeProvider.when("/:nursId/children", {
+            $routeProvider.when("/children", {
                 controller: "ChildrenListController",
                 controllerAs: "vm",
                 templateUrl: "/app/Child/children-list-all.view.html"
             });
 
-            $routeProvider.when("/:nursId/children/waiting", {
+            $routeProvider.when("/children/waiting", {
                 controller: "ChildrenListController",
                 controllerAs: "vm",
                 templateUrl: "/app/Child/children-list-waiting.view.html"
             });
 
-            $routeProvider.when("/:nursId/children/archive", {
+            $routeProvider.when("/children/archive", {
                 controller: "ChildrenListController",
                 controllerAs: "vm",
                 templateUrl: "/app/Child/children-list-archived.view.html"

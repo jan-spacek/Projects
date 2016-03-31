@@ -4,13 +4,13 @@
     angular.module("app.nursery")
         .controller("ChildrenListController", ChildrenListController);
 
-    function ChildrenListController($scope, $http, $sce, $controller, $routeParams) {
+    function ChildrenListController($scope, $http, $sce, $controller, $rootScope) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nurseryId = $rootScope.nursery.id;
         vm.children = [];
         vm.attendantChildren = [];
         vm.waitingChildren = [];

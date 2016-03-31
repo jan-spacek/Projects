@@ -4,14 +4,14 @@
     angular.module("app.nursery")
         .controller("ChildEditController", ChildEditController);
 
-    function ChildEditController($scope, $http, $routeParams, $controller, $uibModal) {
+    function ChildEditController($scope, $rootScope, $http, $routeParams, $controller, $uibModal) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
         vm.childId = $routeParams.id;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nurseryId = $rootScope.nursery.id;
         vm.child = {};
         vm.classId = 0;
         vm.isNew = vm.childId == 0;

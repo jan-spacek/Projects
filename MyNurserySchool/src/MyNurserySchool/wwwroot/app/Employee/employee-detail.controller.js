@@ -4,14 +4,14 @@
     angular.module("app.nursery")
         .controller("EmployeeDetailController", EmployeeDetailController);
 
-    function EmployeeDetailController($scope, $http, $location, $routeParams, $sce, $controller) {
+    function EmployeeDetailController($scope, $rootScope, $http, $location, $routeParams, $sce, $controller) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
         vm.employeeId = $routeParams.id;
-        vm.nurseryId = parseInt($routeParams.nursId);
+        vm.nurseryId = $rootScope.nursery.id;
         vm.employee = {};
         vm.newNote = {};
         vm.attendanceStates = ["Žiadateľ", "Pracujúci", "Odstúpený"];
