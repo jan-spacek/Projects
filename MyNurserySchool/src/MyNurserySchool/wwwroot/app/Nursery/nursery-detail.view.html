@@ -7,7 +7,7 @@
             <div ng-if="vm.nursery.classes.length < 1">
                 Zoznam je prázdny
             </div>
-            <table class="table table-striped table-condensed" ng-if="vm.nursery.classes.length > 0">
+            <table class="table table-striped table-responsive" ng-if="vm.nursery.classes.length > 0">
                 <thead>
                     <tr>
                         <th width="100">
@@ -17,50 +17,51 @@
                                 <span ng-show="sortType == 'title' && sortReverse" class="fa fa-caret-up"></span>
                             </a>
                         </th>
-                        <th width="200">Triedna učiteľka</th>
+                        <th class="hidden-xs" width="200">Triedna učiteľka</th>
                         <th width="80">Poč. detí</th>
-                        <th width="105"></th>
+                        <th class="hidden-xs" width="105"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="class in vm.nursery.classes | orderBySk:sortType:sortReverse" ng-dblclick="redirect('#/class/' + class.id)">
                         <td>{{ class.name }}</td>
-                        <td>{{ class.classTeacher.fullName }}</td>
-                        <td>{{ class.children.length + "/" + class.capacity }}</td>
-                        <td class="text-right">
+                        <td class="hidden-xs">{{ class.classTeacher.fullName }}</td>
+                        <td ng-class="{'text-danger': class.children.length > class.capacity, 'text-warning': class.children.length == class.capacity}">
+                            {{ class.children.length + "/" + class.capacity }}
+                        </td>
+                        <td class="hidden-xs text-right">
                             <a ng-href="#/class/{{ class.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
                             <a ng-href="#/class/{{ class.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <!--<a ng-href="#/class/0/edit" class="btn btn-primary btn-block" ng-if="canEdit"><i class="fa fa-plus-circle"></i> Pridať triedu</a>-->
+            <a ng-href="#/class/0/edit" class="btn btn-primary btn-block visible-xs" ng-if="canEdit"><i class="fa fa-plus-circle"></i> Pridať triedu</a>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6 hidden-xs">
             <h3><i class="fa fa-users"></i> Zamestnanci</h3>
             <div ng-if="vm.nursery.employees.length < 1">
                 Zoznam je prázdny
             </div>
-            <table class="table table-striped table-condensed" ng-if="vm.nursery.employees.length > 0">
+            <table class="table table-striped table-responsive" ng-if="vm.nursery.employees.length > 0">
                 <thead>
                     <tr>
                         <th width="200">Meno</th>
-                        <th>Telefón</th>
-                        <th width="105"></th>
+                        <th class="hidden-xs">Telefón</th>
+                        <th class="hidden-xs" width="105"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="employee in vm.nursery.employees" ng-dblclick="redirect('#/employee/' + employee.id)" ng-if="employee.attendance == 1">
                         <td>{{ employee.fullName }}</td>
-                        <td>{{ employee.workPhone }} {{ employee.privatePhone }}</td>
-                        <td class="text-right">
+                        <td class="hidden-xs">{{ employee.workPhone }} {{ employee.privatePhone }}</td>
+                        <td class="hidden-xs text-right">
                             <a ng-href="#/employee/{{ employee.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
                             <a ng-href="#/employee/{{ employee.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <!--<a ng-href="#/employee/0/edit" class="btn btn-primary btn-block" ng-if="canEdit"><i class="fa fa-user-plus"></i> Pridať zamestnanca</a>-->
         </div>
     </div>
 </div>

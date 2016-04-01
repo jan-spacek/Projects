@@ -28,30 +28,43 @@
     <div ng-init="canEdit = @(User.IsInRole("Editor") ? "true" : "false"); 
          isAdmin = @(User.IsInRole("Admin") ? "true" : "false"); 
          nursery = @Newtonsoft.Json.JsonConvert.SerializeObject(@Model)">
-        <div class="col-xs-12 col-sm-2 affix">
+        <div class="col-xs-12 col-sm-2 affix navigation-vertical">
             <ul class="nav nav-pills nav-stacked nav-vertical" ng-if="isAdmin">
                 <li>
                     <a ng-href="/App#/nurseries" class="list-group-item">
-                        <i class="fa fa-list"></i> Zoznam škôlok
+                        <i class="fa fa-list"></i>
+                        <span>Zoznam škôlok</span>
                     </a>
                 </li>
                 <li>
                     <a ng-href="/App#/users" class="list-group-item">
-                        <i class="fa fa-group"></i> Používatelia
+                        <i class="fa fa-group"></i>
+                        <span>Používatelia</span>
                     </a>
                 </li>
-                <br />
+
             </ul>
+            <br ng-if="isAdmin"/>
             <ul class="nav nav-pills nav-stacked nav-vertical" ng-if="!!nursery">
-                <li>
+                <li class="hidden-xs">
                     <a ng-href="#/" class="list-group-item">
-                        <i class="fa fa-home"></i> Prehľad
+                        <i class="fa fa-home"></i>
+                        <span>Prehľad</span>
                     </a>
-                <li bs-collapse data-start-collapsed="true">
+                </li>
+                <li class="visible-xs">
+                    <a ng-href="#/" class="list-group-item">
+                        <i class="fa fa-cubes"></i>
+                        <span>Triedy</span>
+                    </a>
+                </li>
+                <li bs-collapse data-start-collapsed="true" class="hidden-xs">
                     <a class="list-group-item" ng-click="collapsed = !collapsed" bs-collapse-toggle>
+
                         <span class="row">
                             <span class="col-xs-9">
-                                <i class="fa fa-cubes"></i> Triedy
+                                <i class="fa fa-cubes"></i>
+                                <span>Triedy</span>
                             </span>
                             <span class="col-xs-3 text-right">
                                 <i class="fa fa-caret-down" ng-if="!collapsed"></i>
@@ -61,44 +74,52 @@
                     </a>
                     <ul class="collapse nav nav-pills nav-stacked nav-subnav am-collapse-add" bs-collapse-target>
                         <li ng-repeat="cls in nursery.classes" ng-show="nursery.classes.length > 0">
-                            <a ng-href="#/class/{{cls.id}}">{{cls.name}}</a>
+                            <a ng-href="#/class/{{cls.id}}">
+                                {{cls.name}}
+                            </a>
                         </li>
                         <li ng-if="canEdit">
                             <a ng-href="#/class/0/edit">
-                                <i class="fa fa-plus-circle"></i> Pridať triedu
+                                <i class="fa fa-plus-circle"></i>
+                                <span>Pridať triedu</span>
                             </a>
                         </li>
                     </ul>
                 </li>
                 <li>
                     <a ng-href="#/children" class="list-group-item">
-                        <i class="fa fa-child"></i>Všetky deti
+                        <i class="fa fa-child"></i>
+                        <span>Všetky deti</span>
                     </a>
                 </li>
                 <li>
                     <a ng-href="#/children/waiting" class="list-group-item">
-                        <i class="fa fa-hourglass-half"></i>Žiadatelia
+                        <i class="fa fa-hourglass-half"></i>
+                        <span>Žiadatelia</span>
                     </a>
                 </li>
                 <li>
                     <a ng-href="#/children/archive" class="list-group-item">
-                        <i class="fa fa-archive"></i>Archív detí
+                        <i class="fa fa-archive"></i>
+                        <span>Archív detí</span>
                     </a>
                 </li>
                 <li>
                     <a ng-href="#/employees" class="list-group-item">
-                        <i class="fa fa-users"></i>Zamestnanci
+                        <i class="fa fa-users"></i>
+                        <span>Zamestnanci</span>
                     </a>
                 </li>
                 <li>
                     <a ng-href="#/edit" class="list-group-item">
-                        <i class="fa fa-cogs"></i>{{ canEdit ? "Nastavenia škôlky" : "Informácie o škôlke"}}
+                        <i class="fa fa-cogs"></i>
+                        <span>{{ canEdit ? "Nastavenia škôlky" : "Informácie o škôlke"}}</span>
                     </a>
                 </li>
             </ul>
         </div>
 
-        <div class="col-sm-offset-2 col-sm-10">
+        <div class="col-sm-offset-2 col-sm-10 main-content">
             <div class="container-fluid">
 
                 <div class="view" ng-view></div>

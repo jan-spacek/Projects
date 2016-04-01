@@ -84,17 +84,20 @@
         </div>
         <div class="row">
             <div class="col-xs-8">
-                <button type="submit" class="btn btn-success" ng-if="!vm.isNew" ng-disabled="editForm.$invalid">
-                    <i class="fa fa-save"></i> Uložiť zmeny
+                <button type="submit" class="btn btn-success" ng-if="!vm.isNew" ng-disabled="editForm.$invalid" title="Uložiť zmeny">
+                    <i class="fa fa-save"></i>
+                    <span> Uložiť zmeny</span>
                 </button>
-                <button type="submit" class="btn btn-success" ng-if="vm.isNew" ng-disabled="editForm.$invalid">
-                    <i class="fa fa-user-plus"></i> Vytvoriť zamestnanca
+                <button type="submit" class="btn btn-success" ng-if="vm.isNew" ng-disabled="editForm.$invalid" title="Vytvoriť zamestnanca">
+                    <i class="fa fa-user-plus"></i>
+                    <span> Vytvoriť zamestnanca</span>
                 </button>
                 <back-button></back-button>
             </div>
             <div class="col-xs-4 text-right">
-                <button type="button" class="btn btn-danger" ng-click="vm.deleteEmployeeModal()" ng-if="!vm.isNew">
-                    <i class="fa fa-user-times"></i> Vymazať
+                <button type="button" class="btn btn-danger" ng-click="vm.deleteEmployeeModal()" ng-if="!vm.isNew" title="Vymazať">
+                    <i class="fa fa-user-times"></i>
+                    <span> Vymazať</span>
                 </button>
             </div>
         </div>

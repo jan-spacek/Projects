@@ -19,7 +19,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-8">
+            <div class="col-sm-8 row">
                 <h4 class="col-sm-12">Adresa</h4>
                 <div class="form-group col-sm-8" ng-class="{ 'has-error' : editForm.street.$invalid && !editForm.street.$pristine }">
                     <label for="street" class="required">Ulica</label>
@@ -44,7 +44,10 @@
         </div>
         <div class="row">
             <div class="col-sm-6">
-                <button type="submit" class="btn btn-success" ng-if="canEdit" ng-disabled="editForm.$invalid"><i class="fa fa-save"></i> Uložiť zmeny</button>
+                <button type="submit" class="btn btn-success" ng-if="canEdit" ng-disabled="editForm.$invalid" title="Uložiť zmeny">
+                    <i class="fa fa-save"></i>
+                    <span> Uložiť zmeny</span>
+                </button>
                 <back-button></back-button>
             </div>
         </div>

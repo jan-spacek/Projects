@@ -45,12 +45,24 @@
 
         <div class="row">
             <div class="col-sm-6">
-                <button type="submit" class="btn btn-success" ng-if="!vm.isNew" ng-disabled="editForm.$invalid"><i class="fa fa-save"></i> Uložiť zmeny</button>
-                <button type="submit" class="btn btn-success" ng-if="vm.isNew" ng-disabled="editForm.$invalid"><i class="fa fa-plus-circle"></i> Vytvoriť škôlku</button>
-                <a href="#/" class="btn btn-warning"><i class="fa fa-reply"></i> Späť</a>
+                <button type="submit" class="btn btn-success" ng-if="!vm.isNew" ng-disabled="editForm.$invalid" title="Uložiť zmeny">
+                    <i class="fa fa-save"></i>
+                    <span> Uložiť zmeny</span>
+                </button>
+                <button type="submit" class="btn btn-success" ng-if="vm.isNew" ng-disabled="editForm.$invalid" title="Vytvoriť škôlku">
+                    <i class="fa fa-plus-circle"></i>
+                    <span> Vytvoriť škôlku</span>
+                </button>
+                <a href="#/" class="btn btn-warning" title="Späť">
+                    <i class="fa fa-reply"></i>
+                    <span> Späť</span>
+                </a>
             </div>
             <div class="col-sm-6 text-right">
-                <button type="button" class="btn btn-danger" ng-click="vm.deleteNurseryModal()" ng-if="!vm.isNew"><i class="fa fa-trash-o"></i> Vymazať</button>
+                <button type="button" class="btn btn-danger" ng-click="vm.deleteNurseryModal()" ng-if="!vm.isNew" title="Vymazať škôlku">
+                    <i class="fa fa-trash-o"></i>
+                    <span> Vymazať</span>
+                </button>
             </div>
         </div>
     </form>

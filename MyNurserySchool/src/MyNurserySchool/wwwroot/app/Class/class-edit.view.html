@@ -28,17 +28,20 @@
         </div>
         <div class="row">
             <div class="col-xs-8">
-                <button type="submit" class="btn btn-success" ng-if="!vm.isNew" ng-disabled="editForm.$invalid">
-                    <i class="fa fa-save"></i> Uložiť zmeny
+                <button type="submit" class="btn btn-success" ng-if="!vm.isNew" ng-disabled="editForm.$invalid" title="Uložiť zmeny">
+                    <i class="fa fa-save"></i>
+                    <span> Uložiť zmeny</span>
                 </button>
-                <button type="submit" class="btn btn-success" ng-if="vm.isNew" ng-disabled="editForm.$invalid">
-                    <i class="fa fa-plus-circle"></i> Vytvoriť triedu
+                <button type="submit" class="btn btn-success" ng-if="vm.isNew" ng-disabled="editForm.$invalid" title="Vytvoriť triedu">
+                    <i class="fa fa-plus-circle"></i>
+                    <span> Vytvoriť triedu</span>
                 </button>
                 <back-button></back-button>
             </div>
             <div class="col-xs-4 text-right">
-                <button type="button" class="btn btn-danger" ng-click="vm.deleteClassModal()" ng-if="!vm.isNew">
-                    <i class="fa fa-trash-o"></i> Vymazať
+                <button type="button" class="btn btn-danger" ng-click="vm.deleteClassModal()" ng-if="!vm.isNew" title="Vymazať">
+                    <i class="fa fa-trash-o"></i>
+                    <span> Vymazať</span>
                 </button>
             </div>
         </div>

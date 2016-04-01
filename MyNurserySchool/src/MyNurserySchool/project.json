@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-*",
+  "version": "0.9.0",
   "compilationOptions": {
     "emitEntryPoint": true
   },
@@ -38,7 +38,7 @@
   ],
 
   "scripts": {
-    "prepublish": [ "npm install", "bower install" ],
+    "prepublish": [ "npm install", "bower install", "gulp bump" ],
     "prepare": "gulp minify"
   }
 }

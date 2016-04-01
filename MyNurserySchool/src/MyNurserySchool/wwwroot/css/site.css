@@ -3,7 +3,7 @@
 }.navbar-brand img {
     height: 50px;
     padding: 5px;
-    margin-top: -17px;
+    margin-top: -15px;
 }li .nav li>a {
     padding-left: 25px;
 }
@@ -125,4 +125,39 @@ table.details-table tr td:first-child:after {
 }
 .dropdown-multiselect>button {
     text-align: left;
+}
+@media screen and (max-width: 767px) {
+    h3 {
+        font-size: 20px;
+        margin: 10px 0;
+    }
+    button.btn>span, a.btn>span {
+        display: none;
+    }
+    .navigation-vertical {
+        width: 55px;
+        padding: 0;
+        position: relative;
+        z-index: 1000;
+        float: left;
+    }
+    .navigation-vertical .list-group-item {
+        
+    }
+    .navigation-vertical>ul>li {
+        width: 47px;
+    }
+    .navigation-vertical .list-group-item > span {
+        display: none;
+    }
+    .navigation-vertical .list-group-item:hover > span {
+        display: inline-block;
+    }
+    .navigation-vertical .list-group-item:hover {
+        width: 180px;
+    }
+    .main-content {
+        padding: 0;
+        margin-left: 55px;
+    }
 }

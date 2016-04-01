@@ -72,7 +72,6 @@ namespace MyNurserySchool
 
             services.AddTransient<NurseryDbContextSeedData>();
             services.AddScoped<INurseriesRepository, NurseriesRepository>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

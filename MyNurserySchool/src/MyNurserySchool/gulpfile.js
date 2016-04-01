@@ -3,6 +3,7 @@
     gp_concat = require('gulp-concat'),
     gp_rename = require('gulp-rename'),
     ngAnotate = require('gulp-ng-annotate'),
+    gp_bump = require("gulp-bump"),
     source = ['wwwroot/app/Common/common.module.js', 'wwwroot/app/nursery.module.js', 'wwwroot/app/**/*.js'];
 
 gulp.task('uglify', function () {
@@ -21,6 +22,12 @@ gulp.task('watch', function () {
         .on('change', function(event) {
             console.log('*** File' + event.path + ' was ' + event.type + ', running tasks...')
         });
+});
+
+gulp.task("bump", function () {
+    gulp.src("./project.json")
+    .pipe(bump())
+    .pipe(gulp.dest("./"));
 });
 
 gulp.task('default', ['watch'], function () { });

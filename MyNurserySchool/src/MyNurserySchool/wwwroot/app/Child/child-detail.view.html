@@ -2,11 +2,8 @@
     <wait-cursor ng-if="vm.isBusy"></wait-cursor>
     <div ng-class="{ 'row': canEdit }">
         <div ng-class="{ 'col-md-6': canEdit }">
-            <div class="row">
-                <h3 class="col-xs-6">{{ vm.child.firstName + " " + vm.child.lastName }}</h3>
-                <h3 class="col-xs-6 text-right">{{ vm.child.number }}</h3>
-            </div>
-            {{ vm.child.birthDate | date : 'd.M.yyyy' }}<br />
+            <h3>{{ vm.child.firstName + " " + vm.child.lastName }} ({{ vm.child.number }})</h3>
+            {{ vm.child.birthDate | date : 'd.M.yyyy' }}<br ng-if="vm.child.socialNumber != null" />
             {{ vm.child.socialNumber }}
             <hr />
             <table class="details-table">
@@ -44,14 +41,12 @@
                 </tr>
             </table>
             <br />
-            <div class="row">
-                <div class="col-xs-8">
-                    <a href="#/child/{{ vm.child.id }}/edit" class="btn btn-default" ng-if="canEdit"><i class="fa fa-edit"></i> Upraviť</a>
-                    <back-button></back-button>
-                </div>
-                <div class="col-xs-4 text-right">
-                    <!--<button type="button" class="btn btn-danger" ng-click="vm.deletechild()" ng-if="canEdit"><i class="fa fa-trash-o"></i> Vymazať</button>-->
-                </div>
+            <div>
+                <a href="#/child/{{ vm.child.id }}/edit" class="btn btn-default" ng-if="canEdit" title="Upraviť">
+                    <i class="fa fa-edit"></i>
+                    <span> Upraviť</span>
+                </a>
+                <back-button></back-button>
             </div>
             <created-modified model="vm.child"></created-modified>
             <br />

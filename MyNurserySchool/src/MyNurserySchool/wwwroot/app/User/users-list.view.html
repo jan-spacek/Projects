@@ -1,7 +1,10 @@
 ﻿<div ng-if="isAdmin">
     <div>
         <div class="float-left">
-            <a ng-href="#/" class="btn btn-primary btn-block" ng-if="isAdmin"><i class="fa fa-plus-circle"></i>pridať používateľa</a>
+            <a ng-href="#/" class="btn btn-primary btn-block" ng-if="isAdmin" title="Pridať používateľa">
+                <i class="fa fa-plus-circle"></i>
+                <span> Pridať používateľa</span>
+            </a>
         </div>
         <div class="form-group form-find">
             <div class="input-group">
@@ -19,16 +22,16 @@
             <tr>
                 <th>Meno</th>
                 <th>Role</th>
-                <th>Škôlky</th>
-                <th></th>
+                <th class="hidden-xs">Škôlky</th>
+                <th class="hidden-xs"></th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="user in vm.users" ng-dblclick="vm.editModal(user)">
                 <td>{{ user.userName }}</td>
                 <td><span ng-repeat="role in user.userRoles"><span ng-if="$index != 0">{{ ", " }}</span>{{ role.name }}</span></td>
-                <td><span ng-repeat="nursery in user.nurseries"><span ng-if="$index != 0">{{ ", " }}</span>{{ nursery.name }}</span></td>
-                <td class="text-right">
+                <td class="hidden-xs"><span ng-repeat="nursery in user.nurseries"><span ng-if="$index != 0">{{ ", " }}</span>{{ nursery.name }}</span></td>
+                <td class="hidden-xs text-right">
                     <button ng-click="vm.editModal(user)" class="btn btn-sm btn-default" title="Upraviť používateľa {{ user.userName }}"><i class="fa fa-edit"></i></button>
                     <button ng-click="vm.generatePasswordModal(user)" class="btn btn-sm btn-info" title="Generovať nové heslo pre {{ user.userName }}"><i class="fa fa-unlock-alt"></i></button>
                     <button ng-click="vm.deleteModal(user)" class="btn btn-sm btn-danger" title="Vymazať {{ user.userName }}"><i class="fa fa-trash-o"></i></button>
