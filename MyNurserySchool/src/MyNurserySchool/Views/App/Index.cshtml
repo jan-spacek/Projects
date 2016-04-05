@@ -28,7 +28,7 @@
     <div ng-init="canEdit = @(User.IsInRole("Editor") ? "true" : "false"); 
          isAdmin = @(User.IsInRole("Admin") ? "true" : "false"); 
          nursery = @Newtonsoft.Json.JsonConvert.SerializeObject(@Model)">
-        <div class="col-xs-12 col-sm-2 affix navigation-vertical">
+        <div class="col-sm-12 col-md-2 affix navigation-vertical">
             <ul class="nav nav-pills nav-stacked nav-vertical" ng-if="isAdmin">
                 <li>
                     <a ng-href="/App#/nurseries" class="list-group-item">
@@ -46,19 +46,19 @@
             </ul>
             <br ng-if="isAdmin"/>
             <ul class="nav nav-pills nav-stacked nav-vertical" ng-if="!!nursery">
-                <li class="hidden-xs">
+                <li class="hidden-xs hidden-sm">
                     <a ng-href="#/" class="list-group-item">
                         <i class="fa fa-home"></i>
                         <span>Prehľad</span>
                     </a>
                 </li>
-                <li class="visible-xs">
+                <li class="visible-xs visible-sm">
                     <a ng-href="#/" class="list-group-item">
                         <i class="fa fa-cubes"></i>
                         <span>Triedy</span>
                     </a>
                 </li>
-                <li bs-collapse data-start-collapsed="true" class="hidden-xs">
+                <li bs-collapse data-start-collapsed="true" class="hidden-xs hidden-sm">
                     <a class="list-group-item" ng-click="collapsed = !collapsed" bs-collapse-toggle>
 
                         <span class="row">
@@ -119,7 +119,7 @@
             </ul>
         </div>
 
-        <div class="col-sm-offset-2 col-sm-10 main-content">
+        <div class="col-md-offset-2 col-md-10 main-content">
             <div class="container-fluid">
 
                 <div class="view" ng-view></div>

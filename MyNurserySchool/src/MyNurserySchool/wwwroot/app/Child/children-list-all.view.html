@@ -20,7 +20,7 @@
             </div>
         </div>
     </div>
-    <h3><i class="fa fa-child"></i> Zoznam všetkých detí</h3>
+    <h3><i class="fa fa-child"></i> Zoznam všetkých detí <span ng-if="!vm.isBusy">({{ vm.attendantChildren.length }})</span></h3>
     <wait-cursor ng-show="vm.isBusy"></wait-cursor>
     <back-to-top></back-to-top>
     <div ng-if="vm.attendantChildren.length < 1 && !vm.isBusy">

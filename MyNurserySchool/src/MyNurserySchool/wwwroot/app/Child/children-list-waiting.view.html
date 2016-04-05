@@ -20,7 +20,7 @@
             </div>
         </div>
     </div>
-    <h3><i class="fa fa-hourglass-half"></i> Žiadatelia</h3>
+    <h3><i class="fa fa-hourglass-half"></i> Žiadatelia <span ng-if="!vm.isBusy">({{ vm.waitingChildren.length }})</span></h3>
     <wait-cursor ng-show="vm.isBusy"></wait-cursor>
     <back-to-top></back-to-top>
     <div ng-if="vm.waitingChildren.length < 1 && !vm.isBusy">

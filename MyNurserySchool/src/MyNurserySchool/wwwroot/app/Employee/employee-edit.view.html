@@ -36,14 +36,14 @@
                 </div>
                     
                 <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label for="employment">Pracovný úväzok</label>
+                        <select ng-model="vm.employee.employment" ng-options="e.value as e.value for e in employmentTypes" type="text" class="form-control" name="employment" id="employment" />
+                    </div>
                     <div class="form-group col-sm-6" ng-class="{ 'has-error' : editForm.state.$invalid && !editForm.state.$pristine }">
                         <label for="state" class="required">Pracovný stav</label>
                         <select ng-model="vm.employee.attendance" ng-options="o.id as o.name for o in attendance" class="form-control" name="state" id="state" required />
                         <p ng-show="editForm.state.$invalid && !editForm.state.$pristine" class="help-block">Stav je povinná položka</p>
-                    </div>
-                    <div class="form-group col-sm-6">
-                        <label for="employment">Pracovný úväzok</label>
-                        <select ng-model="vm.employee.employment" ng-options="e.value as e.value for e in employmentTypes" type="text" class="form-control" name="employment" id="employment" />
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="startDate">Dátum nástupu</label>
