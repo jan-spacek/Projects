@@ -122,7 +122,7 @@
     function DataService($http) {
 
         // Nursery
-        var getNurseries = function () {
+        var getAllNurseries = function () {
             return $http.get("/Api/Nurseries");
         }
         var getNursery = function (id) {
@@ -139,7 +139,7 @@
         }
 
         // Class
-        var getClasses = function (nurseryId) {
+        var getAllClasses = function (nurseryId) {
             return $http.get("/Api/Nursery/" + nurseryId + "/Classes/");
         }
         var getClass = function (id) {
@@ -156,7 +156,7 @@
         }
 
         //Child
-        var getChildren = function (nurseryId) {
+        var getAllChildren = function (nurseryId) {
             return $http.get("/Api/Nursery/" + nurseryId + "/children");
         }
         var getChild = function (id) {
@@ -173,7 +173,7 @@
         }
 
         //Employee
-        var getEmployees = function (nurseryId) {
+        var getAllEmployees = function (nurseryId) {
             return $http.get("/Api/Nursery/" + nurseryId + "/employees");
         }
         var getEmployee = function (id) {
@@ -707,8 +707,8 @@
         vm.nurseryId = $rootScope.nursery.id;
         vm.employee = {};
         vm.isNew = vm.employeeId == 0;
-       $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
-       $scope.employmentTypes = [{ value: 'Dohoda' }, { value: 'Plný úväzok' }, { value: 'Študentská dohoda' }, { value: 'Skrátený úväzok' }, { value: 'Živnosť' }];
+        $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
+        $scope.employmentTypes = [{ value: 'Dohoda' }, { value: 'Plný úväzok' }, { value: 'Študentská dohoda' }, { value: 'Skrátený úväzok' }, { value: 'Živnosť' }];
 
         if (!vm.isNew) {
             vm.isBusy = true;
@@ -796,17 +796,68 @@
         vm.nurseryId = $rootScope.nursery.id;
         vm.employees = [];
         vm.isBusy = true;
-       $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
+        vm.editing = false;
+        vm.editedEmp = {};
+        $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Pracujúci' }, { id: 2, name: 'Odstúpený' }];
 
-        $http.get("/Api/Nursery/" + vm.nurseryId + "/employees")
-            .then(function (response) {
-                angular.copy(response.data, vm.employees);
-            }, function (error) {
-                toastr.error("Nepodarilo sa načítať zoznam zamestnancov");
-            })
-            .finally(function () {
-                vm.isBusy = false;
+        activate();
+
+        function activate() {
+            $http.get("/Api/Nursery/" + vm.nurseryId + "/employees")
+                .then(function (response) {
+                    angular.copy(response.data, vm.employees);
+                    _.each(vm.employees, function (employee) {
+                        employee.editMode = false;
+                    });
+                }, function (error) {
+                    toastr.error("Nepodarilo sa načítať zoznam zamestnancov");
+                })
+                .finally(function () {
+                    vm.isBusy = false;
+                });
+        }
+        
+        vm.activateEditMode = function (employee) {
+            if (!vm.editing && $scope.canEdit && $window.outerWidth > 768) {
+                angular.copy(employee, vm.editedEmp);
+                vm.setEditMode(employee.id, true);
+            }
+        }
+
+        vm.closeEditMode = function (id) {
+            vm.setEditMode(id, false);
+            vm.editedEmp = {};
+        }
+
+        vm.setEditMode = function (id, value, copy) {
+            _.find(vm.employees, function (employee) {
+                if (employee.id == id) {
+                    employee.editMode = value;
+                    vm.editing = value;
+                    if (copy) {
+                        angular.copy(vm.editedEmp, employee);
+                    }
+                }
             });
+        }
+
+        vm.saveEmployee = function (employee) {
+            var isValid = true;
+
+            if (isValid) {
+                vm.isBusy = true;
+
+                $http.put("/Api/Employee/" + vm.nurseryId, employee)
+                    .then(function (response) {
+                        toastr.success("Zmeny v zamestnancovi " + employee.fullName + " boli úspešne uložené");
+                        vm.setEditMode(employee.id, false, true);
+                    }, function () {
+                        toastr.error("Zamestnanca sa nepodarilo uložiť");
+                    }).finally(function () {
+                        vm.isBusy = false;
+                    });
+            }
+        }
     }
 })(angular);
 (function (angular) {

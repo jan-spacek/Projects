@@ -23,28 +23,56 @@
         Zoznam je prázdny
     </div>
     <div ng-if="vm.employees.length > 0">
-        <table class="table table-striped table-responsive export-table">
-            <thead>
-                <tr>
-                    <th width="200">Meno</th>
-                    <th class="hidden-xs" width="230">E-mail</th>
-                    <th>Telefón</th>
-                    <th class="hidden-xs">Stav</th>
-                    <th class="hidden-xs" width="105"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="employee in vm.employees | filter:search" ng-dblclick="redirect('#/employee/' + employee.id)" ng-class="employee.attendance == 0 ? 'text-primary' : employee.attendance == 2 ? 'text-gray' : ''">
-                    <td>{{ employee.fullName }}</td>
-                    <td class="hidden-xs">{{ employee.email }}</td>
-                    <td>{{ employee.workPhone }} {{ employee.privatePhone }}</td>
-                    <td class="hidden-xs">{{ attendance[employee.attendance].name }}</td>
-                    <td class="hidden-xs text-right">
-                        <a ng-href="#/employee/{{ employee.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
-                        <a ng-href="#/employee/{{ employee.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <form novalidate name="editForm">
+            <table class="table table-striped table-responsive export-table">
+                <thead>
+                    <tr>
+                        <th width="200">Meno</th>
+                        <th width="230" class="hidden-xs">E-mail</th>
+                        <th width="100">Služ.tel.</th>
+                        <th width="100">Súkr.tel.</th>
+                        <th width="120" class="hidden-xs">Stav</th>
+                        <th width="105" class="hidden-xs"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="employee in vm.employees | filter:search" ng-dblclick="redirect('#/employee/' + employee.id)" ng-class="employee.attendance == 0 ? 'text-primary' : employee.attendance == 2 ? 'text-gray' : ''">
+                        <td ng-if="!employee.editMode" ng-click="vm.activateEditMode(employee)">{{ employee.fullName }}</td>
+                        <td ng-if="employee.editMode" class="form-group-sm">
+                            <input ng-model="vm.editedEmp.fullName" type="text" class="form-control" capitalize-all-first required />
+                        </td>
+
+                        <td class="hidden-xs" ng-if="!employee.editMode" ng-click="vm.activateEditMode(employee)">{{ employee.email }}</td>
+                        <td class="hidden-xs form-group-sm" ng-if="employee.editMode">
+                            <input ng-model="vm.editedEmp.email" type="email" class="form-control"/>
+                        </td>
+
+                        <td ng-if="!employee.editMode" ng-click="vm.activateEditMode(employee)">{{ employee.workPhone }}</td>
+                        <td ng-if="employee.editMode" class="form-group-sm">
+                            <input ng-model="vm.editedEmp.workPhone" type="text" class="form-control" />
+                        </td>
+
+                        <td ng-if="!employee.editMode" ng-click="vm.activateEditMode(employee)">{{ employee.privatePhone }}</td>
+                        <td ng-if="employee.editMode" class="form-group-sm">
+                            <input ng-model="vm.editedEmp.privatePhone" type="text" class="form-control" />
+                        </td>
+
+                        <td class="hidden-xs" ng-if="!employee.editMode" ng-click="vm.activateEditMode(employee)">{{ attendance[employee.attendance].name }}</td>
+                        <td class="hidden-xs form-group-sm" ng-if="employee.editMode">
+                            <select ng-model="vm.editedEmp.attendance" ng-options="o.id as o.name for o in attendance" class="form-control" name="state" id="state" required />
+                        </td>
+
+                        <td class="hidden-xs text-right" ng-if="!employee.editMode">
+                            <a ng-href="#/employee/{{ employee.id }}" class="shadow-on-hover" title="Detail"><i class="fa fa-folder-open-o"></i></a>
+                            <a ng-href="#/employee/{{ employee.id }}/edit" class="shadow-on-hover" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
+                        </td>
+                        <td class="hidden-xs text-right" ng-if="employee.editMode">
+                            <a class="shadow-on-hover" ng-click="vm.saveEmployee(vm.editedEmp)" title="Uložiť zmeny"><i class="fa fa-save"></i></a>
+                            <a class="shadow-on-hover" ng-click="vm.closeEditMode(employee.id)" title="Skončiť editovanie bez uloženia zmien"><i class="fa fa-close"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
     </div>
 </div>

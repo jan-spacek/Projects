@@ -47,8 +47,8 @@
                 <td class="hidden-xs">{{ nursery.classes.length }}</td>
                 <td class="hidden-xs">{{ nursery.modifiedBy }} {{ nursery.modified | date : 'd.M.yyyy HH:mm' }}</td>
                 <td class="hidden-xs text-right">
-                    <a ng-href="#/{{ nursery.id }}" class="btn btn-sm btn-default"><i class="fa fa-folder-open-o"></i></a>
-                    <a ng-href="#/edit/{{ nursery.id }}" class="btn btn-sm btn-primary" ng-if="isAdmin"><i class="fa fa-edit"></i></a>
+                    <a ng-href="#/{{ nursery.id }}" class="shadow-on-hover" title="Detail"><i class="fa fa-folder-open-o"></i></a>
+                    <a ng-href="#/edit/{{ nursery.id }}" class="shadow-on-hover" ng-if="isAdmin" title="Editovať"><i class="fa fa-edit"></i></a>
                 </td>
             </tr>
         </tbody>

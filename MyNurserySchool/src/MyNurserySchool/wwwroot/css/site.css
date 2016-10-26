@@ -20,6 +20,9 @@ ul.nav-subnav {
 .fa.fa-caret-down, .fa.fa-caret-up {
     min-width: 0;
 }
+a.shadow-on-hover:hover {
+    text-shadow: #ccc 1px 1px 3px;
+}
 .view {
     margin-bottom: 50px;
 }
@@ -124,6 +127,8 @@ table.details-table tr td:first-child:after {
 .dropdown-multiselect>button {
     text-align: left;
 }
+
+
 @media screen and (max-width: 767px) {
     h3 {
         font-size: 20px;

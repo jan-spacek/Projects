@@ -30,8 +30,8 @@
                             {{ class.children.length + "/" + class.capacity }}
                         </td>
                         <td class="hidden-xs text-right">
-                            <a ng-href="#/class/{{ class.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
-                            <a ng-href="#/class/{{ class.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
+                            <a ng-href="#/class/{{ class.id }}" class="shadow-on-hover" title="Detail"><i class="fa fa-folder-open-o"></i></a>
+                            <a ng-href="#/class/{{ class.id }}/edit" class="shadow-on-hover" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
                         </td>
                     </tr>
                 </tbody>
@@ -56,8 +56,8 @@
                         <td>{{ employee.fullName }}</td>
                         <td class="hidden-xs">{{ employee.workPhone }} {{ employee.privatePhone }}</td>
                         <td class="hidden-xs text-right">
-                            <a ng-href="#/employee/{{ employee.id }}" class="btn btn-sm btn-default" title="Detail"><i class="fa fa-folder-open-o"></i></a>
-                            <a ng-href="#/employee/{{ employee.id }}/edit" class="btn btn-sm btn-primary" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
+                            <a ng-href="#/employee/{{ employee.id }}" title="Detail"><i class="fa fa-folder-open-o"></i></a>
+                            <a ng-href="#/employee/{{ employee.id }}/edit" title="Editovať" ng-if="canEdit"><i class="fa fa-edit"></i></a>
                         </td>
                     </tr>
                 </tbody>

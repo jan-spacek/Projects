@@ -8,7 +8,7 @@
     function DataService($http) {
 
         // Nursery
-        var getNurseries = function () {
+        var getAllNurseries = function () {
             return $http.get("/Api/Nurseries");
         }
         var getNursery = function (id) {
@@ -25,7 +25,7 @@
         }
 
         // Class
-        var getClasses = function (nurseryId) {
+        var getAllClasses = function (nurseryId) {
             return $http.get("/Api/Nursery/" + nurseryId + "/Classes/");
         }
         var getClass = function (id) {
@@ -42,7 +42,7 @@
         }
 
         //Child
-        var getChildren = function (nurseryId) {
+        var getAllChildren = function (nurseryId) {
             return $http.get("/Api/Nursery/" + nurseryId + "/children");
         }
         var getChild = function (id) {
@@ -59,7 +59,7 @@
         }
 
         //Employee
-        var getEmployees = function (nurseryId) {
+        var getAllEmployees = function (nurseryId) {
             return $http.get("/Api/Nursery/" + nurseryId + "/employees");
         }
         var getEmployee = function (id) {

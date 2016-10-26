@@ -32,9 +32,9 @@
                 <td><span ng-repeat="role in user.userRoles"><span ng-if="$index != 0">{{ ", " }}</span>{{ role.name }}</span></td>
                 <td class="hidden-xs"><span ng-repeat="nursery in user.nurseries"><span ng-if="$index != 0">{{ ", " }}</span>{{ nursery.name }}</span></td>
                 <td class="hidden-xs text-right">
-                    <button ng-click="vm.editModal(user)" class="btn btn-sm btn-default" title="Upraviť používateľa {{ user.userName }}"><i class="fa fa-edit"></i></button>
-                    <button ng-click="vm.generatePasswordModal(user)" class="btn btn-sm btn-info" title="Generovať nové heslo pre {{ user.userName }}"><i class="fa fa-unlock-alt"></i></button>
-                    <button ng-click="vm.deleteModal(user)" class="btn btn-sm btn-danger" title="Vymazať {{ user.userName }}"><i class="fa fa-trash-o"></i></button>
+                    <a ng-click="vm.editModal(user)" class="shadow-on-hover" title="Upraviť používateľa {{ user.userName }}"><i class="fa fa-edit"></i></a>
+                    <a ng-click="vm.generatePasswordModal(user)" class="shadow-on-hover" title="Generovať nové heslo pre {{ user.userName }}"><i class="fa fa-unlock-alt"></i></a>
+                    <a ng-click="vm.deleteModal(user)" class="shadow-on-hover" title="Vymazať {{ user.userName }}"><i class="fa fa-trash-o"></i></a>
                 </td>
             </tr>
         </tbody>

@@ -107,6 +107,7 @@ namespace MyNurserySchool.Data
             try
             {
                 return _context.Employees
+                    .Include(e => e.Address)
                     .Include(e => e.Notes)
                     .OrderBy(e => e.Id)
                     .Where(e => e.NurseryId == nurseryId)
@@ -158,7 +159,8 @@ namespace MyNurserySchool.Data
         }
         public Employee GetEmployeeById(int employeeId)
         {
-            return _context.Employees.Include(e => e.Address)
+            return _context.Employees
+                        .Include(e => e.Address)
                         .Include(e => e.Notes)
                         .Where(e => e.Id == employeeId)
                         .FirstOrDefault();
