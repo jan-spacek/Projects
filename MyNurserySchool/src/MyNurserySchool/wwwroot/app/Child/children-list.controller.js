@@ -4,7 +4,7 @@
     angular.module("app.nursery")
         .controller("ChildrenListController", ChildrenListController);
 
-    function ChildrenListController($scope, $http, $sce, $controller, $rootScope) {
+    function ChildrenListController($scope, $http, $sce, $controller, $rootScope, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
@@ -23,12 +23,7 @@
         activate();
 
         function activate() {
-            getNursery();
-            getChildren();
-        }
-
-        function getNursery() {
-            $http.get("/Api/Nursery/" + vm.nurseryId)
+            DataService.getNursery(vm.nurseryId)
                 .then(function (response) {
                     if (response.data.classes) {
                         for (var i = 0; i < response.data.classes.length; i++)
@@ -37,10 +32,9 @@
                 }, function (error) {
                     toastr.error("Nepodarilo sa načítať zoznam škôlok:<br/>" + error.data.message);
                 });
-        }
 
-        function getChildren() {
-            $http.get("/Api/Nursery/" + vm.nurseryId + "/children")
+
+            DataService.getAllChildren(vm.nurseryId)
                 .then(function (response) {
                     angular.copy(response.data, vm.children);
                     if (vm.children.length > 0) {

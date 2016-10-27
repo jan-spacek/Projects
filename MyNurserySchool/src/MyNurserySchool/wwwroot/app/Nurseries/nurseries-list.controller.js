@@ -5,7 +5,7 @@
     angular.module("app.nursery")
         .controller("NurseriesListController", NurseriesListController);
 
-    function NurseriesListController($http, $scope, $window, $location, $rootScope) {
+    function NurseriesListController($http, $scope, $window, $location, $rootScope, DataService) {
         var vm = this;
         vm.nurseries = [];
         vm.isBusy = true;
@@ -13,7 +13,7 @@
         activate();
 
         function activate() {
-            $http.get("/Api/Nurseries")
+            DataService.getAllNurseries()
                 .then(function (response) {
                     angular.copy(response.data, vm.nurseries);
                     $rootScope.nursery = null;

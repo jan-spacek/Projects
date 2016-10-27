@@ -3,91 +3,94 @@
 
     angular
         .module("app.nursery")
-        .factory("dataService", ["$http", DataService]);
+        .service("DataService", ["$http", DataService]);
 
     function DataService($http) {
-
+        
         // Nursery
-        var getAllNurseries = function () {
-            return $http.get("/Api/Nurseries");
+        this.getAllNurseries = function () {
+            return $http.get("/api/nurseries");
         }
-        var getNursery = function (id) {
-            return $http.get("/Api/Nursery/" + id);
+        this.getNursery = function (id) {
+            return $http.get("/api/nursery/" + id);
         }
-        var insertNursery = function (nursery) {
-            return $http.get("/Api/Nursery", nursery);
+        this.insertNursery = function (nursery) {
+            return $http.post("/api/nursery", nursery);
         }
-        var updateNursery = function (nursery) {
-            return $http.get("/Api/Nursery", nursery);
+        this.updateNursery = function (nursery) {
+            return $http.put("/api/nursery", nursery);
         }
-        var deleteNursery = function (id) {
-            return $http.delete("/Api/Nursery/" + id);
+        this.deleteNursery = function (id) {
+            return $http.delete("/api/nursery/" + id);
         }
 
         // Class
-        var getAllClasses = function (nurseryId) {
-            return $http.get("/Api/Nursery/" + nurseryId + "/Classes/");
+        this.getAllClasses = function (nurseryId) {
+            return $http.get("/api/nursery/" + nurseryId + "/classes/");
         }
-        var getClass = function (id) {
-            return $http.get("/Api/Class/" + id);
+        this.getClass = function (id) {
+            return $http.get("/api/class/" + id);
         }
-        var insertClass = function (nurseryId, cls) {
-            return $http.post("/Api/Class/" + nurseryId, cls)
+        this.insertClass = function (nurseryId, cls) {
+            return $http.post("/api/class/" + nurseryId, cls)
         }
-        var updateClass = function (nurseryId, cls) {
-            return $http.put("/Api/Class/" + nurseryId, cls)
+        this.updateClass = function (nurseryId, cls) {
+            return $http.put("/api/class/" + nurseryId, cls)
         }
-        var deleteClass = function (id) {
-            return $http.delete("/Api/Class/" + id);
+        this.deleteClass = function (id) {
+            return $http.delete("/api/class/" + id);
         }
 
         //Child
-        var getAllChildren = function (nurseryId) {
-            return $http.get("/Api/Nursery/" + nurseryId + "/children");
+        this.getAllChildren = function (nurseryId) {
+            return $http.get("/api/nursery/" + nurseryId + "/children");
         }
-        var getChild = function (id) {
-            return $http.get("/Api/Child/" + id);
+        this.getChild = function (id) {
+            return $http.get("/api/child/" + id);
         }
-        var insertChild = function (child) {
-            return $http.post("/Api/Child/", child)
+        this.insertChild = function (child) {
+            return $http.post("/api/child/", child)
         }
-        var updateChild = function (child) {
-            return $http.put("/Api/Child/", child)
+        this.updateChild = function (child) {
+            return $http.put("/api/child/", child)
         }
-        var deleteChild = function (id) {
-            return $http.delete("/Api/Child/" + id);
+        this.deleteChild = function (id) {
+            return $http.delete("/api/child/" + id);
         }
 
         //Employee
-        var getAllEmployees = function (nurseryId) {
-            return $http.get("/Api/Nursery/" + nurseryId + "/employees");
+        this.getAllEmployees = function (nurseryId) {
+            return $http.get("/api/nursery/" + nurseryId + "/employees");
         }
-        var getEmployee = function (id) {
-            return $http.get("/Api/Employee/" + id);
+        this.getEmployee = function (id) {
+            return $http.get("/api/employee/" + id);
         }
-        var insertEmployee = function (nurseryId, employee) {
-            return $http.post("/Api/Employee/" + nurseryId, employee)
+        this.insertEmployee = function (nurseryId, employee) {
+            return $http.post("/api/employee/" + nurseryId, employee)
         }
-        var updateEmployee = function (nurseryId, employee) {
-            return $http.put("/Api/Employee/" + nurseryId, employee)
+        this.updateEmployee = function (nurseryId, employee) {
+            return $http.put("/api/employee/" + nurseryId, employee)
         }
-        var deleteEmployee = function (id) {
-            return $http.delete("/Api/Employee/" + id);
+        this.deleteEmployee = function (id) {
+            return $http.delete("/api/employee/" + id);
         }
 
         //Note
-        var insertNote = function (note) {
-            return $http.post("/Api/Note/", note)
+        this.insertNote = function (note) {
+            return $http.post("/api/note/", note)
         }
-        var deleteNote = function (id) {
-            return $http.delete("/Api/Note/" + id);
+        this.deleteNote = function (id) {
+            return $http.delete("/api/note/" + id);
         }
 
         //Roles
-        var getRoles = function () {
-            return $http.get("/Api/Roles");
+        this.getRoles = function () {
+            return $http.get("/api/roles");
         }
 
-        return this;
+        //Users
+        this.getUsers = function () {
+            return $http.get("/Api/Users");
+        }
     };
 })(angular);

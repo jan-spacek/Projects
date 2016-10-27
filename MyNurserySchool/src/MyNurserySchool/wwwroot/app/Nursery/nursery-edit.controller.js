@@ -4,17 +4,18 @@
     angular.module("app.nursery")
         .controller("NurseryEditController", NurseryEditController);
 
-    function NurseryEditController($scope, $http, $location, $controller, $rootScope) {
+    function NurseryEditController($scope, $http, $location, $controller, $rootScope, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
+
         vm.nurseryId = $rootScope.nursery.id;
         vm.nursery = {};
         vm.isBusy = true;
 
-        $http.get("/Api/Nursery/" + vm.nurseryId)
+        DataService.getNursery(vm.nurseryId)
             .then(function (response) {
                 angular.copy(response.data, vm.nursery);
             }, function () {
@@ -26,7 +27,8 @@
         vm.saveNursery = function (isValid) {
             if (isValid) {
                 vm.isBusy = true;
-                $http.put("/Api/Nursery/", vm.nursery)
+
+                DataService.updateNursery(vm.nursery)
                     .then(function (response) {
                         toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
                         $location.path("#/");

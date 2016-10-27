@@ -4,12 +4,13 @@
     angular.module("app.nursery")
         .controller("EmployeesListController", EmployeesListController);
 
-    function EmployeesListController($scope, $http, $window, $controller, $rootScope) {
+    function EmployeesListController($scope, $http, $window, $controller, $rootScope, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
+
         vm.nurseryId = $rootScope.nursery.id;
         vm.employees = [];
         vm.isBusy = true;
@@ -20,7 +21,7 @@
         activate();
 
         function activate() {
-            $http.get("/Api/Nursery/" + vm.nurseryId + "/employees")
+            DataService.getAllEmployees(vm.nurseryId)
                 .then(function (response) {
                     angular.copy(response.data, vm.employees);
                     _.each(vm.employees, function (employee) {
@@ -64,7 +65,7 @@
             if (isValid) {
                 vm.isBusy = true;
 
-                $http.put("/Api/Employee/" + vm.nurseryId, employee)
+                DataService.updateEmployee(vm.nurseryId, employee)
                     .then(function (response) {
                         toastr.success("Zmeny v zamestnancovi " + employee.fullName + " boli úspešne uložené");
                         vm.setEditMode(employee.id, false, true);

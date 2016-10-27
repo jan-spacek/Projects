@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
-using MyNurserySchool.Data;
-using Microsoft.Extensions.Logging;
-using AutoMapper;
-using System.Net;
-using MyNurserySchool.ViewModels;
-using MyNurserySchool.Models;
+﻿using AutoMapper;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Mvc;
+using Microsoft.Extensions.Logging;
+using MyNurserySchool.Data;
+using MyNurserySchool.Models;
+using MyNurserySchool.ViewModels;
+using System;
+using System.Linq;
+using System.Net;
 
 namespace MyNurserySchool.Controllers.Api
 {
     [Authorize]
-    [Route("Api/Child")]
+    [Route("api/child")]
     public class ChildController : Controller
     {
         private INurseriesRepository _repository;
@@ -38,8 +36,15 @@ namespace MyNurserySchool.Controllers.Api
                 {
                     if (child == null)
                         return Json(null);
+                    
+                    if (child.ClassId == null)
+                        return Json(Mapper.Map<ChildViewModel>(child));
 
-                    return Json(Mapper.Map<ChildViewModel>(child));
+                    var cls = _repository.GetClassById((int)child.ClassId);
+                    var result = Mapper.Map<ChildViewModel>(child);
+                    result.ClassName = cls.Name;
+
+                    return Json(result);
                 }
             }
             catch (Exception ex)

@@ -18,7 +18,7 @@ namespace MyNurserySchool.Controllers.Api
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("Api/Users/")]
+        [HttpGet("api/users/")]
         public JsonResult GetUsers()
         {
             var results = _repository.GetAllUsers();
@@ -26,7 +26,7 @@ namespace MyNurserySchool.Controllers.Api
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("Api/Roles/")]
+        [HttpGet("api/roles/")]
         public JsonResult GetRoles()
         {
             var results = _repository.GetAllRoles();

@@ -5,19 +5,20 @@
     angular.module("app.nursery")
         .controller("ClassDetailController", ClassDetailController);
 
-    function ClassDetailController($scope, $rootScope, $http, $routeParams, $sce, $window, $controller) {
+    function ClassDetailController($scope, $rootScope, $http, $routeParams, $sce, $window, $controller, DataService) {
         $controller('BaseController', {
-            '$scope':$scope
+            '$scope': $scope
         });
 
         var vm = this;
+
         vm.classId = $routeParams.id;
         vm.nurseryId = $rootScope.nursery.id;
         vm.class = {};
         vm.children = [];
         vm.isBusy = true;
 
-        $http.get("/Api/Class/" + vm.classId)
+        DataService.getClass(vm.classId)
             .then(function (response) {
                 angular.copy(response.data, vm.class);
                 for (var i = 0; i < vm.class.children.length; i++) {
@@ -29,7 +30,7 @@
                     if (vm.class.children[i].attendance == 1)
                         vm.children.push(vm.class.children[i]);
                 }
-                    
+
             }, function (error) {
                 toastr.error("Nepodarilo sa načítať informácie o triede");
             })

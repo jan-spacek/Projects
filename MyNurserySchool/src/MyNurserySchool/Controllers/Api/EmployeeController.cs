@@ -1,20 +1,18 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Net;
-using AutoMapper;
-using MyNurserySchool.ViewModels;
-using MyNurserySchool.Data;
-using Microsoft.AspNet.Mvc;
-using MyNurserySchool.Models;
-using System;
-using System.Collections.Generic;
-using MyNurserySchool.Enums;
+﻿using AutoMapper;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Mvc;
+using Microsoft.Extensions.Logging;
+using MyNurserySchool.Data;
+using MyNurserySchool.Models;
+using MyNurserySchool.ViewModels;
+using System;
 using System.Linq;
+using System.Net;
 
 namespace MyNurserySchool.Controllers.Api
 {
     [Authorize]
-    [Route("Api/Employee/")]
+    [Route("api/employee/")]
     public class EmployeeController : Controller
     {
         private INurseriesRepository _repository;

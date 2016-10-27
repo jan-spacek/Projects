@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
-using MyNurserySchool.ViewModels;
-using AutoMapper;
-using MyNurserySchool.Data;
-using Microsoft.Extensions.Logging;
-using System.Net;
-using MyNurserySchool.Models;
+﻿using AutoMapper;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Mvc;
+using Microsoft.Extensions.Logging;
+using MyNurserySchool.Data;
+using MyNurserySchool.Models;
+using MyNurserySchool.ViewModels;
+using System;
+using System.Net;
 
 namespace MyNurserySchool.Controllers.Api
 {
-    [Route("Api/Note")]
+    [Route("api/note")]
     public class NoteController : Controller
     {
         private INurseriesRepository _repository;

@@ -1,20 +1,19 @@
-﻿using System;
-using Microsoft.AspNet.Mvc;
-using MyNurserySchool.Models;
-using System.Net;
-using AutoMapper;
-using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Mvc;
+using Microsoft.Extensions.Logging;
 using MyNurserySchool.Data;
+using MyNurserySchool.Models;
 using MyNurserySchool.ViewModels;
+using System;
 using System.Collections.Generic;
-using MyNurserySchool.Enums;
 using System.Linq;
+using System.Net;
 
 namespace MyNurserySchool.Controllers.Api
 {
     [Authorize]
-    [Route("Api/Nursery/")]
+    [Route("api/nursery/")]
     public class NurseryController : Controller
     {
         private ILogger<NurseryController> _logger;

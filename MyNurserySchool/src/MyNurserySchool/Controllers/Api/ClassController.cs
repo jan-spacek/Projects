@@ -1,18 +1,18 @@
-﻿using System;
-using Microsoft.AspNet.Mvc;
-using MyNurserySchool.Models;
-using Microsoft.Extensions.Logging;
-using System.Net;
-using AutoMapper;
-using MyNurserySchool.ViewModels;
-using MyNurserySchool.Data;
+﻿using AutoMapper;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Mvc;
+using Microsoft.Extensions.Logging;
+using MyNurserySchool.Data;
+using MyNurserySchool.Models;
+using MyNurserySchool.ViewModels;
+using System;
 using System.Linq;
+using System.Net;
 
 namespace MyNurserySchool.Controllers.Api
 {
     [Authorize]
-    [Route("Api/Class/")]
+    [Route("api/class/")]
     public class ClassController : Controller
     {
         private INurseriesRepository _repository;
@@ -50,7 +50,7 @@ namespace MyNurserySchool.Controllers.Api
             Response.StatusCode = (int)HttpStatusCode.Unauthorized;
             return Json("Unauthorized to get this class");
         }
-
+        
         [HttpPost("{nurseryId}")]
         [Authorize(Roles = "Editor")]
         public JsonResult Post(int nurseryId, [FromBody]ClassViewModel vm)

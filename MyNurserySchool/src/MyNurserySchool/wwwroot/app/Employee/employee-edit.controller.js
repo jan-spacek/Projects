@@ -4,12 +4,13 @@
     angular.module("app.nursery")
         .controller("EmployeeEditController", EmployeeEditController);
 
-    function EmployeeEditController($scope, $rootScope, $http, $routeParams, $controller, $uibModal) {
+    function EmployeeEditController($scope, $rootScope, $http, $routeParams, $controller, $uibModal, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
+
         vm.employeeId = $routeParams.id;
         vm.nurseryId = $rootScope.nursery.id;
         vm.employee = {};
@@ -19,7 +20,8 @@
 
         if (!vm.isNew) {
             vm.isBusy = true;
-            $http.get("/Api/Employee/" + vm.employeeId)
+
+            DataService.getEmployee(vm.employeeId)
                 .then(function (response) {
                     angular.copy(response.data, vm.employee);
                 }, function () {
@@ -34,7 +36,7 @@
                 vm.isBusy = true;
 
                 if (vm.isNew) {
-                    $http.post("/Api/Employee/" + vm.nurseryId, vm.employee)
+                    DataService.insertEmployee(vm.nurseryId, vm.employee)
                         .then(function (response) {
                             toastr.success("Zamestnanec " + vm.employee.fullName + " bol úspešne vytvorený");
                            $scope.back();
@@ -45,7 +47,7 @@
                         });
                 }
                 else {
-                    $http.put("/Api/Employee/" + vm.nurseryId, vm.employee)
+                    DataService.updateEmployee(vm.nurseryId, vm.employee)
                         .then(function (response) {
                             toastr.success("Zmeny v zamestnancovi " + vm.employee.fullName + " boli úspešne uložené");
                            $scope.back();
@@ -74,7 +76,8 @@
 
         vm.deleteEmployee = function () {
             vm.isBusy = true;
-            $http.delete("/Api/Employee/" + vm.employee.id)
+
+            DataService.deleteEmployee(vm.employee.id)
                 .then(function () {
                     toastr.success("Zamestnanec bol vymazaný");
                    $scope.back();

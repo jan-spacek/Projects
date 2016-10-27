@@ -4,20 +4,21 @@
     angular.module("app.nursery")
         .controller("EmployeeDetailController", EmployeeDetailController);
 
-    function EmployeeDetailController($scope, $rootScope, $http, $location, $routeParams, $sce, $controller) {
+    function EmployeeDetailController($scope, $rootScope, $http, $location, $routeParams, $sce, $controller, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
+
         vm.employeeId = $routeParams.id;
         vm.nurseryId = $rootScope.nursery.id;
         vm.employee = {};
         vm.newNote = {};
         vm.attendanceStates = ["Žiadateľ", "Pracujúci", "Odstúpený"];
-
         vm.isBusy = true;
-        $http.get("/Api/Employee/" + vm.employeeId)
+
+        DataService.getEmployee(vm.employeeId)
             .then(function (response) {
                 angular.copy(response.data, vm.employee);
                 vm.employee.description = vm.employee.description ? $sce.trustAsHtml(vm.employee.description.replace(/(\r\n|\n|\r)/gm, '<br />')) : null;
@@ -33,7 +34,8 @@
         vm.saveNote = function () {
             vm.isBusy = true;
             vm.newNote.employeeId = vm.employeeId;
-            $http.post("/Api/Note/", vm.newNote)
+
+            DataService.insertNote(vm.newNote)
                 .then(function (response) {
                     vm.employee.notes.push(response.data);
                     vm.employee.notes[vm.employee.notes.length - 1].text = $sce.trustAsHtml(vm.employee.notes[vm.employee.notes.length - 1].text.replace(/(\r\n|\n|\r)/gm, '<br />'));
@@ -49,7 +51,8 @@
 
         vm.deleteNote = function (id) {
             vm.isBusy = true;
-            $http.delete("/Api/Note/" + id)
+
+            DataService.deleteNote(id)
                 .then(function () {
                     for (var i = 0; i < vm.employee.notes.length; i++) {
                         var note = vm.employee.notes[i];

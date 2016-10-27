@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ActiveDebugProfile>web</ActiveDebugProfile>
     <ShowAllFiles>true</ShowAllFiles>
-    <NameOfLastUsedPublishProfile>MyNurserySchool</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>MyNursery</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>

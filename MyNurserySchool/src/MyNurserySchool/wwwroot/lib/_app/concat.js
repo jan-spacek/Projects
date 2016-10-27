@@ -117,107 +117,111 @@
 
     angular
         .module("app.nursery")
-        .factory("dataService", ["$http", DataService]);
+        .service("DataService", ["$http", DataService]);
 
     function DataService($http) {
-
+        
         // Nursery
-        var getAllNurseries = function () {
-            return $http.get("/Api/Nurseries");
+        this.getAllNurseries = function () {
+            return $http.get("/api/nurseries");
         }
-        var getNursery = function (id) {
-            return $http.get("/Api/Nursery/" + id);
+        this.getNursery = function (id) {
+            return $http.get("/api/nursery/" + id);
         }
-        var insertNursery = function (nursery) {
-            return $http.get("/Api/Nursery", nursery);
+        this.insertNursery = function (nursery) {
+            return $http.post("/api/nursery", nursery);
         }
-        var updateNursery = function (nursery) {
-            return $http.get("/Api/Nursery", nursery);
+        this.updateNursery = function (nursery) {
+            return $http.put("/api/nursery", nursery);
         }
-        var deleteNursery = function (id) {
-            return $http.delete("/Api/Nursery/" + id);
+        this.deleteNursery = function (id) {
+            return $http.delete("/api/nursery/" + id);
         }
 
         // Class
-        var getAllClasses = function (nurseryId) {
-            return $http.get("/Api/Nursery/" + nurseryId + "/Classes/");
+        this.getAllClasses = function (nurseryId) {
+            return $http.get("/api/nursery/" + nurseryId + "/classes/");
         }
-        var getClass = function (id) {
-            return $http.get("/Api/Class/" + id);
+        this.getClass = function (id) {
+            return $http.get("/api/class/" + id);
         }
-        var insertClass = function (nurseryId, cls) {
-            return $http.post("/Api/Class/" + nurseryId, cls)
+        this.insertClass = function (nurseryId, cls) {
+            return $http.post("/api/class/" + nurseryId, cls)
         }
-        var updateClass = function (nurseryId, cls) {
-            return $http.put("/Api/Class/" + nurseryId, cls)
+        this.updateClass = function (nurseryId, cls) {
+            return $http.put("/api/class/" + nurseryId, cls)
         }
-        var deleteClass = function (id) {
-            return $http.delete("/Api/Class/" + id);
+        this.deleteClass = function (id) {
+            return $http.delete("/api/class/" + id);
         }
 
         //Child
-        var getAllChildren = function (nurseryId) {
-            return $http.get("/Api/Nursery/" + nurseryId + "/children");
+        this.getAllChildren = function (nurseryId) {
+            return $http.get("/api/nursery/" + nurseryId + "/children");
         }
-        var getChild = function (id) {
-            return $http.get("/Api/Child/" + id);
+        this.getChild = function (id) {
+            return $http.get("/api/child/" + id);
         }
-        var insertChild = function (child) {
-            return $http.post("/Api/Child/", child)
+        this.insertChild = function (child) {
+            return $http.post("/api/child/", child)
         }
-        var updateChild = function (child) {
-            return $http.put("/Api/Child/", child)
+        this.updateChild = function (child) {
+            return $http.put("/api/child/", child)
         }
-        var deleteChild = function (id) {
-            return $http.delete("/Api/Child/" + id);
+        this.deleteChild = function (id) {
+            return $http.delete("/api/child/" + id);
         }
 
         //Employee
-        var getAllEmployees = function (nurseryId) {
-            return $http.get("/Api/Nursery/" + nurseryId + "/employees");
+        this.getAllEmployees = function (nurseryId) {
+            return $http.get("/api/nursery/" + nurseryId + "/employees");
         }
-        var getEmployee = function (id) {
-            return $http.get("/Api/Employee/" + id);
+        this.getEmployee = function (id) {
+            return $http.get("/api/employee/" + id);
         }
-        var insertEmployee = function (nurseryId, employee) {
-            return $http.post("/Api/Employee/" + nurseryId, employee)
+        this.insertEmployee = function (nurseryId, employee) {
+            return $http.post("/api/employee/" + nurseryId, employee)
         }
-        var updateEmployee = function (nurseryId, employee) {
-            return $http.put("/Api/Employee/" + nurseryId, employee)
+        this.updateEmployee = function (nurseryId, employee) {
+            return $http.put("/api/employee/" + nurseryId, employee)
         }
-        var deleteEmployee = function (id) {
-            return $http.delete("/Api/Employee/" + id);
+        this.deleteEmployee = function (id) {
+            return $http.delete("/api/employee/" + id);
         }
 
         //Note
-        var insertNote = function (note) {
-            return $http.post("/Api/Note/", note)
+        this.insertNote = function (note) {
+            return $http.post("/api/note/", note)
         }
-        var deleteNote = function (id) {
-            return $http.delete("/Api/Note/" + id);
+        this.deleteNote = function (id) {
+            return $http.delete("/api/note/" + id);
         }
 
         //Roles
-        var getRoles = function () {
-            return $http.get("/Api/Roles");
+        this.getRoles = function () {
+            return $http.get("/api/roles");
         }
 
-        return this;
+        //Users
+        this.getUsers = function () {
+            return $http.get("/Api/Users");
+        }
     };
 })(angular);
 (function (angular) {
     "use strict";
 
-    ChildDetailController.$inject = ["$scope", "$http", "$location", "$routeParams", "$sce", "$controller"];
+    ChildDetailController.$inject = ["$scope", "$http", "$location", "$routeParams", "$sce", "$controller", "DataService"];
     angular.module("app.nursery")
         .controller("ChildDetailController", ChildDetailController);
 
-    function ChildDetailController($scope, $http, $location, $routeParams, $sce, $controller) {
+    function ChildDetailController($scope, $http, $location, $routeParams, $sce, $controller, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
+
         vm.childId = $routeParams.id;
         vm.nurseryId = parseInt($routeParams.nursId);
         vm.child = {};
@@ -225,13 +229,12 @@
         vm.attendanceStates = ["Žiadateľ", "Docházdajúci", "Odstúpený"];
         vm.isBusy = true;
 
-        $http.get("/Api/Child/" + vm.childId)
+        DataService.getChild(vm.childId)
             .then(function (response) {
                 angular.copy(response.data, vm.child);
                 vm.classId = vm.child.classId;
                 vm.child.description = vm.child.description ? $sce.trustAsHtml(vm.child.description.replace(/(\r\n|\n|\r)/gm, '<br />')) : null;
                 vm.child.contacts = vm.child.contacts ? $sce.trustAsHtml(vm.child.contacts.replace(/(\r\n|\n|\r)/gm, '<br />')) : null;
-                getClassName();
 
                 for (var i = 0; i < vm.child.notes.length; i++)
                     if (vm.child.notes[i].text != null)
@@ -241,21 +244,11 @@
             }).finally(function () {
                 vm.isBusy = false;
             });
-
-        function getClassName() {
-            $http.get("/Api/Class/" + vm.child.classId)
-                .then(function (response) {
-                    vm.classTitle = response.data.name;
-                }, function () {
-                    toastr.error("Nepodarilo sa načítať informácie o škôlke");
-                }).finally(function () {
-                    vm.isBusy = false;
-                });
-        }
-
+        
         vm.deleteChild = function () {
             vm.isBusy = true;
-            $http.delete("/Api/Child/" + vm.child.id)
+
+            DataService.getChild(vm.child.id)
                 .then(function () {
                     toastr.success("Dieťa bolo vymazané");
                     $location.path("#/class/" + vm.classId);
@@ -270,7 +263,8 @@
         vm.saveNote = function () {
             vm.isBusy = true;
             vm.newNote.childId = vm.childId;
-            $http.post("/Api/Note/", vm.newNote)
+
+            DataService.insertNote(vm.newNote)
                 .then(function (response) {
                     vm.child.notes.push(response.data);
                     vm.child.notes[vm.child.notes.length - 1].text = $sce.trustAsHtml(vm.child.notes[vm.child.notes.length - 1].text.replace(/(\r\n|\n|\r)/gm, '<br />'));
@@ -286,7 +280,8 @@
 
         vm.deleteNote = function (id) {
             vm.isBusy = true;
-            $http.delete("/Api/Note/" + id)
+
+            DataService.deleteNote(id)
                 .then(function () {
                     for (var i = 0; i < vm.child.notes.length; i++) {
                         var note = vm.child.notes[i];
@@ -307,25 +302,26 @@
 (function (angular) {
     "use strict";
 
-    ChildEditController.$inject = ["$scope", "$rootScope", "$http", "$routeParams", "$controller", "$uibModal"];
+    ChildEditController.$inject = ["$scope", "$rootScope", "$http", "$routeParams", "$controller", "$uibModal", "DataService"];
     angular.module("app.nursery")
         .controller("ChildEditController", ChildEditController);
 
-    function ChildEditController($scope, $rootScope, $http, $routeParams, $controller, $uibModal) {
+    function ChildEditController($scope, $rootScope, $http, $routeParams, $controller, $uibModal, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
+
         vm.childId = $routeParams.id;
         vm.nurseryId = $rootScope.nursery.id;
         vm.child = {};
         vm.classId = 0;
         vm.isNew = vm.childId == 0;
-       $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Dochádzajúci' }, { id: 2, name: 'Odstúpený' }];
+        $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Dochádzajúci' }, { id: 2, name: 'Odstúpený' }];
         vm.classes = [];
 
-        $http.get("/Api/Nursery/" + vm.nurseryId + "/Classes/")
+        DataService.getAllClasses(vm.nurseryId)
             .then(function (response) {
                 angular.copy(response.data, vm.classes);
                $scope.classes = vm.classes;
@@ -338,7 +334,8 @@
 
         if (!vm.isNew) {
             vm.isBusy = true;
-            $http.get("/Api/Child/" + vm.childId)
+
+            DataService.getChild(vm.childId)
                 .then(function (response) {
                     angular.copy(response.data, vm.child);
                     vm.classId = vm.child.classId;
@@ -355,7 +352,7 @@
                 vm.child.nurseryId = vm.nurseryId;
 
                 if (vm.isNew) {
-                    $http.post("/Api/Child/", vm.child)
+                    DataService.insertChild(vm.child)
                         .then(function (response) {
                             toastr.success("Dieťa " + vm.child.firstName + " " + vm.child.lastName + " bolo úspešne vytvorené");
                            $scope.back();
@@ -368,7 +365,8 @@
                 else {
                     if (vm.child.classId == null)
                         vm.child.classId = vm.classId;
-                    $http.put("/Api/Child/", vm.child)
+
+                    DataService.updateChild(vm.child)
                         .then(function (response) {
                             toastr.success("Zmeny v dieťati " + vm.child.firstName + " " + vm.child.lastName + " boli úspešne uložené");
                            $scope.back();
@@ -397,7 +395,8 @@
 
         vm.deleteChild = function () {
             vm.isBusy = true;
-            $http.delete("/Api/Child/" + vm.child.id)
+
+            DataService.deleteChild(vm.child.id)
                 .then(function () {
                     toastr.success("Dieťa bolo vymazané");
                    $scope.back();
@@ -413,11 +412,11 @@
 (function (angular) {
     "use strict";
 
-    ChildrenListController.$inject = ["$scope", "$http", "$sce", "$controller", "$rootScope"];
+    ChildrenListController.$inject = ["$scope", "$http", "$sce", "$controller", "$rootScope", "DataService"];
     angular.module("app.nursery")
         .controller("ChildrenListController", ChildrenListController);
 
-    function ChildrenListController($scope, $http, $sce, $controller, $rootScope) {
+    function ChildrenListController($scope, $http, $sce, $controller, $rootScope, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
@@ -436,12 +435,7 @@
         activate();
 
         function activate() {
-            getNursery();
-            getChildren();
-        }
-
-        function getNursery() {
-            $http.get("/Api/Nursery/" + vm.nurseryId)
+            DataService.getNursery(vm.nurseryId)
                 .then(function (response) {
                     if (response.data.classes) {
                         for (var i = 0; i < response.data.classes.length; i++)
@@ -450,10 +444,9 @@
                 }, function (error) {
                     toastr.error("Nepodarilo sa načítať zoznam škôlok:<br/>" + error.data.message);
                 });
-        }
 
-        function getChildren() {
-            $http.get("/Api/Nursery/" + vm.nurseryId + "/children")
+
+            DataService.getAllChildren(vm.nurseryId)
                 .then(function (response) {
                     angular.copy(response.data, vm.children);
                     if (vm.children.length > 0) {
@@ -488,23 +481,24 @@
 
     "use strict";
 
-    ClassDetailController.$inject = ["$scope", "$rootScope", "$http", "$routeParams", "$sce", "$window", "$controller"];
+    ClassDetailController.$inject = ["$scope", "$rootScope", "$http", "$routeParams", "$sce", "$window", "$controller", "DataService"];
     angular.module("app.nursery")
         .controller("ClassDetailController", ClassDetailController);
 
-    function ClassDetailController($scope, $rootScope, $http, $routeParams, $sce, $window, $controller) {
+    function ClassDetailController($scope, $rootScope, $http, $routeParams, $sce, $window, $controller, DataService) {
         $controller('BaseController', {
-            '$scope':$scope
+            '$scope': $scope
         });
 
         var vm = this;
+
         vm.classId = $routeParams.id;
         vm.nurseryId = $rootScope.nursery.id;
         vm.class = {};
         vm.children = [];
         vm.isBusy = true;
 
-        $http.get("/Api/Class/" + vm.classId)
+        DataService.getClass(vm.classId)
             .then(function (response) {
                 angular.copy(response.data, vm.class);
                 for (var i = 0; i < vm.class.children.length; i++) {
@@ -516,7 +510,7 @@
                     if (vm.class.children[i].attendance == 1)
                         vm.children.push(vm.class.children[i]);
                 }
-                    
+
             }, function (error) {
                 toastr.error("Nepodarilo sa načítať informácie o triede");
             })
@@ -528,16 +522,17 @@
 (function () {
     "use strict";
 
-    ClassEditController.$inject = ["$scope", "$rootScope", "$http", "$location", "$routeParams", "$controller", "$uibModal"];
+    ClassEditController.$inject = ["$scope", "$rootScope", "$http", "$location", "$routeParams", "$controller", "$uibModal", "DataService"];
     angular.module("app.nursery")
         .controller("ClassEditController", ClassEditController);
 
-    function ClassEditController($scope, $rootScope, $http, $location, $routeParams, $controller, $uibModal) {
+    function ClassEditController($scope, $rootScope, $http, $location, $routeParams, $controller, $uibModal, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
+
         vm.classId = $routeParams.id;
         vm.nurseryId = $rootScope.nursery.id;
         vm.nursery = {};
@@ -545,7 +540,7 @@
         vm.isNew = vm.classId == 0;
         vm.isBusy = true;
 
-        $http.get("/Api/Nursery/" + vm.nurseryId)
+        DataService.getNursery(vm.nurseryId)
             .then(function (response) {
                 angular.copy(response.data, vm.nursery);
                 if (!vm.isNew) {
@@ -566,7 +561,7 @@
             if (isValid) {
                 vm.isBusy = true;
                 if (vm.isNew) {
-                    $http.post("/Api/Class/" + vm.nursery.id, vm.class)
+                    DataService.insertClass(vm.nursery.id, vm.class)
                         .then(function (response) {
                             toastr.success("Trieda " + vm.class.name + " bola úspešne vytvorená");
                             $location.path("#/");
@@ -577,7 +572,7 @@
                         });
                 }
                 else {
-                    $http.put("/Api/Class/" + vm.nursery.id, vm.class)
+                    DataService.updateClass(vm.nursery.id, vm.class)
                         .then(function (response) {
                             toastr.success("Zmeny v triede " + vm.class.name + " boli úspešne uložené");
                             $location.path("#/");
@@ -606,8 +601,10 @@
 
         vm.deleteClass = function () {
             vm.isBusy = true;
+
             var className = vm.class.name;
-            $http.delete("/Api/Class/" + vm.class.id)
+
+            DataService.deleteClass(vm.class.id)
                 .then(function () {                    
                     toastr.success("Trieda " + className + " bola vymazaná");
                    $scope.back();
@@ -623,24 +620,25 @@
 (function (angular) {
     "use strict";
 
-    EmployeeDetailController.$inject = ["$scope", "$rootScope", "$http", "$location", "$routeParams", "$sce", "$controller"];
+    EmployeeDetailController.$inject = ["$scope", "$rootScope", "$http", "$location", "$routeParams", "$sce", "$controller", "DataService"];
     angular.module("app.nursery")
         .controller("EmployeeDetailController", EmployeeDetailController);
 
-    function EmployeeDetailController($scope, $rootScope, $http, $location, $routeParams, $sce, $controller) {
+    function EmployeeDetailController($scope, $rootScope, $http, $location, $routeParams, $sce, $controller, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
+
         vm.employeeId = $routeParams.id;
         vm.nurseryId = $rootScope.nursery.id;
         vm.employee = {};
         vm.newNote = {};
         vm.attendanceStates = ["Žiadateľ", "Pracujúci", "Odstúpený"];
-
         vm.isBusy = true;
-        $http.get("/Api/Employee/" + vm.employeeId)
+
+        DataService.getEmployee(vm.employeeId)
             .then(function (response) {
                 angular.copy(response.data, vm.employee);
                 vm.employee.description = vm.employee.description ? $sce.trustAsHtml(vm.employee.description.replace(/(\r\n|\n|\r)/gm, '<br />')) : null;
@@ -656,7 +654,8 @@
         vm.saveNote = function () {
             vm.isBusy = true;
             vm.newNote.employeeId = vm.employeeId;
-            $http.post("/Api/Note/", vm.newNote)
+
+            DataService.insertNote(vm.newNote)
                 .then(function (response) {
                     vm.employee.notes.push(response.data);
                     vm.employee.notes[vm.employee.notes.length - 1].text = $sce.trustAsHtml(vm.employee.notes[vm.employee.notes.length - 1].text.replace(/(\r\n|\n|\r)/gm, '<br />'));
@@ -672,7 +671,8 @@
 
         vm.deleteNote = function (id) {
             vm.isBusy = true;
-            $http.delete("/Api/Note/" + id)
+
+            DataService.deleteNote(id)
                 .then(function () {
                     for (var i = 0; i < vm.employee.notes.length; i++) {
                         var note = vm.employee.notes[i];
@@ -693,16 +693,17 @@
 (function (angular) {
     "use strict";
 
-    EmployeeEditController.$inject = ["$scope", "$rootScope", "$http", "$routeParams", "$controller", "$uibModal"];
+    EmployeeEditController.$inject = ["$scope", "$rootScope", "$http", "$routeParams", "$controller", "$uibModal", "DataService"];
     angular.module("app.nursery")
         .controller("EmployeeEditController", EmployeeEditController);
 
-    function EmployeeEditController($scope, $rootScope, $http, $routeParams, $controller, $uibModal) {
+    function EmployeeEditController($scope, $rootScope, $http, $routeParams, $controller, $uibModal, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
+
         vm.employeeId = $routeParams.id;
         vm.nurseryId = $rootScope.nursery.id;
         vm.employee = {};
@@ -712,7 +713,8 @@
 
         if (!vm.isNew) {
             vm.isBusy = true;
-            $http.get("/Api/Employee/" + vm.employeeId)
+
+            DataService.getEmployee(vm.employeeId)
                 .then(function (response) {
                     angular.copy(response.data, vm.employee);
                 }, function () {
@@ -727,7 +729,7 @@
                 vm.isBusy = true;
 
                 if (vm.isNew) {
-                    $http.post("/Api/Employee/" + vm.nurseryId, vm.employee)
+                    DataService.insertEmployee(vm.nurseryId, vm.employee)
                         .then(function (response) {
                             toastr.success("Zamestnanec " + vm.employee.fullName + " bol úspešne vytvorený");
                            $scope.back();
@@ -738,7 +740,7 @@
                         });
                 }
                 else {
-                    $http.put("/Api/Employee/" + vm.nurseryId, vm.employee)
+                    DataService.updateEmployee(vm.nurseryId, vm.employee)
                         .then(function (response) {
                             toastr.success("Zmeny v zamestnancovi " + vm.employee.fullName + " boli úspešne uložené");
                            $scope.back();
@@ -767,7 +769,8 @@
 
         vm.deleteEmployee = function () {
             vm.isBusy = true;
-            $http.delete("/Api/Employee/" + vm.employee.id)
+
+            DataService.deleteEmployee(vm.employee.id)
                 .then(function () {
                     toastr.success("Zamestnanec bol vymazaný");
                    $scope.back();
@@ -783,16 +786,17 @@
 (function (angular) {
     "use strict";
 
-    EmployeesListController.$inject = ["$scope", "$http", "$window", "$controller", "$rootScope"];
+    EmployeesListController.$inject = ["$scope", "$http", "$window", "$controller", "$rootScope", "DataService"];
     angular.module("app.nursery")
         .controller("EmployeesListController", EmployeesListController);
 
-    function EmployeesListController($scope, $http, $window, $controller, $rootScope) {
+    function EmployeesListController($scope, $http, $window, $controller, $rootScope, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
+
         vm.nurseryId = $rootScope.nursery.id;
         vm.employees = [];
         vm.isBusy = true;
@@ -803,7 +807,7 @@
         activate();
 
         function activate() {
-            $http.get("/Api/Nursery/" + vm.nurseryId + "/employees")
+            DataService.getAllEmployees(vm.nurseryId)
                 .then(function (response) {
                     angular.copy(response.data, vm.employees);
                     _.each(vm.employees, function (employee) {
@@ -847,7 +851,7 @@
             if (isValid) {
                 vm.isBusy = true;
 
-                $http.put("/Api/Employee/" + vm.nurseryId, employee)
+                DataService.updateEmployee(vm.nurseryId, employee)
                     .then(function (response) {
                         toastr.success("Zmeny v zamestnancovi " + employee.fullName + " boli úspešne uložené");
                         vm.setEditMode(employee.id, false, true);
@@ -864,11 +868,11 @@
 
     "use strict";
 
-    NurseriesListController.$inject = ["$http", "$scope", "$window", "$location", "$rootScope"];
+    NurseriesListController.$inject = ["$http", "$scope", "$window", "$location", "$rootScope", "DataService"];
     angular.module("app.nursery")
         .controller("NurseriesListController", NurseriesListController);
 
-    function NurseriesListController($http, $scope, $window, $location, $rootScope) {
+    function NurseriesListController($http, $scope, $window, $location, $rootScope, DataService) {
         var vm = this;
         vm.nurseries = [];
         vm.isBusy = true;
@@ -876,7 +880,7 @@
         activate();
 
         function activate() {
-            $http.get("/Api/Nurseries")
+            DataService.getAllNurseries()
                 .then(function (response) {
                     angular.copy(response.data, vm.nurseries);
                     $rootScope.nursery = null;
@@ -896,11 +900,11 @@
 (function (angular) {
     "use strict";
 
-    NurseryAdminEditController.$inject = ["$routeParams", "$http", "$location", "$uibModal", "$scope"];
+    NurseryAdminEditController.$inject = ["$routeParams", "$http", "$location", "$uibModal", "$scope", "DataService"];
     angular.module("app.nursery")
         .controller("NurseryAdminEditController", NurseryAdminEditController);
 
-    function NurseryAdminEditController($routeParams, $http, $location, $uibModal,$scope) {
+    function NurseryAdminEditController($routeParams, $http, $location, $uibModal,$scope, DataService) {
         var vm = this;
         vm.nurseryId = parseInt($routeParams.id);
         vm.nursery = {};
@@ -908,7 +912,8 @@
 
         if (!vm.isNew) {
             vm.isBusy = true;
-            $http.get("/Api/Nursery/" + vm.nurseryId)
+
+            DataService.getNursery(vm.nurseryId)
                 .then(function (response) {
                     angular.copy(response.data, vm.nursery);
                 }, function () {
@@ -922,7 +927,7 @@
             vm.isBusy = true;
 
             if (vm.isNew) {
-                $http.post("/Api/Nursery", vm.nursery)
+                DataService.insertNursery(vm.nursery)
                     .then(function (response) {
                         toastr.success("Bola vytvorená nová škôlka " + vm.nursery.name);
                         $location.path("#/");
@@ -934,7 +939,7 @@
             }
             else
             {
-                $http.put("/Api/Nursery/", vm.nursery)
+                DataService.updateNursery(vm.nursery)
                     .then(function (response) {
                         toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
                         $location.path("#/");
@@ -962,8 +967,10 @@
 
         vm.deleteNursery = function () {
             vm.isBusy = true;
+
             var nurseryName = vm.nursery.name;
-            $http.delete("/Api/Nursery/" + vm.nursery.id)
+
+            DataService.deleteNursery(vm.nursery.id)
                 .then(function () {
                     toastr.success("Škôlka " + nurseryName + " bola vymazaná");
                     $location.path("#/");
@@ -980,11 +987,11 @@
 
     "use strict";
 
-    NurseryDetailController.$inject = ["$scope", "$rootScope", "$http", "$location", "$window", "$controller"];
+    NurseryDetailController.$inject = ["$scope", "$rootScope", "$http", "$location", "$window", "$controller", "DataService"];
     angular.module("app.nursery")
         .controller("NurseryDetailController", NurseryDetailController);
 
-    function NurseryDetailController($scope, $rootScope, $http, $location, $window, $controller) {
+    function NurseryDetailController($scope, $rootScope, $http, $location, $window, $controller, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
@@ -1008,7 +1015,7 @@
         }
 
         function getNursery() {
-            $http.get("/Api/Nursery/" + vm.nurseryId)
+            DataService.getNursery(vm.nurseryId)
                 .then(function (response) {
                     angular.copy(response.data, vm.nursery);
                     if (vm.nursery.classes.length > 0) {
@@ -1025,7 +1032,7 @@
         }
 
         function getClass(i) {
-            $http.get("/Api/Class/" + vm.nursery.classes[i].id)
+            DataService.getClass(vm.nursery.classes[i].id)
                 .then(function (response) {
                     for (var j = 0; j < response.data.children.length; j++)
                         if (response.data.children[j].attendance == 1)
@@ -1039,21 +1046,22 @@
 (function (angular) {
     "use strict";
 
-    NurseryEditController.$inject = ["$scope", "$http", "$location", "$controller", "$rootScope"];
+    NurseryEditController.$inject = ["$scope", "$http", "$location", "$controller", "$rootScope", "DataService"];
     angular.module("app.nursery")
         .controller("NurseryEditController", NurseryEditController);
 
-    function NurseryEditController($scope, $http, $location, $controller, $rootScope) {
+    function NurseryEditController($scope, $http, $location, $controller, $rootScope, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
+
         vm.nurseryId = $rootScope.nursery.id;
         vm.nursery = {};
         vm.isBusy = true;
 
-        $http.get("/Api/Nursery/" + vm.nurseryId)
+        DataService.getNursery(vm.nurseryId)
             .then(function (response) {
                 angular.copy(response.data, vm.nursery);
             }, function () {
@@ -1065,7 +1073,8 @@
         vm.saveNursery = function (isValid) {
             if (isValid) {
                 vm.isBusy = true;
-                $http.put("/Api/Nursery/", vm.nursery)
+
+                DataService.updateNursery(vm.nursery)
                     .then(function (response) {
                         toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
                         $location.path("#/");
@@ -1101,19 +1110,21 @@
 
     "use strict";
 
-    UsersListController.$inject = ["$http", "$scope", "$window", "$uibModal"];
+    UsersListController.$inject = ["$http", "$scope", "$window", "$uibModal", "DataService"];
     angular
         .module("app.nursery")
         .controller("UsersListController", UsersListController);
 
-    function UsersListController($http, $scope, $window, $uibModal) {
+    function UsersListController($http, $scope, $window, $uibModal, DataService) {
         var vm = this;
+
         vm.users = [];
         vm.roles = [];
         vm.nurseries = [];
         vm.isBusy = true;
 
-        $http.get("/Api/Users")
+
+        DataService.getUsers()
             .then(function (response) {
                 angular.copy(response.data, vm.users);
                 vm.getRoles();
@@ -1121,8 +1132,9 @@
                 toastr.error("Nepodarilo sa načítať dáta: " + error);
             });
 
+        
         vm.getRoles = function () {
-            $http.get("/Api/Roles")
+            DataService.getRoles()
                 .then(function (response) {
                     angular.copy(response.data, vm.roles);
                     vm.getNurseries();
@@ -1132,7 +1144,7 @@
         }
 
         vm.getNurseries = function () {
-            $http.get("/Api/Nurseries")
+            DataService.getAllNurseries()
                 .then(function (response) {
                     angular.copy(response.data, vm.nurseries);
                     vm.joinData();

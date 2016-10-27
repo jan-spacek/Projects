@@ -4,7 +4,7 @@
     angular.module("app.nursery")
         .controller("NurseryAdminEditController", NurseryAdminEditController);
 
-    function NurseryAdminEditController($routeParams, $http, $location, $uibModal,$scope) {
+    function NurseryAdminEditController($routeParams, $http, $location, $uibModal,$scope, DataService) {
         var vm = this;
         vm.nurseryId = parseInt($routeParams.id);
         vm.nursery = {};
@@ -12,7 +12,8 @@
 
         if (!vm.isNew) {
             vm.isBusy = true;
-            $http.get("/Api/Nursery/" + vm.nurseryId)
+
+            DataService.getNursery(vm.nurseryId)
                 .then(function (response) {
                     angular.copy(response.data, vm.nursery);
                 }, function () {
@@ -26,7 +27,7 @@
             vm.isBusy = true;
 
             if (vm.isNew) {
-                $http.post("/Api/Nursery", vm.nursery)
+                DataService.insertNursery(vm.nursery)
                     .then(function (response) {
                         toastr.success("Bola vytvorená nová škôlka " + vm.nursery.name);
                         $location.path("#/");
@@ -38,7 +39,7 @@
             }
             else
             {
-                $http.put("/Api/Nursery/", vm.nursery)
+                DataService.updateNursery(vm.nursery)
                     .then(function (response) {
                         toastr.success("Zmeny v škôlke " + vm.nursery.name + " boli úspešne uložené");
                         $location.path("#/");
@@ -66,8 +67,10 @@
 
         vm.deleteNursery = function () {
             vm.isBusy = true;
+
             var nurseryName = vm.nursery.name;
-            $http.delete("/Api/Nursery/" + vm.nursery.id)
+
+            DataService.deleteNursery(vm.nursery.id)
                 .then(function () {
                     toastr.success("Škôlka " + nurseryName + " bola vymazaná");
                     $location.path("#/");

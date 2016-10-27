@@ -4,21 +4,22 @@
     angular.module("app.nursery")
         .controller("ChildEditController", ChildEditController);
 
-    function ChildEditController($scope, $rootScope, $http, $routeParams, $controller, $uibModal) {
+    function ChildEditController($scope, $rootScope, $http, $routeParams, $controller, $uibModal, DataService) {
         $controller('BaseController', {
             '$scope':$scope
         });
 
         var vm = this;
+
         vm.childId = $routeParams.id;
         vm.nurseryId = $rootScope.nursery.id;
         vm.child = {};
         vm.classId = 0;
         vm.isNew = vm.childId == 0;
-       $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Dochádzajúci' }, { id: 2, name: 'Odstúpený' }];
+        $scope.attendance = [{ id: 0, name: 'Žiadateľ' }, { id: 1, name: 'Dochádzajúci' }, { id: 2, name: 'Odstúpený' }];
         vm.classes = [];
 
-        $http.get("/Api/Nursery/" + vm.nurseryId + "/Classes/")
+        DataService.getAllClasses(vm.nurseryId)
             .then(function (response) {
                 angular.copy(response.data, vm.classes);
                $scope.classes = vm.classes;
@@ -31,7 +32,8 @@
 
         if (!vm.isNew) {
             vm.isBusy = true;
-            $http.get("/Api/Child/" + vm.childId)
+
+            DataService.getChild(vm.childId)
                 .then(function (response) {
                     angular.copy(response.data, vm.child);
                     vm.classId = vm.child.classId;
@@ -48,7 +50,7 @@
                 vm.child.nurseryId = vm.nurseryId;
 
                 if (vm.isNew) {
-                    $http.post("/Api/Child/", vm.child)
+                    DataService.insertChild(vm.child)
                         .then(function (response) {
                             toastr.success("Dieťa " + vm.child.firstName + " " + vm.child.lastName + " bolo úspešne vytvorené");
                            $scope.back();
@@ -61,7 +63,8 @@
                 else {
                     if (vm.child.classId == null)
                         vm.child.classId = vm.classId;
-                    $http.put("/Api/Child/", vm.child)
+
+                    DataService.updateChild(vm.child)
                         .then(function (response) {
                             toastr.success("Zmeny v dieťati " + vm.child.firstName + " " + vm.child.lastName + " boli úspešne uložené");
                            $scope.back();
@@ -90,7 +93,8 @@
 
         vm.deleteChild = function () {
             vm.isBusy = true;
-            $http.delete("/Api/Child/" + vm.child.id)
+
+            DataService.deleteChild(vm.child.id)
                 .then(function () {
                     toastr.success("Dieťa bolo vymazané");
                    $scope.back();

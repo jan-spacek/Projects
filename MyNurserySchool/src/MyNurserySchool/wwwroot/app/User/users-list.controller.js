@@ -6,14 +6,16 @@
         .module("app.nursery")
         .controller("UsersListController", UsersListController);
 
-    function UsersListController($http, $scope, $window, $uibModal) {
+    function UsersListController($http, $scope, $window, $uibModal, DataService) {
         var vm = this;
+
         vm.users = [];
         vm.roles = [];
         vm.nurseries = [];
         vm.isBusy = true;
 
-        $http.get("/Api/Users")
+
+        DataService.getUsers()
             .then(function (response) {
                 angular.copy(response.data, vm.users);
                 vm.getRoles();
@@ -21,8 +23,9 @@
                 toastr.error("Nepodarilo sa načítať dáta: " + error);
             });
 
+        
         vm.getRoles = function () {
-            $http.get("/Api/Roles")
+            DataService.getRoles()
                 .then(function (response) {
                     angular.copy(response.data, vm.roles);
                     vm.getNurseries();
@@ -32,7 +35,7 @@
         }
 
         vm.getNurseries = function () {
-            $http.get("/Api/Nurseries")
+            DataService.getAllNurseries()
                 .then(function (response) {
                     angular.copy(response.data, vm.nurseries);
                     vm.joinData();
